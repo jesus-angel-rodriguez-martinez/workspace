@@ -18,6 +18,10 @@
     {
       "packageName": "@libs/core",
       "projectFolder": "libs/core"
+    },
+    {
+      "packageName": "@libs/logger",
+      "projectFolder": "libs/logger"
     }
   ],
   "repository": {
