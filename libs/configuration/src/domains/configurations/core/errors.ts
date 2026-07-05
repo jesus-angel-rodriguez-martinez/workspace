@@ -1,0 +1,94 @@
+import { CoreError, type ICoreErrorOptions } from '@libs/core';
+
+/**
+ * Error thrown when a configuration value is empty.
+ */
+export class EmptyConfigurationError extends CoreError {
+  /**
+   * @param key - The configuration key with empty value.
+   * @param options - Optional error configuration options.
+   */
+  constructor(key: string, options: ICoreErrorOptions = {}) {
+    super({
+      code: 'CONFIGURATION.EMPTY',
+      detail: `Configuration key '${key}' cannot be empty.`,
+      stack: options.stack,
+      title: 'Empty configuration'
+    });
+  }
+}
+
+/**
+ * Error thrown when a configuration value expected to be a boolean is invalid.
+ */
+export class InvalidBooleanConfigurationError extends CoreError {
+  /**
+   * @param key - The configuration key with invalid boolean value.
+   * @param value - The invalid value that could not be parsed as boolean.
+   * @param options - Optional error configuration options.
+   */
+  constructor(key: string, value: string, options: ICoreErrorOptions = {}) {
+    super({
+      code: 'CONFIGURATION.INVALID_BOOLEAN',
+      detail: `Invalid boolean value '${value}' for configuration key '${key}'.`,
+      stack: options.stack,
+      title: 'Invalid boolean configuration'
+    });
+  }
+}
+
+/**
+ * Error thrown when a configuration value expected to be a number is invalid.
+ */
+export class InvalidNumberConfigurationError extends CoreError {
+  /**
+   * @param key - The configuration key with invalid number value.
+   * @param value - The invalid value that could not be parsed as number.
+   * @param options - Optional error configuration options.
+   */
+  constructor(key: string, value: string, options: ICoreErrorOptions = {}) {
+    super({
+      code: 'CONFIGURATION.INVALID_NUMBER',
+      detail: `Invalid number value '${value}' for configuration key '${key}'.`,
+      stack: options.stack,
+      title: 'Invalid number configuration'
+    });
+  }
+}
+
+/**
+ * Error thrown when a required configuration value is missing from the environment.
+ */
+export class MissingConfigurationError extends CoreError {
+  /**
+   * @param configuration - The name of the missing configuration variable.
+   * @param options - Optional error configuration options.
+   */
+  constructor(configuration: string, options: ICoreErrorOptions = {}) {
+    super({
+      code: 'CONFIGURATION.MISSING',
+      detail: `Missing required configuration: '${configuration}'.`,
+      stack: options.stack,
+      title: 'Missing configuration'
+    });
+  }
+}
+
+/**
+ * Error thrown when the configuration value type is unsupported.
+ */
+export class UnsupportedPrimitiveError extends CoreError {
+  /**
+   * @param key - The configuration key with unsupported primitive type.
+   * @param primitive - The unsupported primitive type.
+   * @param options - Optional error configuration options.
+   */
+  constructor(key: string, primitive: string, options: ICoreErrorOptions = {}) {
+    super({
+      code: 'CONFIGURATION.UNSUPPORTED_PRIMITIVE',
+      detail: `Unsupported primitive type '${primitive}' for configuration key '${key}'.`,
+      stack: options.stack,
+      title: 'Unsupported configuration primitive'
+    });
+  }
+}

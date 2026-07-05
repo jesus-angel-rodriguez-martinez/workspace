@@ -1,0 +1,40 @@
+{
+  "name": "@libs/configuration",
+  "version": "1.0.0",
+  "description": "Provides a lightweight and reusable configuration service for managing environment variables.",
+  "keywords": [
+    "@libs",
+    "configuration"
+  ],
+  "license": "MIT",
+  "author": "Jesús Ángel Rodríguez Martínez",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "npm run start:clean && npm run start:build",
+    "start:build": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
+    "start:clean": "rimraf dist",
+    "start:integration-test": "npm run start:test -- --testMatch '**/*.integration.test.ts'",
+    "start:integration-test:coverage": "npm run start:test -- --coverage --testMatch '**/*.integration.test.ts'",
+    "start:test": "NODE_OPTIONS='--experimental-vm-modules' jest",
+    "start:test:coverage": "npm run start:test -- --coverage",
+    "start:unit-test": "npm run start:test -- --testMatch '**/*.unit.test.ts'",
+    "start:unit-test:coverage": "npm run start:test -- --coverage --testMatch '**/*.unit.test.ts'",
+    "test": "npm run start:test"
+  },
+  "dependencies": {
+    "@libs/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@jest/globals": "^30.0.4",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^24.0.1",
+    "dotenv": "~17.3.1",
+    "jest": "^29.7.0",
+    "rimraf": "^6.0.1",
+    "ts-jest": "^29.3.4",
+    "tsc-alias": "^1.8.16",
+    "typescript": "^5.8.3"
+  }
+}

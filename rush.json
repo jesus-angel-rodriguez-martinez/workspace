@@ -16,6 +16,10 @@
   "projectFolderMinDepth": 2,
   "projects": [
     {
+      "packageName": "@libs/configuration",
+      "projectFolder": "libs/configuration"
+    },
+    {
       "packageName": "@libs/core",
       "projectFolder": "libs/core"
     },
