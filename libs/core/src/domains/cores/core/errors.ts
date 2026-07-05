@@ -1,4 +1,4 @@
-import { ICoreError } from '@domains/cores';
+import { type ICoreError } from '@domains/cores';
 
 /**
  * Base error class for all application-related exceptions.
@@ -13,17 +13,18 @@ export class CoreError extends Error implements ICoreError {
    * @param error - The error payload.
    */
   constructor(error: ICoreError) {
-    super(error.detail, { cause: error });
+    super(error.detail);
 
     this.code = error.code;
     this.detail = error.detail;
     this.name = this.constructor.name;
-    this.title = error.title;
 
     if (error.stack) {
       this.stack = error.stack;
     } else {
       Error.captureStackTrace(this, this.constructor);
     }
+
+    this.title = error.title;
   }
 }
