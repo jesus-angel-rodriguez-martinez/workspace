@@ -1,0 +1,26 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/rush.schema.json",
+  "ensureConsistentVersions": true,
+  "eventHooks": {
+    "postRushBuild": [],
+    "postRushInstall": [],
+    "postRushx": [],
+    "preRushBuild": [],
+    "preRushInstall": [],
+    "preRushx": []
+  },
+  "gitPolicy": {},
+  "nodeSupportedVersionRange": ">=24.11.1 <25.0.0",
+  "pnpmVersion": "9.15.9",
+  "projectFolderMaxDepth": 2,
+  "projectFolderMinDepth": 2,
+  "projects": [],
+  "repository": {
+    "defaultBranch": "main",
+    "defaultRemote": "origin",
+    "url": "https://github.com/jesus-angel-rodriguez-martinez/workspace"
+  },
+  "rushVersion": "5.177.1",
+  "telemetryEnabled": false,
+  "variants": []
+}
