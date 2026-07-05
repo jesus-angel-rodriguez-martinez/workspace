@@ -84,7 +84,7 @@ describe('LoggerService', () => {
     beforeAll(() => {
       LoggerService.init({
         level: 'trace',
-        applicationName: '@utils/logger',
+        applicationName: '@libs/logger',
         prettify: true
       });
     });
