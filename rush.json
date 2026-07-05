@@ -14,7 +14,12 @@
   "pnpmVersion": "9.15.9",
   "projectFolderMaxDepth": 2,
   "projectFolderMinDepth": 2,
-  "projects": [],
+  "projects": [
+    {
+      "packageName": "@libs/core",
+      "projectFolder": "libs/core"
+    }
+  ],
   "repository": {
     "defaultBranch": "main",
     "defaultRemote": "origin",
