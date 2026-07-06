@@ -114,8 +114,8 @@ export class ConflictError extends ApiError {
       detail:
         options.detail ||
         'The request could not be completed due to a conflict with the current state of the resource.',
-      status: `${STATUS_CODES.CONFLICT}`,
       stack: options.stack,
+      status: `${STATUS_CODES.CONFLICT}`,
       title: options.title || 'Conflict detected while processing the request'
     });
   }
@@ -131,8 +131,8 @@ export class UnsupportedMediaTypeError extends ApiError {
     super({
       code: options.code || 'UNSUPPORTED_MEDIA_TYPE',
       detail: options.detail || 'The request contains a media type that is not supported by the server.',
-      status: `${STATUS_CODES.UNSUPPORTED_MEDIA_TYPE}`,
       stack: options.stack,
+      status: `${STATUS_CODES.UNSUPPORTED_MEDIA_TYPE}`,
       title: options.title || 'Unsupported media type in the request'
     });
   }

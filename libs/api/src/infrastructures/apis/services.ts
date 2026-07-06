@@ -35,13 +35,13 @@ export class ApiService extends AbstractApiService {
     try {
       this.globalMiddlewaresService.setRequestMiddlewares();
 
+      this.authenticationMiddlewaresService.init();
+
       this.globalMiddlewaresService.setValidators();
 
       await this.globalMiddlewaresService.setRouting();
 
       this.globalMiddlewaresService.setResponseMiddlewares();
-
-      this.authenticationMiddlewaresService.init();
 
       this.server = this.app.listen(this.port, () =>
         this.loggerService.info(`Server connection established successfully on 'PORT:${this.port}'.`)

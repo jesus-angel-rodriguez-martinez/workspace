@@ -1,5 +1,5 @@
 import { type Express } from 'express';
-import { type Server } from 'http';
+import { type Server } from 'node:http';
 import { type IApiServiceConfiguration } from '@domains/apis';
 import { type AbstractAuthenticationMiddlewaresService } from '@domains/authentication-middlewares';
 import { type AbstractGlobalMiddlewaresService } from '@domains/global-middlewares';

@@ -48,7 +48,7 @@ export class GlobalMiddlewaresService extends AbstractGlobalMiddlewaresService {
       }
 
       const [firstError = fallback] = errors;
-      const statusCode = parseInt(firstError.status);
+      const statusCode = parseInt(firstError.status, 10);
       if (statusCode >= STATUS_CODES.INTERNAL_SERVER_ERROR) {
         this.loggerService.error(`Server-side failure.`, { error: firstError });
       } else {
