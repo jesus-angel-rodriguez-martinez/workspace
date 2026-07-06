@@ -26,6 +26,10 @@
     {
       "packageName": "@libs/logger",
       "projectFolder": "libs/logger"
+    },
+    {
+      "packageName": "@libs/security",
+      "projectFolder": "libs/security"
     }
   ],
   "repository": {
