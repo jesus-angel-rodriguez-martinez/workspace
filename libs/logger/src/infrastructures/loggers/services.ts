@@ -1,4 +1,4 @@
-import pino, { Logger, LoggerOptions, stdTimeFunctions } from 'pino';
+import pino, { type Logger, type LoggerOptions, stdTimeFunctions } from 'pino';
 import {
   AbstractLoggerService,
   type ILoggerServiceConfiguration,

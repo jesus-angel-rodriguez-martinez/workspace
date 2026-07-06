@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "lib": ["ES2022"],
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "outDir": "dist",
+    "paths": {
+      "@domains/*": ["./src/domains/*"],
+      "@infrastructures/*": ["./src/infrastructures/*"]
+    },
+    "rootDir": "src",
+    "target": "ES2022",
+    "types": ["jest", "node"]
+  },
+  "include": ["src"]
+}
