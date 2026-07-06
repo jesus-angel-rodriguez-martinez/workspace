@@ -17,10 +17,11 @@ rush add -p @libs/logger
 `LoggerService` must be initialized once at application startup before any instance is created:
 
 ```ts
+import { ConfigurationService } from '@libs/configuration';
 import { LoggerService } from '@libs/logger';
 
-const { environment } = process.env;
-const isDevelopment = environment === 'development';
+const { ENVIRONMENT } = new ConfigurationService().getAll({ ENVIRONMENT: 'string' });
+const isDevelopment = ENVIRONMENT === 'development';
 
 LoggerService.init({
   applicationName: '@libs/logger',
