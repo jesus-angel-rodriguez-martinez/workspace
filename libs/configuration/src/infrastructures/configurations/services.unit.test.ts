@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from '@jest/globals';
 import {
+  type ConfigurationValue,
   EmptyConfigurationError,
   InvalidBooleanConfigurationError,
   InvalidNumberConfigurationError,
@@ -119,7 +120,7 @@ describe('ConfigurationService', () => {
 
           expect(() =>
             configurationService.getAll({
-              INVALID_TYPE: '{}' as any
+              INVALID_TYPE: '{}' as unknown as ConfigurationValue
             })
           ).toThrow(UnsupportedPrimitiveError);
         });

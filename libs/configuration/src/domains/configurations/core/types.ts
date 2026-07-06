@@ -1,12 +1,7 @@
 /**
- * Represents a concrete configuration object that conforms to a given schema.
+ * Extracts the valid keys from a given configuration schema.
  */
-export type Configuration<S extends ConfigurationSchema = {}> = S;
-
-/**
- * Extracts the valid keys from a given configuration.
- */
-export type ConfigurationKey<C extends Configuration> = keyof C & string;
+export type ConfigurationKey<S extends ConfigurationSchema> = keyof S & string;
 
 /**
  * Defines the expected structure of a configuration object.

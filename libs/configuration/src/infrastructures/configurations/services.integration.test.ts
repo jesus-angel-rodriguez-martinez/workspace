@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import { join } from 'path';
 import { beforeAll, describe, expect, it } from '@jest/globals';
 import {
+  type ConfigurationValue,
   EmptyConfigurationError,
   InvalidBooleanConfigurationError,
   InvalidNumberConfigurationError,
@@ -16,7 +17,7 @@ describe('ConfigurationService', () => {
     const directory = process.cwd();
     const path = join(directory, filename);
 
-    dotenv.config({ path });
+    dotenv.config({ override: true, path });
   });
 
   describe('when environment variables are loaded', () => {
@@ -97,7 +98,7 @@ describe('ConfigurationService', () => {
 
           expect(() =>
             configurationService.getAll({
-              INVALID_TYPE: '{}' as any
+              INVALID_TYPE: '{}' as unknown as ConfigurationValue
             })
           ).toThrow(UnsupportedPrimitiveError);
         });
