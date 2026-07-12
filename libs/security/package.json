@@ -24,6 +24,7 @@
     "test": "npm run start:test"
   },
   "dependencies": {
+    "@libs/core": "workspace:*",
     "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {

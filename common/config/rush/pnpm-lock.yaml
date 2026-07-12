@@ -188,6 +188,9 @@ importers:
 
   ../../libs/security:
     dependencies:
+      '@libs/core':
+        specifier: workspace:*
+        version: link:../core
       jsonwebtoken:
         specifier: ^9.0.2
         version: 9.0.3
