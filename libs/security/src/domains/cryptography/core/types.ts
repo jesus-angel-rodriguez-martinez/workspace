@@ -2,7 +2,7 @@ export interface ICryptographyServiceConfiguration {
   /**
    * The digest algorithm.
    */
-  digest: 'sha256' | 'sha512';
+  digest: 'sha256';
   /**
    * The number of iterations used by the algorithm.
    */
