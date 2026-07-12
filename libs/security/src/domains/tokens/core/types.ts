@@ -1,5 +1,3 @@
-import { type ISecureUser } from '@domains/users';
-
 /**
  * The string representation of the issued authentication token.
  */
@@ -18,10 +16,6 @@ export interface ITokenPayload {
    * The unique identifier of the user.
    */
   sub: string;
-  /**
-   * The authenticated user with sensitive fields removed for secure usage.
-   */
-  user: ISecureUser;
 }
 
 export interface ITokenServiceConfiguration {
