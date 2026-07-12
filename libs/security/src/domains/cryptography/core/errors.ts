@@ -12,9 +12,9 @@ export class WeakCryptographyConfigurationError extends CoreError {
    */
   constructor(key: string, minimum: number, options: ICoreErrorOptions = {}) {
     super({
+      cause: options.cause,
       code: 'SECURITY.WEAK_CRYPTOGRAPHY_CONFIGURATION',
       detail: `Cryptography configuration '${key}' must be at least ${minimum}.`,
-      stack: options.stack,
       title: 'Weak cryptography configuration'
     });
   }

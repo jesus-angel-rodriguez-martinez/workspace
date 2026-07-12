@@ -9,9 +9,9 @@ export class LoggerAlreadyInitializedError extends CoreError {
    */
   constructor(options: ICoreErrorOptions = {}) {
     super({
+      cause: options.cause,
       code: 'LOGGER.ALREADY_INITIALIZED',
       detail: 'The logger has already been initialized.',
-      stack: options.stack,
       title: 'Logger already initialized'
     });
   }
@@ -26,9 +26,9 @@ export class LoggerNotInitializedError extends CoreError {
    */
   constructor(options: ICoreErrorOptions = {}) {
     super({
+      cause: options.cause,
       code: 'LOGGER.NOT_INITIALIZED',
       detail: 'Cannot access the logger before it has been initialized.',
-      stack: options.stack,
       title: 'Logger not initialized'
     });
   }

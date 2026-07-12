@@ -6,9 +6,9 @@ import { CoreError, type ICoreErrorOptions } from '@libs/core';
 export class AuthenticationMiddlewareAlreadyInitializedError extends CoreError {
   constructor(options: ICoreErrorOptions = {}) {
     super({
+      cause: options.cause,
       code: 'AUTHENTICATION_MIDDLEWARE.ALREADY_INITIALIZED',
       detail: 'Authentication Middleware have already been initialized.',
-      stack: options.stack,
       title: 'Authentication Middleware already initialized'
     });
   }

@@ -11,6 +11,10 @@ import { type AbstractLoggerService } from '@libs/logger';
  */
 export interface IApiError {
   /**
+   * The underlying error or value that caused this error, if any.
+   */
+  cause?: unknown;
+  /**
    * A machine-readable identifier for the specific type of error.
    */
   code: string;
@@ -18,10 +22,6 @@ export interface IApiError {
    * A human-readable explanation of the error, specific to this occurrence.
    */
   detail: string;
-  /**
-   * Optional stack trace associated with the error.
-   */
-  stack?: string | undefined;
   /**
    * The HTTP status code applicable to this error, expressed as a string.
    */
@@ -41,13 +41,13 @@ export interface IApiErrorOptions extends Partial<Omit<IApiError, keyof Pick<IAp
 
 /*
  * Defines the standardized structure of an API error response containing multiple error objects.
- * The `stack` field is omitted for security reasons.
+ * The `cause` field is omitted for security reasons.
  */
 export interface IApiErrors {
   /*
    * Array of individual error details.
    */
-  errors: Partial<Omit<IApiError, keyof Pick<IApiError, 'stack'>>>[];
+  errors: Partial<Omit<IApiError, keyof Pick<IApiError, 'cause'>>>[];
 }
 
 /**

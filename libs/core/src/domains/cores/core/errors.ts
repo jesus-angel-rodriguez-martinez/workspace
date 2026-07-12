@@ -13,17 +13,13 @@ export class CoreError extends Error implements ICoreError {
    * @param error - The error payload.
    */
   constructor(error: ICoreError) {
-    super(error.detail);
+    super(error.detail, { cause: error.cause });
 
     this.code = error.code;
     this.detail = error.detail;
     this.name = this.constructor.name;
 
-    if (error.stack) {
-      this.stack = error.stack;
-    } else {
-      Error.captureStackTrace(this, this.constructor);
-    }
+    Error.captureStackTrace(this, this.constructor);
 
     this.title = error.title;
   }

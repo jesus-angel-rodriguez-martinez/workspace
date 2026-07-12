@@ -13,17 +13,13 @@ export class ApiError extends Error implements IApiError {
   public readonly title: string;
 
   constructor(error: IApiError) {
-    super(error.detail);
+    super(error.detail, { cause: error.cause });
 
     this.code = error.code;
     this.detail = error.detail;
     this.name = this.constructor.name;
 
-    if (error.stack) {
-      this.stack = error.stack;
-    } else {
-      Error.captureStackTrace(this, this.constructor);
-    }
+    Error.captureStackTrace(this, this.constructor);
 
     this.status = error.status;
     this.title = error.title;
@@ -39,11 +35,11 @@ export class ApiError extends Error implements IApiError {
 export class BadRequestError extends ApiError {
   constructor(options: IApiErrorOptions = {}) {
     super({
+      cause: options.cause,
       code: options.code || 'BAD_REQUEST_ERROR',
       detail:
         options.detail ||
         'The request could not be processed due to invalid input. Please check the provided data.',
-      stack: options.stack,
       status: `${STATUS_CODES.BAD_REQUEST}`,
       title: options.title || 'There was an error while validating the request'
     });
@@ -58,9 +54,9 @@ export class BadRequestError extends ApiError {
 export class UnauthorizedError extends ApiError {
   constructor(options: IApiErrorOptions = {}) {
     super({
+      cause: options.cause,
       code: options.code || 'UNAUTHORIZED_ERROR',
       detail: options.detail || 'Authentication is required.',
-      stack: options.stack,
       status: `${STATUS_CODES.UNAUTHORIZED}`,
       title: options.title || 'Unauthorized access'
     });
@@ -75,9 +71,9 @@ export class UnauthorizedError extends ApiError {
 export class ForbiddenError extends ApiError {
   constructor(options: IApiErrorOptions = {}) {
     super({
+      cause: options.cause,
       code: options.code || 'FORBIDDEN_ERROR',
       detail: options.detail || 'You do not have permission to access the requested resource.',
-      stack: options.stack,
       status: `${STATUS_CODES.FORBIDDEN}`,
       title: options.title || 'Forbidden'
     });
@@ -92,9 +88,9 @@ export class ForbiddenError extends ApiError {
 export class NotFoundError extends ApiError {
   constructor(options: IApiErrorOptions = {}) {
     super({
+      cause: options.cause,
       code: options.code || 'NOT_FOUND_ERROR',
       detail: options.detail || 'The requested resource could not be found.',
-      stack: options.stack,
       status: `${STATUS_CODES.NOT_FOUND}`,
       title: options.title || 'Resource not found'
     });
@@ -110,11 +106,11 @@ export class NotFoundError extends ApiError {
 export class ConflictError extends ApiError {
   constructor(options: IApiErrorOptions = {}) {
     super({
+      cause: options.cause,
       code: options.code || 'CONFLICT_ERROR',
       detail:
         options.detail ||
         'The request could not be completed due to a conflict with the current state of the resource.',
-      stack: options.stack,
       status: `${STATUS_CODES.CONFLICT}`,
       title: options.title || 'Conflict detected while processing the request'
     });
@@ -129,9 +125,9 @@ export class ConflictError extends ApiError {
 export class UnsupportedMediaTypeError extends ApiError {
   constructor(options: IApiErrorOptions = {}) {
     super({
+      cause: options.cause,
       code: options.code || 'UNSUPPORTED_MEDIA_TYPE',
       detail: options.detail || 'The request contains a media type that is not supported by the server.',
-      stack: options.stack,
       status: `${STATUS_CODES.UNSUPPORTED_MEDIA_TYPE}`,
       title: options.title || 'Unsupported media type in the request'
     });
@@ -147,10 +143,10 @@ export class UnsupportedMediaTypeError extends ApiError {
 export class UnprocessableEntityError extends ApiError {
   constructor(options: IApiErrorOptions = {}) {
     super({
+      cause: options.cause,
       code: options.code || 'UNPROCESSABLE_ENTITY_ERROR',
       detail:
         options.detail || 'The request was well-formed but was unable to be followed due to semantic errors.',
-      stack: options.stack,
       status: `${STATUS_CODES.UNPROCESSABLE_ENTITY}`,
       title: options.title || 'Unprocessable entity'
     });
@@ -166,9 +162,9 @@ export class UnprocessableEntityError extends ApiError {
 export class InternalServerError extends ApiError {
   constructor(options: IApiErrorOptions = {}) {
     super({
+      cause: options.cause,
       code: options.code || 'INTERNAL_SERVER_ERROR',
       detail: options.detail || 'An unexpected error occurred on the server. Please try again later.',
-      stack: options.stack,
       status: `${STATUS_CODES.INTERNAL_SERVER_ERROR}`,
       title: options.title || 'Internal Server error'
     });

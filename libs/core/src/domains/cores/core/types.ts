@@ -1,7 +1,7 @@
 /**
  * Standardized interface for managing core application errors.
  */
-export interface ICoreError extends Pick<ICoreErrorOptions, 'stack'> {
+export interface ICoreError extends ICoreErrorOptions {
   /**
    * A machine-readable identifier for the specific type of error.
    */
@@ -18,9 +18,9 @@ export interface ICoreError extends Pick<ICoreErrorOptions, 'stack'> {
 
 export interface ICoreErrorOptions {
   /**
-   * Optional stack trace associated with the error.
+   * The underlying error or value that caused this error, if any.
    */
-  stack?: string | undefined;
+  cause?: unknown;
 }
 
 /**

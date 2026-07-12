@@ -10,9 +10,9 @@ export class EmptyConfigurationError extends CoreError {
    */
   constructor(key: string, options: ICoreErrorOptions = {}) {
     super({
+      cause: options.cause,
       code: 'CONFIGURATION.EMPTY',
       detail: `Configuration key '${key}' cannot be empty.`,
-      stack: options.stack,
       title: 'Empty configuration'
     });
   }
@@ -29,9 +29,9 @@ export class InvalidBooleanConfigurationError extends CoreError {
    */
   constructor(key: string, value: string, options: ICoreErrorOptions = {}) {
     super({
+      cause: options.cause,
       code: 'CONFIGURATION.INVALID_BOOLEAN',
       detail: `Invalid boolean value '${value}' for configuration key '${key}'.`,
-      stack: options.stack,
       title: 'Invalid boolean configuration'
     });
   }
@@ -48,9 +48,9 @@ export class InvalidNumberConfigurationError extends CoreError {
    */
   constructor(key: string, value: string, options: ICoreErrorOptions = {}) {
     super({
+      cause: options.cause,
       code: 'CONFIGURATION.INVALID_NUMBER',
       detail: `Invalid number value '${value}' for configuration key '${key}'.`,
-      stack: options.stack,
       title: 'Invalid number configuration'
     });
   }
@@ -66,9 +66,9 @@ export class MissingConfigurationError extends CoreError {
    */
   constructor(configuration: string, options: ICoreErrorOptions = {}) {
     super({
+      cause: options.cause,
       code: 'CONFIGURATION.MISSING',
       detail: `Missing required configuration: '${configuration}'.`,
-      stack: options.stack,
       title: 'Missing configuration'
     });
   }
@@ -85,9 +85,9 @@ export class UnsupportedPrimitiveError extends CoreError {
    */
   constructor(key: string, primitive: string, options: ICoreErrorOptions = {}) {
     super({
+      cause: options.cause,
       code: 'CONFIGURATION.UNSUPPORTED_PRIMITIVE',
       detail: `Unsupported primitive type '${primitive}' for configuration key '${key}'.`,
-      stack: options.stack,
       title: 'Unsupported configuration primitive'
     });
   }
