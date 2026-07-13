@@ -1,12 +1,12 @@
 /**
- * Extracts the valid keys from a given configuration schema.
+ * Extracts the valid keys from a given configuration.
  */
-export type ConfigurationKey<S extends ConfigurationSchema> = keyof S & string;
+export type ConfigurationKey<C extends Configuration> = keyof C & string;
 
 /**
  * Defines the expected structure of a configuration object.
  */
-export type ConfigurationSchema = Record<string, ConfigurationValue>;
+export type Configuration = Record<string, ConfigurationValue>;
 
 /**
  * Defines the primitive value types supported.
@@ -14,14 +14,14 @@ export type ConfigurationSchema = Record<string, ConfigurationValue>;
 export type ConfigurationValue = 'boolean' | 'number' | 'string';
 
 /**
- * Resolves a configuration schema to its corresponding native types.
+ * Resolves a configuration to its corresponding native types.
  */
-export type ResolvedConfigurationSchema<S extends ConfigurationSchema> = {
-  [K in keyof S]: S[K] extends 'boolean'
+export type ResolvedConfiguration<C extends Configuration> = {
+  [K in keyof C]: C[K] extends 'boolean'
     ? boolean
-    : S[K] extends 'number'
+    : C[K] extends 'number'
       ? number
-      : S[K] extends 'string'
+      : C[K] extends 'string'
         ? string
         : never;
 };

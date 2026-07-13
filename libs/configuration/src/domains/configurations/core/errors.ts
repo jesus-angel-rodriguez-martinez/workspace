@@ -1,4 +1,25 @@
-import { CoreError, type ICoreErrorOptions } from '@libs/core';
+import { CoreError, type ICoreError, type ICoreErrorOptions } from '@libs/core';
+
+/**
+ * Error thrown when one or more configuration validation errors are found.
+ */
+export class AggregateConfigurationError extends CoreError {
+  /**
+   * @param errors - The collection of configuration errors.
+   * @param options - Optional error configuration options.
+   */
+  constructor(errors: ICoreError[], options: ICoreErrorOptions = {}) {
+    const count = errors.length;
+    const details = errors.map(({ code, detail }) => `- [${code}] ${detail}`).join('\n');
+    const isSingular = count === 1;
+    super({
+      cause: options.cause,
+      code: 'CONFIGURATION.INVALID',
+      detail: `Found ${count} configuration ${isSingular ? 'error' : 'errors'}:\n${details}`,
+      title: 'Invalid configuration'
+    });
+  }
+}
 
 /**
  * Error thrown when a configuration value is empty.
@@ -24,14 +45,13 @@ export class EmptyConfigurationError extends CoreError {
 export class InvalidBooleanConfigurationError extends CoreError {
   /**
    * @param key - The configuration key with invalid boolean value.
-   * @param value - The invalid value that could not be parsed as boolean.
    * @param options - Optional error configuration options.
    */
-  constructor(key: string, value: string, options: ICoreErrorOptions = {}) {
+  constructor(key: string, options: ICoreErrorOptions = {}) {
     super({
       cause: options.cause,
       code: 'CONFIGURATION.INVALID_BOOLEAN',
-      detail: `Invalid boolean value '${value}' for configuration key '${key}'.`,
+      detail: `Invalid boolean value for configuration key '${key}'.`,
       title: 'Invalid boolean configuration'
     });
   }
@@ -43,14 +63,13 @@ export class InvalidBooleanConfigurationError extends CoreError {
 export class InvalidNumberConfigurationError extends CoreError {
   /**
    * @param key - The configuration key with invalid number value.
-   * @param value - The invalid value that could not be parsed as number.
    * @param options - Optional error configuration options.
    */
-  constructor(key: string, value: string, options: ICoreErrorOptions = {}) {
+  constructor(key: string, options: ICoreErrorOptions = {}) {
     super({
       cause: options.cause,
       code: 'CONFIGURATION.INVALID_NUMBER',
-      detail: `Invalid number value '${value}' for configuration key '${key}'.`,
+      detail: `Invalid number value for configuration key '${key}'.`,
       title: 'Invalid number configuration'
     });
   }
