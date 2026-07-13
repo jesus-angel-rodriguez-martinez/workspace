@@ -32,7 +32,7 @@ export interface IUserModelFilters extends Partial<Pick<IUserModel, 'id' | 'user
 
 export interface IUsersRepository {
   /**
-   * Finds a user by given filter criteria.
+   * Finds a user by the given filter criteria.
    * If no filters are provided, returns the first user.
    *
    * @param filters - An object with zero or more properties to filter users by.

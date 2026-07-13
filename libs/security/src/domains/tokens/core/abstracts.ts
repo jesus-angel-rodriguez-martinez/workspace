@@ -37,7 +37,7 @@ export abstract class AbstractTokenService {
    */
   protected abstract validateConfiguration(): void;
   /**
-   * Verifies the signature and expiration of an authentication token and decodes its payload.
+   * Verifies the signature and expiration of an authentication token.
    *
    * @param token - The authentication token to verify.
    *

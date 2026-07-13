@@ -34,11 +34,11 @@ const isPasswordValid = await cryptographyService.verifyPassword(password, salt,
 
 ### Tokens
 
-`TokenService` generates signed JWT authentication tokens from a secure user payload:
+`TokenService` generates and verifies signed JWT authentication tokens from a user id:
 
 ```ts
 import { ConfigurationService } from '@libs/configuration';
-import { type ISecureUser, TokenService } from '@libs/security';
+import { TokenService } from '@libs/security';
 
 const { SECRET } = new ConfigurationService().getAll({ SECRET: 'string' });
 
@@ -48,15 +48,22 @@ const tokenService = new TokenService({
   secret: SECRET
 });
 
-const secureUser: ISecureUser = {
-  about: 'Software engineer',
-  id: '550e8400-e29b-41d4-a716-446655440000',
-  name: 'Jesús Ángel Rodríguez Martínez',
-  username: 'jesus-angel-rodriguez-martinez'
-};
-
-const token = tokenService.generateToken(secureUser);
+const token = tokenService.generateToken('550e8400-e29b-41d4-a716-446655440000');
 ```
+
+Use `verifyToken` to validate the signature and expiration of a token. It throws if the token is invalid or expired:
+
+```ts
+const { exp, iat, sub } = tokenService.verifyToken(token);
+```
+
+### Errors
+
+- `TokenExpiryError`: Thrown when verifying a token that has expired.
+- `TokenIssuanceError`: Thrown when an authentication token cannot be issued.
+- `TokenValidationError`: Thrown when verifying a token whose signature or format is invalid.
+- `WeakCryptographyConfigurationError`: Thrown when constructing a `CryptographyService` with a configuration value below its minimum security requirement.
+- `WeakTokenConfigurationError`: Thrown when constructing a `TokenService` with a configuration value below its minimum security requirement.
 
 ## 🧪 Testing
 

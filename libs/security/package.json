@@ -1,7 +1,7 @@
 {
   "name": "@libs/security",
   "version": "1.0.0",
-  "description": "Provides lightweight and reusable security utilities for handling identity validation, credential processing, and authentication-related helpers across the application.",
+  "description": "Provides lightweight and reusable security utilities for handling credential processing, identity validation, and authentication token management.",
   "keywords": [
     "@libs",
     "security"

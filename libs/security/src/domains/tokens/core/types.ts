@@ -5,11 +5,11 @@ export type AuthenticationToken = string;
 
 export interface ITokenPayload {
   /**
-   * The expiration time.
+   * The expiration time, in seconds since the Unix epoch.
    */
   exp: number;
   /**
-   * The time at which the token was issued.
+   * The time at which the token was issued, in seconds since the Unix epoch.
    */
   iat: number;
   /**
