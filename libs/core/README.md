@@ -22,9 +22,9 @@ import { CoreError, type ICoreErrorOptions } from '@libs/core';
 export class UserNotFoundError extends CoreError {
   constructor(username: string, options: ICoreErrorOptions = {}) {
     super({
+      cause: options.cause,
       code: 'USER.NOT_FOUND',
       detail: `The requested user '${username}' could not be found.`,
-      stack: options.stack,
       title: 'User not found'
     });
   }
