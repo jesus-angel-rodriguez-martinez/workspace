@@ -17,7 +17,7 @@ export abstract class AbstractConfigurationService<C extends Configuration> {
 
   /**
    * The constructor is protected to ensure this abstract class cannot be
-   * instantiated directly, but only through subclasses.
+   * instantiated directly, but only by subclasses.
    *
    * @param configuration - The configuration defining keys and their expected primitive types.
    */
