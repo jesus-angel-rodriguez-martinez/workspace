@@ -53,6 +53,19 @@ export class LoggerService extends AbstractLoggerService {
     LoggerService.rootLogger = pino(loggerOptions);
   }
 
+  public static async close(): Promise<void> {
+    if (!LoggerService.rootLogger) {
+      return;
+    }
+
+    await new Promise<void>((resolve) => {
+      LoggerService.rootLogger.flush(() => resolve());
+    });
+
+    LoggerService.rootLogger = undefined as unknown as Logger;
+    LoggerService.childLoggers = {};
+  }
+
   public trace(message: string, context?: LoggerContext): void {
     this.log('trace', message, context);
   }

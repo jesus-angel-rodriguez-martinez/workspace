@@ -22,6 +22,8 @@ const childMock = jest.fn(() => ({
   fatal: fatalMock
 }));
 
+const flushMock = jest.fn((callback?: () => void) => callback?.());
+
 const defaultMock = jest.fn(() => ({
   trace: traceMock,
   debug: debugMock,
@@ -29,7 +31,8 @@ const defaultMock = jest.fn(() => ({
   warn: warnMock,
   error: errorMock,
   fatal: fatalMock,
-  child: childMock
+  child: childMock,
+  flush: flushMock
 }));
 
 const stdTimeFunctionsMock = jest.fn();
@@ -167,6 +170,21 @@ describe('LoggerService', () => {
           expect(mock).toHaveBeenCalledWith({ error }, `logging ${level}`);
         });
       });
+    });
+  });
+
+  describe('close', () => {
+    it('flushes and resets the logger so it can be initialized again', async () => {
+      await LoggerService.close();
+
+      expect(flushMock).toHaveBeenCalledTimes(1);
+      expect(() =>
+        LoggerService.init({
+          level: 'trace',
+          applicationName: '@libs/logger',
+          prettify: false
+        })
+      ).not.toThrow();
     });
   });
 });
