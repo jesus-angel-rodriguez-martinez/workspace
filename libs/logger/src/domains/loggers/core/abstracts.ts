@@ -76,6 +76,15 @@ export abstract class AbstractLoggerService {
    */
   public abstract fatal(message: string, context?: LoggerContext): void;
   /**
+   * Formats a raw logger name into the stable identifier shown in log entries.
+   *
+   * Converts a module reference to a concise, package-scoped name.
+   *
+   * @param loggerName - The configured logger name.
+   * @returns The formatted logger name.
+   */
+  protected abstract formatLoggerName(loggerName: string): string;
+  /**
    * Logs a message at the specified log level.
    *
    * This method centralizes the common logging logic shared across all log levels.

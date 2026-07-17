@@ -1,8 +1,11 @@
+import { parse, sep } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import pino, { type Logger, type LoggerOptions, stdTimeFunctions } from 'pino';
 import {
   AbstractLoggerService,
   type ILoggerServiceConfiguration,
   type ILoggerServiceInitConfiguration,
+  LOGGER_RULES,
   LoggerAlreadyInitializedError,
   type LoggerContext,
   type LoggerLevel,
@@ -12,6 +15,7 @@ import {
 export class LoggerService extends AbstractLoggerService {
   protected static childLoggers: Record<string, Logger>;
   protected static rootLogger: Logger;
+  protected readonly loggerName: string;
 
   public constructor(configuration: ILoggerServiceConfiguration) {
     if (!LoggerService.rootLogger) {
@@ -19,11 +23,11 @@ export class LoggerService extends AbstractLoggerService {
     }
     super(configuration);
 
-    const { loggerName } = configuration;
+    this.loggerName = this.formatLoggerName(configuration.loggerName);
 
-    if (!LoggerService.childLoggers[loggerName]) {
-      LoggerService.childLoggers[loggerName] = LoggerService.rootLogger.child({
-        logger: loggerName
+    if (!LoggerService.childLoggers[this.loggerName]) {
+      LoggerService.childLoggers[this.loggerName] = LoggerService.rootLogger.child({
+        logger: this.loggerName
       });
     }
   }
@@ -90,11 +94,35 @@ export class LoggerService extends AbstractLoggerService {
     this.log('fatal', message, context);
   }
 
+  protected formatLoggerName(loggerName: string): string {
+    if (!loggerName.startsWith('file:')) {
+      return loggerName;
+    }
+
+    const segments = fileURLToPath(loggerName).split(sep);
+
+    const srcIndex = segments.lastIndexOf('src');
+    const distIndex = segments.lastIndexOf('dist');
+
+    const rootIndex = Math.max(srcIndex, distIndex);
+    if (rootIndex < LOGGER_RULES.packageName.DEPTH) {
+      return loggerName;
+    }
+
+    const packageName = segments.slice(rootIndex - LOGGER_RULES.packageName.DEPTH, rootIndex).join('/');
+
+    const modules = segments.slice(rootIndex + 1);
+    const fileName = parse(modules.pop() ?? '').name;
+
+    const feature = modules.length > 0 ? modules.join('/') : fileName === 'index' ? '' : fileName;
+    return feature ? `@${packageName}/${feature}` : `@${packageName}`;
+  }
+
   protected log(level: LoggerLevel, message: string, context: LoggerContext = {}): void {
     this.logger[level](context, message);
   }
 
   protected get logger(): Logger {
-    return LoggerService.childLoggers[this.configuration.loggerName] || LoggerService.rootLogger;
+    return LoggerService.childLoggers[this.loggerName] || LoggerService.rootLogger;
   }
 }

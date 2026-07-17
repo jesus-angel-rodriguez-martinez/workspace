@@ -1,10 +1,11 @@
-import { beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import {
-  AbstractLoggerService,
+  type AbstractLoggerService,
   LoggerAlreadyInitializedError,
   type LoggerLevel,
   LoggerNotInitializedError
 } from '@domains/loggers';
+import { type Bindings } from 'pino';
 
 const traceMock = jest.fn();
 const debugMock = jest.fn();
@@ -13,7 +14,7 @@ const warnMock = jest.fn();
 const errorMock = jest.fn();
 const fatalMock = jest.fn();
 
-const childMock = jest.fn(() => ({
+const childMock = jest.fn((_bindings: Bindings) => ({
   trace: traceMock,
   debug: debugMock,
   info: infoMock,
@@ -22,7 +23,7 @@ const childMock = jest.fn(() => ({
   fatal: fatalMock
 }));
 
-const flushMock = jest.fn((callback?: () => void) => callback?.());
+const flushMock = jest.fn((callback: Function) => callback());
 
 const defaultMock = jest.fn(() => ({
   trace: traceMock,
@@ -66,39 +67,26 @@ const { LoggerService } = await import('@infrastructures/loggers');
 describe('LoggerService', () => {
   const loggerName = import.meta.url;
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    await LoggerService.close();
+
+    LoggerService.init({
+      level: 'trace',
+      applicationName: '@libs/logger',
+      prettify: false
+    });
+
     jest.clearAllMocks();
   });
 
-  describe('when not initialized', () => {
-    it('throws LoggerNotInitializedError', () => {
-      expect(
-        () =>
-          new LoggerService({
-            loggerName
-          })
-      ).toThrow(LoggerNotInitializedError);
-    });
-  });
+  describe('init', () => {
+    it('throws LoggerNotInitializedError when a logger is created before initialization', async () => {
+      await LoggerService.close();
 
-  describe('when initialized', () => {
-    let loggerService: AbstractLoggerService;
-
-    beforeAll(() => {
-      LoggerService.init({
-        level: 'trace',
-        applicationName: '@libs/logger',
-        prettify: true
-      });
+      expect(() => new LoggerService({ loggerName })).toThrow(LoggerNotInitializedError);
     });
 
-    beforeEach(() => {
-      loggerService = new LoggerService({
-        loggerName
-      });
-    });
-
-    it('throws LoggerAlreadyInitializedError if the service has already been initialized', () => {
+    it('throws LoggerAlreadyInitializedError when initialized twice', () => {
       expect(() =>
         LoggerService.init({
           level: 'trace',
@@ -106,6 +94,31 @@ describe('LoggerService', () => {
           prettify: false
         })
       ).toThrow(LoggerAlreadyInitializedError);
+    });
+  });
+
+  describe('close', () => {
+    it('flushes and resets the logger so it can be initialized again', async () => {
+      await LoggerService.close();
+
+      expect(flushMock).toHaveBeenCalledTimes(1);
+      expect(() =>
+        LoggerService.init({
+          level: 'trace',
+          applicationName: '@libs/logger',
+          prettify: false
+        })
+      ).not.toThrow();
+    });
+  });
+
+  describe('logging', () => {
+    let loggerService: AbstractLoggerService;
+
+    beforeEach(() => {
+      loggerService = new LoggerService({
+        loggerName
+      });
     });
 
     describe('critical levels', () => {
@@ -173,18 +186,61 @@ describe('LoggerService', () => {
     });
   });
 
-  describe('close', () => {
-    it('flushes and resets the logger so it can be initialized again', async () => {
-      await LoggerService.close();
+  describe('formatLoggerName', () => {
+    it('reduces a src "file:" URL to a package-scoped feature path', () => {
+      new LoggerService({
+        loggerName: 'file:///workspace/libs/logger/src/infrastructures/loggers/services.ts'
+      });
 
-      expect(flushMock).toHaveBeenCalledTimes(1);
-      expect(() =>
-        LoggerService.init({
-          level: 'trace',
-          applicationName: '@libs/logger',
-          prettify: false
-        })
-      ).not.toThrow();
+      expect(childMock).toHaveBeenCalledWith({ logger: '@libs/logger/infrastructures/loggers' });
+    });
+
+    it('reduces a dist "file:" URL to the same package-scoped feature path', () => {
+      new LoggerService({
+        loggerName: 'file:///workspace/libs/logger/dist/infrastructures/loggers/services.js'
+      });
+
+      expect(childMock).toHaveBeenCalledWith({ logger: '@libs/logger/infrastructures/loggers' });
+    });
+
+    it('reduces an "index" file at the package root to the bare package name', () => {
+      new LoggerService({ loggerName: 'file:///workspace/libs/logger/src/index.ts' });
+
+      expect(childMock).toHaveBeenCalledWith({ logger: '@libs/logger' });
+    });
+
+    it('drops a nested "index" file, keeping the feature path', () => {
+      new LoggerService({ loggerName: 'file:///workspace/libs/logger/src/domains/loggers/core/index.ts' });
+
+      expect(childMock).toHaveBeenCalledWith({ logger: '@libs/logger/domains/loggers/core' });
+    });
+
+    it('keeps the file name for a non-index file at the package root', () => {
+      new LoggerService({ loggerName: 'file:///workspace/libs/logger/src/bootstrap.ts' });
+
+      expect(childMock).toHaveBeenCalledWith({ logger: '@libs/logger/bootstrap' });
+    });
+
+    it('resolves a dist file even when an ancestor directory is named "src"', () => {
+      new LoggerService({
+        loggerName: 'file:///src/workspace/libs/logger/dist/infrastructures/loggers/services.js'
+      });
+
+      expect(childMock).toHaveBeenCalledWith({ logger: '@libs/logger/infrastructures/loggers' });
+    });
+
+    it('uses an explicit logical name verbatim', () => {
+      new LoggerService({ loggerName: 'loggers' });
+
+      expect(childMock).toHaveBeenCalledWith({ logger: 'loggers' });
+    });
+
+    it('falls back to the original value when the "file:" URL cannot be reduced', () => {
+      const unresolvable = 'file:///scratch/services.ts';
+
+      new LoggerService({ loggerName: unresolvable });
+
+      expect(childMock).toHaveBeenCalledWith({ logger: unresolvable });
     });
   });
 });
