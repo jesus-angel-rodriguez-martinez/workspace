@@ -184,12 +184,22 @@
     //   // "autoinstallerName": "my-task"
     // }
     {
+      "commandKind": "bulk",
+      "name": "test",
+      "allowWarningsInSuccessfulBuild": true,
+      "description": "Invokes the \"test\" script in each project's package.json.",
+      "enableParallelism": true,
+      "ignoreDependencyOrder": true,
+      "ignoreMissingScript": false,
+      "summary": "Runs the test suite for every project."
+    },
+    {
       "commandKind": "global",
       "name": "prettier",
-      "summary": "Used by the pre-commit Git hook. Reformats staged files.",
-      "safeForSimultaneousRushProcesses": true,
       "autoinstallerName": "rush-prettier",
-      "shellCommand": "pretty-quick --staged"
+      "safeForSimultaneousRushProcesses": true,
+      "shellCommand": "pretty-quick --staged",
+      "summary": "Used by the pre-commit Git hook. Reformats staged files."
     }
   ],
 
