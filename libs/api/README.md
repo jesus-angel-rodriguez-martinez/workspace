@@ -16,7 +16,7 @@ rush add -p @libs/api
 
 ```ts
 import express from 'express';
-import { ConfigurationService } from '@libs/configuration';
+import { type Configuration, ConfigurationService } from '@libs/configuration';
 import { LoggerService } from '@libs/logger';
 import {
   ApiService,
@@ -25,11 +25,13 @@ import {
   PathsService
 } from '@libs/api';
 
-const { ENVIRONMENT, PORT, SECRET } = new ConfigurationService().getAll({
+const configuration = {
   ENVIRONMENT: 'string',
   PORT: 'number',
   SECRET: 'string'
-});
+} as const satisfies Configuration;
+
+const { ENVIRONMENT, PORT, SECRET } = new ConfigurationService(configuration).getAll();
 
 const isDevelopment = ENVIRONMENT === 'development';
 

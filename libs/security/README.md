@@ -37,10 +37,14 @@ const isPasswordValid = await cryptographyService.verifyPassword(password, salt,
 `TokenService` generates and verifies signed JWT authentication tokens from a user id:
 
 ```ts
-import { ConfigurationService } from '@libs/configuration';
+import { type Configuration, ConfigurationService } from '@libs/configuration';
 import { TokenService } from '@libs/security';
 
-const { SECRET } = new ConfigurationService().getAll({ SECRET: 'string' });
+const configuration = {
+  SECRET: 'string'
+} as const satisfies Configuration;
+
+const { SECRET } = new ConfigurationService(configuration).getAll();
 
 const tokenService = new TokenService({
   algorithm: 'HS256',
