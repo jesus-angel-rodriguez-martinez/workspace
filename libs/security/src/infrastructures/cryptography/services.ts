@@ -36,12 +36,12 @@ export class CryptographyService extends AbstractCryptographyService {
       throw new WeakCryptographyConfigurationError('iterations', CRYPTOGRAPHY_RULES.iterations.MIN);
     }
 
-    if (keyLength < CRYPTOGRAPHY_RULES.keyLength.MIN) {
-      throw new WeakCryptographyConfigurationError('keyLength', CRYPTOGRAPHY_RULES.keyLength.MIN);
+    if (keyLength < CRYPTOGRAPHY_RULES.key.MIN_LENGTH) {
+      throw new WeakCryptographyConfigurationError('keyLength', CRYPTOGRAPHY_RULES.key.MIN_LENGTH);
     }
 
-    if (saltLength < CRYPTOGRAPHY_RULES.saltLength.MIN) {
-      throw new WeakCryptographyConfigurationError('saltLength', CRYPTOGRAPHY_RULES.saltLength.MIN);
+    if (saltLength < CRYPTOGRAPHY_RULES.salt.MIN_LENGTH) {
+      throw new WeakCryptographyConfigurationError('saltLength', CRYPTOGRAPHY_RULES.salt.MIN_LENGTH);
     }
   }
 

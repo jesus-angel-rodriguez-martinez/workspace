@@ -8,16 +8,16 @@ export const CRYPTOGRAPHY_RULES = {
      */
     MIN: 100_000
   },
-  keyLength: {
+  key: {
     /**
      * Minimum length in bytes of a derived key.
      */
-    MIN: 32
+    MIN_LENGTH: 32
   },
-  saltLength: {
+  salt: {
     /**
      * Minimum length in bytes of a cryptographic salt.
      */
-    MIN: 16
+    MIN_LENGTH: 16
   }
 } as const;
