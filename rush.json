@@ -16,6 +16,10 @@
   "projectFolderMinDepth": 2,
   "projects": [
     {
+      "packageName": "@apis/identity",
+      "projectFolder": "apis/identity"
+    },
+    {
       "packageName": "@libs/api",
       "projectFolder": "libs/api"
     },
