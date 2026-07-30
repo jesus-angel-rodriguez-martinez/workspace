@@ -71,8 +71,8 @@ describe('LoggerService', () => {
     await LoggerService.close();
 
     LoggerService.init({
-      level: 'trace',
       applicationName: '@libs/logger',
+      level: 'trace',
       prettify: false
     });
 
@@ -89,8 +89,8 @@ describe('LoggerService', () => {
     it('throws LoggerAlreadyInitializedError when initialized twice', () => {
       expect(() =>
         LoggerService.init({
-          level: 'trace',
           applicationName: '@libs/logger',
+          level: 'trace',
           prettify: false
         })
       ).toThrow(LoggerAlreadyInitializedError);
@@ -104,8 +104,8 @@ describe('LoggerService', () => {
       expect(flushMock).toHaveBeenCalledTimes(1);
       expect(() =>
         LoggerService.init({
-          level: 'trace',
           applicationName: '@libs/logger',
+          level: 'trace',
           prettify: false
         })
       ).not.toThrow();
