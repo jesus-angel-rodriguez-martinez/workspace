@@ -11,7 +11,7 @@ import {
   WeakTokenConfigurationError
 } from '@domains/tokens';
 
-const { sign, verify, TokenExpiredError } = jsonwebtoken;
+const { TokenExpiredError, sign, verify } = jsonwebtoken;
 
 export class TokenService extends AbstractTokenService {
   constructor(configuration: ITokenServiceConfiguration) {
