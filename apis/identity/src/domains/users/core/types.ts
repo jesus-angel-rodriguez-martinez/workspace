@@ -1,16 +1,17 @@
 import {
-  type InvalidNameCharactersError,
-  type InvalidUsernameCharactersError,
-  type NameEndsWithWhitespaceError,
-  type NameLengthOutOfRangeError,
-  type NameStartsWithWhitespaceError,
-  type PasswordLengthOutOfRangeError,
   type UserAlreadyExistsError,
-  type UserMissingLowercaseCharacterError,
-  type UserMissingNumericDigitError,
-  type UserMissingUppercaseCharacterError,
+  type UserNameConsecutiveWhitespaceError,
+  type UserNameEndsWithWhitespaceError,
+  type UserNameInvalidCharactersError,
+  type UserNameLengthOutOfRangeError,
+  type UserNameStartsWithWhitespaceError,
   type UserNotFoundError,
-  type UsernameLengthOutOfRangeError
+  type UserPasswordLengthOutOfRangeError,
+  type UserPasswordMissingLowercaseCharacterError,
+  type UserPasswordMissingNumericDigitError,
+  type UserPasswordMissingUppercaseCharacterError,
+  type UserUsernameInvalidCharactersError,
+  type UserUsernameLengthOutOfRangeError
 } from '@domains/users';
 
 /**
@@ -50,15 +51,16 @@ export interface IUser {
 }
 
 export type UserError =
-  | InvalidNameCharactersError
-  | InvalidUsernameCharactersError
-  | NameEndsWithWhitespaceError
-  | NameLengthOutOfRangeError
-  | NameStartsWithWhitespaceError
-  | PasswordLengthOutOfRangeError
   | UserAlreadyExistsError
-  | UserMissingLowercaseCharacterError
-  | UserMissingNumericDigitError
-  | UserMissingUppercaseCharacterError
+  | UserNameConsecutiveWhitespaceError
+  | UserNameEndsWithWhitespaceError
+  | UserNameInvalidCharactersError
+  | UserNameLengthOutOfRangeError
+  | UserNameStartsWithWhitespaceError
   | UserNotFoundError
-  | UsernameLengthOutOfRangeError;
+  | UserPasswordLengthOutOfRangeError
+  | UserPasswordMissingLowercaseCharacterError
+  | UserPasswordMissingNumericDigitError
+  | UserPasswordMissingUppercaseCharacterError
+  | UserUsernameInvalidCharactersError
+  | UserUsernameLengthOutOfRangeError;

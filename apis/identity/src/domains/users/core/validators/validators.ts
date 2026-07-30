@@ -1,17 +1,18 @@
 import {
   AbstractCreateUsersValidator,
   type ICreateUser,
-  InvalidNameCharactersError,
-  InvalidUsernameCharactersError,
-  NameEndsWithWhitespaceError,
-  NameLengthOutOfRangeError,
-  NameStartsWithWhitespaceError,
-  PasswordLengthOutOfRangeError,
   USER_RULES,
-  UserMissingLowercaseCharacterError,
-  UserMissingNumericDigitError,
-  UserMissingUppercaseCharacterError,
-  UsernameLengthOutOfRangeError
+  UserNameConsecutiveWhitespaceError,
+  UserNameEndsWithWhitespaceError,
+  UserNameInvalidCharactersError,
+  UserNameLengthOutOfRangeError,
+  UserNameStartsWithWhitespaceError,
+  UserPasswordLengthOutOfRangeError,
+  UserPasswordMissingLowercaseCharacterError,
+  UserPasswordMissingNumericDigitError,
+  UserPasswordMissingUppercaseCharacterError,
+  UserUsernameInvalidCharactersError,
+  UserUsernameLengthOutOfRangeError
 } from '@domains/users';
 
 export class CreateUsersValidator extends AbstractCreateUsersValidator {
@@ -27,23 +28,26 @@ export class CreateUsersValidator extends AbstractCreateUsersValidator {
 
   protected validateName(name: string): void {
     const { MAX_LENGTH, MIN_LENGTH, REGEX_PATTERNS } = USER_RULES.name;
-    const { ALLOWED_CHARACTERS } = REGEX_PATTERNS;
+    const { ALLOWED_CHARACTERS, CONSECUTIVE_WHITESPACE } = REGEX_PATTERNS;
 
     const length = name.length;
     if (length < MIN_LENGTH || length > MAX_LENGTH) {
-      throw new NameLengthOutOfRangeError(length);
+      throw new UserNameLengthOutOfRangeError(length);
     }
 
     const whiteSpace = ' ';
     if (name.startsWith(whiteSpace)) {
-      throw new NameStartsWithWhitespaceError();
+      throw new UserNameStartsWithWhitespaceError();
     }
     if (name.endsWith(whiteSpace)) {
-      throw new NameEndsWithWhitespaceError();
+      throw new UserNameEndsWithWhitespaceError();
     }
 
+    if (CONSECUTIVE_WHITESPACE.test(name)) {
+      throw new UserNameConsecutiveWhitespaceError();
+    }
     if (!ALLOWED_CHARACTERS.test(name)) {
-      throw new InvalidNameCharactersError();
+      throw new UserNameInvalidCharactersError();
     }
   }
 
@@ -53,17 +57,17 @@ export class CreateUsersValidator extends AbstractCreateUsersValidator {
 
     const length = password.length;
     if (length < MIN_LENGTH || length > MAX_LENGTH) {
-      throw new PasswordLengthOutOfRangeError(length);
+      throw new UserPasswordLengthOutOfRangeError(length);
     }
 
     if (!HAS_LOWERCASE.test(password)) {
-      throw new UserMissingLowercaseCharacterError();
+      throw new UserPasswordMissingLowercaseCharacterError();
     }
     if (!HAS_NUMBER.test(password)) {
-      throw new UserMissingNumericDigitError();
+      throw new UserPasswordMissingNumericDigitError();
     }
     if (!HAS_UPPERCASE.test(password)) {
-      throw new UserMissingUppercaseCharacterError();
+      throw new UserPasswordMissingUppercaseCharacterError();
     }
   }
 
@@ -73,11 +77,11 @@ export class CreateUsersValidator extends AbstractCreateUsersValidator {
 
     const length = username.length;
     if (length < MIN_LENGTH || length > MAX_LENGTH) {
-      throw new UsernameLengthOutOfRangeError(length);
+      throw new UserUsernameLengthOutOfRangeError(length);
     }
 
     if (!ALLOWED_CHARACTERS.test(username)) {
-      throw new InvalidUsernameCharactersError();
+      throw new UserUsernameInvalidCharactersError();
     }
   }
 }

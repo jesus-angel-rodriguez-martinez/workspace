@@ -18,7 +18,11 @@ export const USER_RULES = {
       /**
        * Regex pattern to allow only letters, spaces, and apostrophes.
        */
-      ALLOWED_CHARACTERS: /^[\p{L} ']+$/u
+      ALLOWED_CHARACTERS: /^[\p{L} ']+$/u,
+      /**
+       * Regex pattern to detect two or more consecutive whitespace characters.
+       */
+      CONSECUTIVE_WHITESPACE: /\s{2,}/
     }
   },
   password: {
