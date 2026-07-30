@@ -47,4 +47,12 @@ export abstract class AbstractAuthenticationApp {
    * @returns A promise that resolves with the authentication token.
    */
   public abstract authenticate(userCredentials: IUserCredentials): Promise<AuthenticationToken>;
+  /**
+   * Issues an authentication token for the given user.
+   *
+   * @param userId - The unique identifier of the user for whom the token will be issued.
+   *
+   * @returns The generated authentication token.
+   */
+  public abstract issueToken(userId: string): AuthenticationToken;
 }

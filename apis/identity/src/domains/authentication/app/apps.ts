@@ -30,7 +30,12 @@ export class AuthenticationApp extends AbstractAuthenticationApp {
       throw new WrongCredentialsError();
     }
 
-    const token = this.tokenService.generateToken(userModel.id);
+    const token = this.issueToken(userModel.id);
+    return token;
+  }
+
+  public issueToken(userId: string): AuthenticationToken {
+    const token = this.tokenService.generateToken(userId);
     return token;
   }
 }
