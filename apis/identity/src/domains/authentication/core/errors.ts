@@ -8,8 +8,8 @@ export class WrongCredentialsError extends CoreError {
     super({
       cause: options.cause,
       code: 'AUTHENTICATION.WRONG_CREDENTIALS',
-      title: 'Wrong username or password.',
-      detail: 'The provided username or password is incorrect'
+      title: 'Wrong credentials',
+      detail: 'The provided username or password is incorrect.'
     });
   }
 }

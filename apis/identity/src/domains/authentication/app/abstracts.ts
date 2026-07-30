@@ -1,5 +1,5 @@
 import { type IAuthenticationAppConfiguration, type IUserCredentials } from '@domains/authentication';
-import { type IUsersRepository } from '@domains/users';
+import { type AbstractUsersApp, type ICreateUser, type IUsersRepository } from '@domains/users';
 import {
   type AbstractCryptographyService,
   type AbstractTokenService,
@@ -11,13 +11,17 @@ import {
  */
 export abstract class AbstractAuthenticationApp {
   /**
-   * Provides cryptographic utilities for securely verifying passwords.
+   * Provides cryptographic utilities.
    */
   protected readonly cryptographyService: AbstractCryptographyService;
   /**
-   * Provides utilities for generating and validating authentication tokens.
+   * Provides token utilities.
    */
   protected readonly tokenService: AbstractTokenService;
+  /**
+   * Provides user use cases.
+   */
+  protected readonly usersApp: AbstractUsersApp;
   /**
    * Provides access to user data.
    */
@@ -32,27 +36,29 @@ export abstract class AbstractAuthenticationApp {
   protected constructor({
     cryptographyService,
     tokenService,
+    usersApp,
     usersRepository
   }: IAuthenticationAppConfiguration) {
     this.cryptographyService = cryptographyService;
     this.tokenService = tokenService;
+    this.usersApp = usersApp;
     this.usersRepository = usersRepository;
   }
 
   /**
-   * Authenticates a user using their credentials.
+   * Logs a user in using their credentials.
    *
    * @param userCredentials - The credentials provided by the user.
    *
    * @returns A promise that resolves with the authentication token.
    */
-  public abstract authenticate(userCredentials: IUserCredentials): Promise<AuthenticationToken>;
+  public abstract logIn(userCredentials: IUserCredentials): Promise<AuthenticationToken>;
   /**
-   * Issues an authentication token for the given user.
+   * Signs a new user up.
    *
-   * @param userId - The unique identifier of the user for whom the token will be issued.
+   * @param payload - The data required to create the user.
    *
-   * @returns The generated authentication token.
+   * @returns A promise that resolves with the authentication token.
    */
-  public abstract issueToken(userId: string): AuthenticationToken;
+  public abstract signUp(payload: ICreateUser): Promise<AuthenticationToken>;
 }
