@@ -1,8 +1,8 @@
-import { CONFIGURATION_SCHEMA } from '@infrastructures/configurations';
+import { type ComposeConfigurations } from '@infrastructures/configurations';
 import { ConfigurationService } from '@libs/configuration';
 
-export const composeConfiguration = () => {
-  const configurationService = new ConfigurationService(CONFIGURATION_SCHEMA);
+export const composeConfigurations: ComposeConfigurations = (configuration) => {
+  const configurationService = new ConfigurationService(configuration);
   const configurations = configurationService.getAll();
   return configurations;
 };

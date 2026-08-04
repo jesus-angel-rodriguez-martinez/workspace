@@ -1,2 +1,2 @@
 export * from './compositions';
-export * from './constants';
+export * from './types';

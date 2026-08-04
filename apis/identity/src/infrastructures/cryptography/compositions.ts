@@ -1,7 +1,7 @@
-import { CRYPTOGRAPHY_CONFIGURATION } from '@infrastructures/cryptography';
+import { type ComposeCryptography } from '@infrastructures/cryptography';
 import { CryptographyService } from '@libs/security';
 
-export const composeCryptography = () => {
-  const cryptographyService = new CryptographyService(CRYPTOGRAPHY_CONFIGURATION);
-  return { cryptographyService };
+export const composeCryptography: ComposeCryptography = (configuration) => {
+  const cryptographyService = new CryptographyService(configuration);
+  return cryptographyService;
 };

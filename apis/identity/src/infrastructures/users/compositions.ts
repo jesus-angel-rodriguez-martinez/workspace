@@ -1,8 +1,12 @@
 import { UsersApp } from '@domains/users';
-import { CreateUsersValidator, UsersModelMapper, UsersRepository } from '@infrastructures/users';
-import { type AbstractCryptographyService } from '@libs/security';
+import {
+  type ComposeUsers,
+  CreateUsersValidator,
+  UsersModelMapper,
+  UsersRepository
+} from '@infrastructures/users';
 
-export const composeUsers = (cryptographyService: AbstractCryptographyService) => {
+export const composeUsers: ComposeUsers = ({ cryptographyService }) => {
   const createUsersValidator = new CreateUsersValidator();
 
   const usersModelMapper = new UsersModelMapper();
