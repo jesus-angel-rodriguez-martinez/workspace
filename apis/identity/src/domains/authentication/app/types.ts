@@ -11,7 +11,7 @@ export interface IAuthenticationAppConfiguration {
    */
   tokenService: AbstractTokenService;
   /**
-   * Provides user use cases, used to create the account on sign-up.
+   * Provides user use cases.
    */
   usersApp: AbstractUsersApp;
   /**

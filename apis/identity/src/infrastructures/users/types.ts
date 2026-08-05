@@ -12,7 +12,7 @@ export interface IComposeUsersConfiguration {
 
 export interface IComposedUsers {
   /**
-   * Provides user use cases, used to create the account on sign-up.
+   * Provides user use cases.
    */
   usersApp: AbstractUsersApp;
   /**

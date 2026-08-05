@@ -28,14 +28,14 @@ Read the resolved values with full type safety through `getAll` (every value):
 import { type Configuration, ConfigurationService } from '@libs/configuration';
 
 const configuration = {
+  API_PORT: 'number',
   DEBUG: 'boolean',
-  PORT: 'number',
-  SECRET: 'string'
+  JWT_SECRET: 'string'
 } as const satisfies Configuration;
 
 const configurationService = new ConfigurationService(configuration);
 
-export const { DEBUG, PORT, SECRET } = configurationService.getAll();
+export const { API_PORT, DEBUG, JWT_SECRET } = configurationService.getAll();
 ```
 
 Or read the resolved values with full type safety through `get` (a single value):
@@ -44,16 +44,16 @@ Or read the resolved values with full type safety through `get` (a single value)
 import { type Configuration, ConfigurationService } from '@libs/configuration';
 
 const configuration = {
+  API_PORT: 'number',
   DEBUG: 'boolean',
-  PORT: 'number',
-  SECRET: 'string'
+  JWT_SECRET: 'string'
 } as const satisfies Configuration;
 
 const configurationService = new ConfigurationService(configuration);
 
+export const API_PORT = configurationService.get('API_PORT');
 export const DEBUG = configurationService.get('DEBUG');
-export const PORT = configurationService.get('PORT');
-export const SECRET = configurationService.get('SECRET');
+export const JWT_SECRET = configurationService.get('JWT_SECRET');
 ```
 
 Because parsing happens at construction time, later changes to `process.env` do not affect an already-created service.
