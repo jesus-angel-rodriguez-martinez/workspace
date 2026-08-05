@@ -49,6 +49,9 @@ export class LoggerService extends AbstractLoggerService {
 
     if (prettify) {
       loggerOptions.transport = {
+        options: {
+          translateTime: 'yyyy-mm-dd HH:MM:ss'
+        },
         target: 'pino-pretty'
       };
     }

@@ -1,4 +1,5 @@
 import { AuthenticationApp } from '@domains/authentication';
+import { composeApis } from '@infrastructures/apis';
 import { composeConfigurations } from '@infrastructures/configurations';
 import { composeCryptography } from '@infrastructures/cryptography';
 import { composeLoggers } from '@infrastructures/loggers';
@@ -56,6 +57,10 @@ const init = async () => {
     });
 
     loggerService.info(`User signed up at PORT: ${API_PORT}.`, { token });
+
+    await composeApis({
+      usersApp
+    });
   } catch (e) {
     const error = e as Error;
 
