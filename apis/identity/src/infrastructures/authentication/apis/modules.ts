@@ -1,7 +1,14 @@
-import { AuthenticationController } from '@infrastructures/authentication';
-import { Module } from '@nestjs/common';
+import { AbstractAuthenticationApp } from '@domains/authentication';
+import { AuthenticationApiController } from '@infrastructures/authentication';
+import { type DynamicModule, Module } from '@nestjs/common';
 
-@Module({
-  controllers: [AuthenticationController]
-})
-export class AuthenticationModule {}
+@Module({})
+export class AuthenticationApiModule {
+  static forRoot(authenticationApp: AbstractAuthenticationApp): DynamicModule {
+    return {
+      controllers: [AuthenticationApiController],
+      module: AuthenticationApiModule,
+      providers: [{ provide: AbstractAuthenticationApp, useValue: authenticationApp }]
+    };
+  }
+}

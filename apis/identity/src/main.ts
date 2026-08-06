@@ -1,7 +1,8 @@
 import { AuthenticationApp } from '@domains/authentication';
-import { composeApis } from '@infrastructures/apis';
+import { composeApi } from '@infrastructures/api';
 import { composeConfigurations } from '@infrastructures/configurations';
 import { composeCryptography } from '@infrastructures/cryptography';
+import { shutdown } from '@infrastructures/lifecycle';
 import { composeLoggers } from '@infrastructures/loggers';
 import { composeTokens } from '@infrastructures/tokens';
 import { composeUsers } from '@infrastructures/users';
@@ -50,42 +51,17 @@ const init = async () => {
       usersRepository
     });
 
-    const token = await authenticationApp.signUp({
-      name: 'test',
-      password: 'Fake-P@ssw0rd',
-      username: 'test'
+    const api = await composeApi({
+      authenticationApp
     });
 
-    loggerService.info(`User signed up at PORT: ${API_PORT}.`, { token });
-
-    await composeApis({
-      usersApp
-    });
+    await api.listen(API_PORT);
   } catch (e) {
-    const error = e as Error;
-
-    if (loggerService) {
-      loggerService.fatal('Critical error encountered.', { error });
-    } else {
-      console.error('Logger service unavailable during critical failure.', error);
-    }
-
-    process.exit(1);
+    await shutdown({ loggerService, reason: { error: e as Error } });
   }
-};
-
-const shutdown = async (signal: 'SIGINT' | 'SIGTERM') => {
-  const message = `${signal} received. Shutting down API.`;
-
-  if (!loggerService) {
-    console.error(`Logger service unavailable during ${signal}.`, message);
-  } else {
-    loggerService.info(message);
-  }
-
-  process.exit(0);
 };
 
 await init();
-process.on('SIGINT', () => shutdown('SIGINT'));
-process.on('SIGTERM', () => shutdown('SIGTERM'));
+
+process.on('SIGINT', () => shutdown({ loggerService, reason: { signal: 'SIGINT' } }));
+process.on('SIGTERM', () => shutdown({ loggerService, reason: { signal: 'SIGTERM' } }));
