@@ -2,6 +2,13 @@ import { type AbstractLoggerService } from '@libs/logger';
 import { type LoggerService } from '@nestjs/common';
 
 export class LoggerAdapter implements LoggerService {
+  private readonly ignoredContexts = [
+    'InstanceLoader',
+    'NestApplication',
+    'NestFactory',
+    'RouterExplorer',
+    'RoutesResolver'
+  ];
   private readonly loggerService: AbstractLoggerService;
 
   constructor(loggerService: AbstractLoggerService) {
@@ -20,7 +27,10 @@ export class LoggerAdapter implements LoggerService {
     this.loggerService.fatal(message);
   }
 
-  log(message: string): void {
+  log(message: string, context?: string): void {
+    if (context && this.ignoredContexts.includes(context)) {
+      return;
+    }
     this.loggerService.info(message);
   }
 

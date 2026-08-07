@@ -26,6 +26,7 @@ const init = async () => {
       loggerName: import.meta.url,
       prettify: isDevelopment
     });
+    loggerService.debug('🔧 Logger service ready');
 
     const cryptographyService = composeCryptography({
       digest: 'sha256',
@@ -33,16 +34,20 @@ const init = async () => {
       keyLength: 64,
       saltLength: 16
     });
+    loggerService.debug('🔧 Cryptography service ready');
 
     const tokenService = composeTokens({
       algorithm: 'HS256',
       expiresIn: 3_600,
       secret: JWT_SECRET
     });
+    loggerService.debug('🔧 Token service ready');
 
     const { usersApp, usersRepository } = composeUsers({
       cryptographyService
     });
+    loggerService.debug('📦 User repository ready');
+    loggerService.debug('🧩 User application ready');
 
     const authenticationApp = new AuthenticationApp({
       cryptographyService,
@@ -50,13 +55,19 @@ const init = async () => {
       usersApp,
       usersRepository
     });
+    loggerService.debug('🧩 Authentication application ready');
 
     const api = await composeApi({
       authenticationApp,
       loggerService
     });
+    loggerService.debug('🌐 API ready');
 
     await api.listen(API_PORT);
+    loggerService.info('🚀 API listening', {
+      environment: ENVIRONMENT,
+      port: API_PORT
+    });
   } catch (e) {
     await shutdown({ loggerService, reason: { error: e as Error } });
   }
