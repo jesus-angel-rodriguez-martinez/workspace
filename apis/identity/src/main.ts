@@ -52,7 +52,8 @@ const init = async () => {
     });
 
     const api = await composeApi({
-      authenticationApp
+      authenticationApp,
+      loggerService
     });
 
     await api.listen(API_PORT);
