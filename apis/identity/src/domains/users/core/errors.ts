@@ -1,5 +1,5 @@
 import { USER_RULES } from '@domains/users';
-import { CoreError, ICoreErrorOptions } from '@libs/core';
+import { CoreError, type ICoreErrorOptions } from '@libs/core';
 
 /**
  * Error thrown when a requested user already exists in the system.
@@ -151,6 +151,20 @@ export class UserPasswordMissingUppercaseCharacterError extends CoreError {
       code: 'USER.PASSWORD_MISSING_UPPERCASE_CHARACTER',
       detail: 'The password must contain at least one uppercase character.',
       title: 'Password missing uppercase character'
+    });
+  }
+}
+
+/**
+ * Error thrown when a user is not authorized to perform a certain action.
+ */
+export class UserUnauthorizedError extends CoreError {
+  constructor(options: ICoreErrorOptions = {}) {
+    super({
+      cause: options.cause,
+      code: 'USER.UNAUTHORIZED',
+      detail: 'You do not have permission to perform this action.',
+      title: 'Unauthorized'
     });
   }
 }

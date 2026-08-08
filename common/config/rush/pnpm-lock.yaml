@@ -11,6 +11,9 @@ importers:
 
   ../../apis/identity:
     dependencies:
+      '@libs/api':
+        specifier: workspace:*
+        version: link:../../libs/api
       '@libs/configuration':
         specifier: workspace:*
         version: link:../../libs/configuration

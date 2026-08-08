@@ -1,4 +1,4 @@
-import { AbstractAuthenticationApp } from '@domains/authentication';
+import { type AbstractAuthenticationApp } from '@domains/authentication';
 import { AuthenticationApiModule } from '@infrastructures/authentication';
 import { type DynamicModule, Module } from '@nestjs/common';
 

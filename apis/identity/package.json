@@ -24,6 +24,7 @@
     "test": "npm run start:test"
   },
   "dependencies": {
+    "@libs/api": "workspace:*",
     "@libs/configuration": "workspace:*",
     "@libs/core": "workspace:*",
     "@libs/logger": "workspace:*",

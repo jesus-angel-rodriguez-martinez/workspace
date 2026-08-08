@@ -10,6 +10,7 @@ import {
   type UserPasswordMissingLowercaseCharacterError,
   type UserPasswordMissingNumericDigitError,
   type UserPasswordMissingUppercaseCharacterError,
+  type UserUnauthorizedError,
   type UserUsernameInvalidCharactersError,
   type UserUsernameLengthOutOfRangeError
 } from '@domains/users';
@@ -62,5 +63,6 @@ export type UserError =
   | UserPasswordMissingLowercaseCharacterError
   | UserPasswordMissingNumericDigitError
   | UserPasswordMissingUppercaseCharacterError
+  | UserUnauthorizedError
   | UserUsernameInvalidCharactersError
   | UserUsernameLengthOutOfRangeError;

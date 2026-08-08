@@ -1,4 +1,4 @@
-import { CoreError, ICoreErrorOptions } from '@libs/core';
+import { CoreError, type ICoreErrorOptions } from '@libs/core';
 
 /**
  * Error thrown when the username or password is incorrect.
