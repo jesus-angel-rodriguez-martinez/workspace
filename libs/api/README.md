@@ -1,6 +1,6 @@
 # Api
 
-`@libs/api` provides a lifecycle-managed, modular, and OpenAPI-compliant HTTP service layer for Express applications.
+`@libs/api` provides reusable HTTP error classes and a NestJS exception filter that map domain errors to consistent JSON:API responses.
 
 ## 📦 Installation
 
@@ -14,63 +14,72 @@ rush add -p @libs/api
 
 ### Initialization
 
+Declare a domain-specific abstract mapper by extending `AbstractApiMapper`:
+
 ```ts
-import express from 'express';
-import { type Configuration, ConfigurationService } from '@libs/configuration';
-import { LoggerService } from '@libs/logger';
-import {
-  ApiService,
-  AuthenticationMiddlewaresService,
-  GlobalMiddlewaresService,
-  PathsService
-} from '@libs/api';
+import { type UserApiError } from '@infrastructures/users';
+import { AbstractApiMapper } from '@libs/api';
+import { type CoreError } from '@libs/core';
 
-const configuration = {
-  ENVIRONMENT: 'string',
-  PORT: 'number',
-  SECRET: 'string'
-} as const satisfies Configuration;
+export abstract class AbstractUsersApiMapper extends AbstractApiMapper {
+  protected constructor() {
+    super();
+  }
 
-const { ENVIRONMENT, PORT, SECRET } = new ConfigurationService(configuration).getAll();
-
-const isDevelopment = ENVIRONMENT === 'development';
-
-LoggerService.init({
-  applicationName: 'my-app',
-  level: isDevelopment ? 'trace' : 'info',
-  prettify: isDevelopment
-});
-
-const loggerService = new LoggerService({ loggerName: import.meta.url });
-const app = express();
-
-const { apiDocPath, endpointsPath } = new PathsService().resolve('my-app');
-
-const authenticationMiddlewaresService = new AuthenticationMiddlewaresService({
-  loggerService,
-  secret: SECRET,
-  usersRepository
-});
-
-const globalMiddlewaresService = new GlobalMiddlewaresService({
-  apiDocPath,
-  apiMapper,
-  app,
-  dependencies: {},
-  endpointsPath,
-  loggerService
-});
-
-const apiService = new ApiService({
-  app,
-  authenticationMiddlewaresService,
-  globalMiddlewaresService,
-  loggerService,
-  port: PORT
-});
-
-await apiService.init();
+  public abstract override toApiError(error: CoreError): UserApiError | undefined;
+}
 ```
+
+Implement it, converting each domain error into its API error. The trailing `exhaustiveCheck` turns forgetting to map any `UserError` member into a compile-time error:
+
+```ts
+import { UserAlreadyExistsError, type UserError, UserNotFoundError } from '@domains/users';
+import {
+  AbstractUsersApiMapper,
+  UserAlreadyExistsApiError,
+  type UserApiError,
+  UserNotFoundApiError
+} from '@infrastructures/users';
+
+export class UsersApiMapper extends AbstractUsersApiMapper {
+  public constructor() {
+    super();
+  }
+
+  public toApiError(error: UserError): UserApiError | undefined {
+    if (error instanceof UserAlreadyExistsError) {
+      return new UserAlreadyExistsApiError(error);
+    }
+    if (error instanceof UserNotFoundError) {
+      return new UserNotFoundApiError(error);
+    }
+
+    const exhaustiveCheck: never = error;
+    void exhaustiveCheck;
+
+    return undefined;
+  }
+}
+```
+
+Every `UserError` member must be mapped: once all are handled, `error` narrows to `never` and the assignment compiles. Miss one and it fails to compile.
+
+Compose the domain mappers into a single `ApiMapper` and register the `ApiExceptionFilter` so thrown errors become JSON:API responses:
+
+```ts
+import { UsersApiMapper } from '@infrastructures/users';
+import { ApiExceptionFilter, ApiMapper } from '@libs/api';
+
+const usersApiMapper = new UsersApiMapper();
+
+const apiMapper = new ApiMapper({ mappers: [usersApiMapper] });
+
+const apiExceptionFilter = new ApiExceptionFilter({ apiMapper, loggerService });
+
+app.useGlobalFilters(apiExceptionFilter);
+```
+
+The filter catches both domain errors (`CoreError`, mapped via the `ApiMapper`) and API errors (`ApiError`, used as-is). Unmapped errors fall back to a generic `InternalServerError`, and every response is serialized as `{ errors: [...] }`.
 
 ### Errors
 
