@@ -1,10 +1,11 @@
 import { type AbstractAuthenticationApp } from '@domains/authentication';
 import { type AbstractUsersApp, type IUsersRepository } from '@domains/users';
-import { type AbstractTokenService, type AbstractCryptographyService } from '@libs/security';
+import { type AbstractAuthenticationApiMapper } from '@infrastructures/authentication';
+import { type AbstractCryptographyService, type AbstractTokenService } from '@libs/security';
 
 export type ComposeAuthentication = (
   configuration: IComposeAuthenticationConfiguration
-) => AbstractAuthenticationApp;
+) => IComposedAuthentication;
 
 export interface IComposeAuthenticationConfiguration {
   /**
@@ -23,4 +24,15 @@ export interface IComposeAuthenticationConfiguration {
    * Provides access to user data.
    */
   usersRepository: IUsersRepository;
+}
+
+export interface IComposedAuthentication {
+  /**
+   * Responsible for mapping authentication API errors.
+   */
+  authenticationApiMapper: AbstractAuthenticationApiMapper;
+  /**
+   * Provides authentication use cases.
+   */
+  authenticationApp: AbstractAuthenticationApp;
 }

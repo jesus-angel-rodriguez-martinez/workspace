@@ -1,5 +1,5 @@
 import { AuthenticationApp } from '@domains/authentication';
-import { type ComposeAuthentication } from '@infrastructures/authentication';
+import { AuthenticationApiMapper, type ComposeAuthentication } from '@infrastructures/authentication';
 
 export const composeAuthentication: ComposeAuthentication = ({
   cryptographyService,
@@ -7,11 +7,14 @@ export const composeAuthentication: ComposeAuthentication = ({
   usersApp,
   usersRepository
 }) => {
+  const authenticationApiMapper = new AuthenticationApiMapper();
+
   const authenticationApp = new AuthenticationApp({
     cryptographyService,
     tokenService,
     usersApp,
     usersRepository
   });
-  return authenticationApp;
+
+  return { authenticationApiMapper, authenticationApp };
 };

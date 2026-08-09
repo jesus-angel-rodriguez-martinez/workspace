@@ -42,13 +42,13 @@ const init = async () => {
     });
     loggerService.debug('🔧 Token service ready');
 
-    const { usersApp, usersRepository } = composeUsers({
+    const { usersApiMapper, usersApp, usersRepository } = composeUsers({
       cryptographyService
     });
     loggerService.debug('📦 User repository ready');
     loggerService.debug('🧩 User application ready');
 
-    const authenticationApp = composeAuthentication({
+    const { authenticationApiMapper, authenticationApp } = composeAuthentication({
       cryptographyService,
       tokenService,
       usersApp,
@@ -57,8 +57,10 @@ const init = async () => {
     loggerService.debug('🧩 Authentication application ready');
 
     const api = await composeApi({
+      authenticationApiMapper,
       authenticationApp,
-      loggerService
+      loggerService,
+      usersApiMapper
     });
     loggerService.debug('🌐 API ready');
 

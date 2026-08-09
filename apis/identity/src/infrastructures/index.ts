@@ -1,3 +1,5 @@
+export * from './api';
+export * from './authentication';
 export * from './configurations';
 export * from './cryptography';
 export * from './lifecycle';

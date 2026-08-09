@@ -1,4 +1,5 @@
 import { type AbstractUsersApp, type IUsersRepository } from '@domains/users';
+import { type AbstractUsersApiMapper } from '@infrastructures/users';
 import { type AbstractCryptographyService } from '@libs/security';
 
 export type ComposeUsers = (configuration: IComposeUsersConfiguration) => IComposedUsers;
@@ -11,6 +12,10 @@ export interface IComposeUsersConfiguration {
 }
 
 export interface IComposedUsers {
+  /**
+   * Responsible for mapping user API errors.
+   */
+  usersApiMapper: AbstractUsersApiMapper;
   /**
    * Provides user use cases.
    */
