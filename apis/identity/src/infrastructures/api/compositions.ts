@@ -12,7 +12,7 @@ export const composeApi: ComposeApi = async ({
   const logger = new LoggerAdapter(loggerService);
 
   const apiMapper = new ApiMapper({ mappers: [usersApiMapper, authenticationApiMapper] });
-  const apiExceptionFilter = new ApiExceptionFilter(apiMapper, loggerService);
+  const apiExceptionFilter = new ApiExceptionFilter({ apiMapper, loggerService });
 
   const entryModule = ApiModule.forRoot(authenticationApp);
   const api = await NestFactory.create(entryModule, {
