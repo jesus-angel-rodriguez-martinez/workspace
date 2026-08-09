@@ -1,5 +1,5 @@
-import { AuthenticationApp } from '@domains/authentication';
 import { composeApi } from '@infrastructures/api';
+import { composeAuthentication } from '@infrastructures/authentication';
 import { composeConfigurations } from '@infrastructures/configurations';
 import { composeCryptography } from '@infrastructures/cryptography';
 import { shutdown } from '@infrastructures/lifecycle';
@@ -19,7 +19,6 @@ const init = async () => {
     });
 
     const isDevelopment = ENVIRONMENT === 'development';
-
     loggerService = composeLoggers({
       applicationName: '@apis/identity',
       level: isDevelopment ? 'trace' : 'info',
@@ -49,7 +48,7 @@ const init = async () => {
     loggerService.debug('📦 User repository ready');
     loggerService.debug('🧩 User application ready');
 
-    const authenticationApp = new AuthenticationApp({
+    const authenticationApp = composeAuthentication({
       cryptographyService,
       tokenService,
       usersApp,
