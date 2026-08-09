@@ -1,7 +1,7 @@
 /**
  * Defines a set of standard HTTP status codes used consistently across the application for API responses.
  */
-export const STATUS_CODES = {
+export const STATUS_CODE = {
   OK: 200,
   CREATED: 201,
   ACCEPTED: 202,

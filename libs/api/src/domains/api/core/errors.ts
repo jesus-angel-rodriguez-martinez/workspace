@@ -1,5 +1,5 @@
-import { type IApiErrorOptions, type IApiError } from '@domains/apis';
-import { type StatusCode, STATUS_CODES } from '@domains/status-codes';
+import { type IApiErrorOptions, type IApiError } from '@domains/api';
+import { type StatusCode, STATUS_CODE } from '@domains/status-code';
 
 /**
  * Base class for standardized application errors.
@@ -40,7 +40,7 @@ export class BadRequestError extends ApiError {
       detail:
         options.detail ||
         'The request could not be processed due to invalid input. Please check the provided data.',
-      status: `${STATUS_CODES.BAD_REQUEST}`,
+      status: `${STATUS_CODE.BAD_REQUEST}`,
       title: options.title || 'There was an error while validating the request'
     });
   }
@@ -57,7 +57,7 @@ export class UnauthorizedError extends ApiError {
       cause: options.cause,
       code: options.code || 'UNAUTHORIZED_ERROR',
       detail: options.detail || 'Authentication is required.',
-      status: `${STATUS_CODES.UNAUTHORIZED}`,
+      status: `${STATUS_CODE.UNAUTHORIZED}`,
       title: options.title || 'Unauthorized access'
     });
   }
@@ -74,7 +74,7 @@ export class ForbiddenError extends ApiError {
       cause: options.cause,
       code: options.code || 'FORBIDDEN_ERROR',
       detail: options.detail || 'You do not have permission to access the requested resource.',
-      status: `${STATUS_CODES.FORBIDDEN}`,
+      status: `${STATUS_CODE.FORBIDDEN}`,
       title: options.title || 'Forbidden'
     });
   }
@@ -91,7 +91,7 @@ export class NotFoundError extends ApiError {
       cause: options.cause,
       code: options.code || 'NOT_FOUND_ERROR',
       detail: options.detail || 'The requested resource could not be found.',
-      status: `${STATUS_CODES.NOT_FOUND}`,
+      status: `${STATUS_CODE.NOT_FOUND}`,
       title: options.title || 'Resource not found'
     });
   }
@@ -111,7 +111,7 @@ export class ConflictError extends ApiError {
       detail:
         options.detail ||
         'The request could not be completed due to a conflict with the current state of the resource.',
-      status: `${STATUS_CODES.CONFLICT}`,
+      status: `${STATUS_CODE.CONFLICT}`,
       title: options.title || 'Conflict detected while processing the request'
     });
   }
@@ -128,7 +128,7 @@ export class UnsupportedMediaTypeError extends ApiError {
       cause: options.cause,
       code: options.code || 'UNSUPPORTED_MEDIA_TYPE',
       detail: options.detail || 'The request contains a media type that is not supported by the server.',
-      status: `${STATUS_CODES.UNSUPPORTED_MEDIA_TYPE}`,
+      status: `${STATUS_CODE.UNSUPPORTED_MEDIA_TYPE}`,
       title: options.title || 'Unsupported media type in the request'
     });
   }
@@ -147,7 +147,7 @@ export class UnprocessableEntityError extends ApiError {
       code: options.code || 'UNPROCESSABLE_ENTITY_ERROR',
       detail:
         options.detail || 'The request was well-formed but was unable to be followed due to semantic errors.',
-      status: `${STATUS_CODES.UNPROCESSABLE_ENTITY}`,
+      status: `${STATUS_CODE.UNPROCESSABLE_ENTITY}`,
       title: options.title || 'Unprocessable entity'
     });
   }
@@ -165,7 +165,7 @@ export class InternalServerError extends ApiError {
       cause: options.cause,
       code: options.code || 'INTERNAL_SERVER_ERROR',
       detail: options.detail || 'An unexpected error occurred on the server. Please try again later.',
-      status: `${STATUS_CODES.INTERNAL_SERVER_ERROR}`,
+      status: `${STATUS_CODE.INTERNAL_SERVER_ERROR}`,
       title: options.title || 'Internal Server error'
     });
   }

@@ -1,4 +1,4 @@
-import { type ApiError } from '@domains/apis';
+import { type ApiError } from '@domains/api';
 import { type CoreError } from '@libs/core';
 
 /**
