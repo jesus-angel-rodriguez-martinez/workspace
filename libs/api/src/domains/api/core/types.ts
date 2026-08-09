@@ -46,4 +46,4 @@ export interface IApiErrors {
 /**
  * Represents any error type that can be intercepted and processed by the API.
  */
-export type UnknownError = ApiError | ApiError[] | CoreError | Error;
+export type UnknownError = ApiError | CoreError;

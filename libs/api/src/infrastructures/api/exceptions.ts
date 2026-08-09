@@ -1,0 +1,49 @@
+import {
+  type AbstractApiMapper,
+  ApiError,
+  type IApiError,
+  type IApiErrors,
+  InternalServerError,
+  type UnknownError
+} from '@domains/api';
+import { STATUS_CODE } from '@domains/status-code';
+import { CoreError } from '@libs/core';
+import { type AbstractLoggerService } from '@libs/logger';
+import { type ArgumentsHost, Catch, type ExceptionFilter } from '@nestjs/common';
+import { type Response } from 'express';
+
+@Catch(ApiError, CoreError)
+export class ApiExceptionFilter implements ExceptionFilter {
+  private readonly apiMapper: AbstractApiMapper;
+  private readonly loggerService: AbstractLoggerService;
+
+  constructor(apiMapper: AbstractApiMapper, loggerService: AbstractLoggerService) {
+    this.apiMapper = apiMapper;
+    this.loggerService = loggerService;
+  }
+
+  catch(unknownError: UnknownError, host: ArgumentsHost): void {
+    const error =
+      unknownError instanceof ApiError
+        ? unknownError
+        : (this.apiMapper.toApiError(unknownError) ?? new InternalServerError());
+
+    const statusCode = parseInt(error.status, 10);
+    if (statusCode >= STATUS_CODE.INTERNAL_SERVER_ERROR) {
+      this.loggerService.error('Server-side failure.', { error });
+    } else {
+      this.loggerService.warn('Client-side failure.', { error });
+    }
+
+    const apiError: IApiError = {
+      code: error.code,
+      detail: error.detail,
+      status: error.status,
+      title: error.title
+    };
+    const apiErrors: IApiErrors = { errors: [apiError] };
+
+    const response = host.switchToHttp().getResponse<Response>();
+    response.status(statusCode).json(apiErrors);
+  }
+}
