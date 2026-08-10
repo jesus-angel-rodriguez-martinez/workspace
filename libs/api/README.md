@@ -1,6 +1,6 @@
 # Api
 
-`@libs/api` provides reusable HTTP error classes and a NestJS exception filter that map domain errors to consistent JSON:API responses.
+`@libs/api` provides reusable HTTP error classes and NestJS glue — an exception filter and a response interceptor — that shape domain errors and successful results into consistent JSON:API responses (`{ errors }` and `{ data }`).
 
 ## 📦 Installation
 
@@ -64,11 +64,11 @@ export class UsersApiMapper extends AbstractUsersApiMapper {
 
 Every `UserError` member must be mapped: once all are handled, `error` narrows to `never` and the assignment compiles. Miss one and it fails to compile.
 
-Compose the domain mappers into a single `ApiMapper` and register the `ApiExceptionFilter` so thrown errors become JSON:API responses:
+Compose the domain mappers into a single `ApiMapper`, then register the `ApiExceptionFilter` (errors) and the `ApiInterceptor` (successful responses):
 
 ```ts
 import { UsersApiMapper } from '@infrastructures/users';
-import { ApiExceptionFilter, ApiMapper } from '@libs/api';
+import { ApiExceptionFilter, ApiInterceptor, ApiMapper } from '@libs/api';
 
 const usersApiMapper = new UsersApiMapper();
 
@@ -77,9 +77,10 @@ const apiMapper = new ApiMapper({ mappers: [usersApiMapper] });
 const apiExceptionFilter = new ApiExceptionFilter({ apiMapper, loggerService });
 
 app.useGlobalFilters(apiExceptionFilter);
+app.useGlobalInterceptors(new ApiInterceptor());
 ```
 
-The filter catches both domain errors (`CoreError`, mapped via the `ApiMapper`) and API errors (`ApiError`, used as-is). Unmapped errors fall back to a generic `InternalServerError`, and every response is serialized as `{ errors: [...] }`.
+The filter catches both domain errors (`CoreError`, mapped via the `ApiMapper`) and API errors (`ApiError`, used as-is); unmapped errors fall back to a generic `InternalServerError`, serialized as `{ errors: [...] }`. Successful responses are wrapped by the `ApiInterceptor` as `{ data: ... }`.
 
 ### Errors
 

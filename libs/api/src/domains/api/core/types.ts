@@ -43,6 +43,13 @@ export interface IApiErrors {
   errors: Partial<Omit<IApiError, keyof Pick<IApiError, 'cause'>>>[];
 }
 
+export interface IApiResponse<T> {
+  /**
+   * The payload returned on a successful request.
+   */
+  data: T;
+}
+
 /**
  * Represents any error type that can be intercepted and processed by the API.
  */

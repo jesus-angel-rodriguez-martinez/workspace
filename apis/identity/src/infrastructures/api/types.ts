@@ -1,5 +1,8 @@
 import { type AbstractAuthenticationApp } from '@domains/authentication';
-import { type AbstractAuthenticationApiMapper } from '@infrastructures/authentication';
+import {
+  type AbstractAuthenticationApiMapper,
+  type AbstractAuthenticationResponseMapper
+} from '@infrastructures/authentication';
 import { type AbstractUsersApiMapper } from '@infrastructures/users';
 import { type AbstractLoggerService } from '@libs/logger';
 import { type INestApplication } from '@nestjs/common';
@@ -15,6 +18,10 @@ export interface IComposeApiConfiguration {
    * Provides authentication use cases.
    */
   authenticationApp: AbstractAuthenticationApp;
+  /**
+   * Responsible for mapping authentication responses.
+   */
+  authenticationResponseMapper: AbstractAuthenticationResponseMapper;
   /**
    * Logging service used for structured output and diagnostics.
    */

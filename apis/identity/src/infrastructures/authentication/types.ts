@@ -1,6 +1,9 @@
 import { type AbstractAuthenticationApp } from '@domains/authentication';
 import { type AbstractUsersApp, type IUsersRepository } from '@domains/users';
-import { type AbstractAuthenticationApiMapper } from '@infrastructures/authentication';
+import {
+  type AbstractAuthenticationApiMapper,
+  type AbstractAuthenticationResponseMapper
+} from '@infrastructures/authentication';
 import { type AbstractCryptographyService, type AbstractTokenService } from '@libs/security';
 
 export type ComposeAuthentication = (
@@ -35,4 +38,8 @@ export interface IComposedAuthentication {
    * Provides authentication use cases.
    */
   authenticationApp: AbstractAuthenticationApp;
+  /**
+   * Responsible for mapping authentication responses.
+   */
+  authenticationResponseMapper: AbstractAuthenticationResponseMapper;
 }
