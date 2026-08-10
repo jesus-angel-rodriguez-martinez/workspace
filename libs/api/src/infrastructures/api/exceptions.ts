@@ -1,8 +1,8 @@
 import {
   type AbstractApiMapper,
   ApiError,
-  type IApiError,
-  type IApiErrors,
+  type IApiErrorsResponse,
+  type IApiSafeErrorResponse,
   InternalServerError,
   type UnknownError
 } from '@domains/api';
@@ -36,15 +36,16 @@ export class ApiExceptionFilter implements ExceptionFilter {
       this.loggerService.warn('Client-side failure.', { error });
     }
 
-    const apiError: IApiError = {
+    const safeErrorResponse: IApiSafeErrorResponse = {
       code: error.code,
       detail: error.detail,
       status: error.status,
       title: error.title
     };
-    const apiErrors: IApiErrors = { errors: [apiError] };
+    const apiErrorsResponse: IApiErrorsResponse = { errors: [safeErrorResponse] };
 
-    const response = host.switchToHttp().getResponse<Response>();
-    response.status(statusCode).json(apiErrors);
+    const context = host.switchToHttp();
+    const response = context.getResponse<Response>();
+    response.status(statusCode).json(apiErrorsResponse);
   }
 }

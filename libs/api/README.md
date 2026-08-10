@@ -1,6 +1,6 @@
 # Api
 
-`@libs/api` provides reusable HTTP error classes and NestJS glue — an exception filter and a response interceptor — that shape domain errors and successful results into consistent JSON:API responses (`{ errors }` and `{ data }`).
+`@libs/api` contains the shared HTTP error classes and NestJS utilities used across the API, including an exception filter (`{ errors }`), response interceptor (`{ data }`), and logger adapter. Together, they help keep API responses consistent.
 
 ## 📦 Installation
 
@@ -75,12 +75,26 @@ const usersApiMapper = new UsersApiMapper();
 const apiMapper = new ApiMapper({ mappers: [usersApiMapper] });
 
 const apiExceptionFilter = new ApiExceptionFilter({ apiMapper, loggerService });
+const apiInterceptor = new ApiInterceptor();
 
 app.useGlobalFilters(apiExceptionFilter);
-app.useGlobalInterceptors(new ApiInterceptor());
+app.useGlobalInterceptors(apiInterceptor);
 ```
 
 The filter catches both domain errors (`CoreError`, mapped via the `ApiMapper`) and API errors (`ApiError`, used as-is); unmapped errors fall back to a generic `InternalServerError`, serialized as `{ errors: [...] }`. Successful responses are wrapped by the `ApiInterceptor` as `{ data: ... }`.
+
+Route Nest's own logs through your application logger (and silence its bootstrap noise) with the `LoggerAdapter` when creating the app:
+
+```ts
+import { LoggerAdapter } from '@libs/api';
+
+const logger = new LoggerAdapter(loggerService);
+
+const app = await NestFactory.create(AppModule, {
+  bufferLogs: true,
+  logger
+});
+```
 
 ### Errors
 

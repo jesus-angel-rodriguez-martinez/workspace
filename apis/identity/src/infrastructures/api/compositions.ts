@@ -1,6 +1,5 @@
 import { ApiModule, type ComposeApi } from '@infrastructures/api';
-import { LoggerAdapter } from '@infrastructures/loggers';
-import { ApiExceptionFilter, ApiInterceptor, ApiMapper } from '@libs/api';
+import { ApiExceptionFilter, ApiInterceptor, ApiMapper, LoggerAdapter } from '@libs/api';
 import { NestFactory } from '@nestjs/core';
 
 export const composeApi: ComposeApi = async ({

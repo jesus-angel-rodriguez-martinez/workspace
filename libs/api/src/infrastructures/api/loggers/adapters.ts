@@ -31,6 +31,7 @@ export class LoggerAdapter implements LoggerService {
     if (context && this.ignoredContexts.includes(context)) {
       return;
     }
+
     this.loggerService.info(message);
   }
 

@@ -32,24 +32,6 @@ export interface IApiError {
  */
 export interface IApiErrorOptions extends Partial<Omit<IApiError, keyof Pick<IApiError, 'status'>>> {}
 
-/*
- * Defines the standardized structure of an API error response containing multiple error objects.
- * The `cause` field is omitted for security reasons.
- */
-export interface IApiErrors {
-  /*
-   * Array of individual error details.
-   */
-  errors: Partial<Omit<IApiError, keyof Pick<IApiError, 'cause'>>>[];
-}
-
-export interface IApiResponse<T> {
-  /**
-   * The payload returned on a successful request.
-   */
-  data: T;
-}
-
 /**
  * Represents any error type that can be intercepted and processed by the API.
  */
