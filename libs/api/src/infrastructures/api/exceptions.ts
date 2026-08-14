@@ -36,13 +36,13 @@ export class ApiExceptionFilter implements ExceptionFilter {
       this.loggerService.warn('Client-side failure.', { error });
     }
 
-    const safeErrorResponse: IApiSafeErrorResponse = {
+    const apiSafeErrorResponse: IApiSafeErrorResponse = {
       code: error.code,
       detail: error.detail,
       status: error.status,
       title: error.title
     };
-    const apiErrorsResponse: IApiErrorsResponse = { errors: [safeErrorResponse] };
+    const apiErrorsResponse: IApiErrorsResponse = { errors: [apiSafeErrorResponse] };
 
     const context = host.switchToHttp();
     const response = context.getResponse<Response>();

@@ -29,7 +29,7 @@ const cryptographyService = new CryptographyService({
 const password = 'plain-text-password';
 const salt = await cryptographyService.generateSalt();
 const hashedPassword = await cryptographyService.hashPassword(password, salt);
-const isPasswordValid = await cryptographyService.verifyPassword(password, salt, hashedPassword);
+const areCredentialsValid = await cryptographyService.verifyPassword(password, salt, hashedPassword);
 ```
 
 ### Token
