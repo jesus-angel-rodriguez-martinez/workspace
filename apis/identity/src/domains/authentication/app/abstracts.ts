@@ -1,5 +1,5 @@
 import { type IAuthenticationAppConfiguration, type IUserCredentials } from '@domains/authentication';
-import { type AbstractUsersApp, type ICreateUser, type IUsersRepository } from '@domains/users';
+import { type AbstractUserApp, type ICreateUser, type IUserRepository } from '@domains/user';
 import {
   type AbstractCryptographyService,
   type AbstractTokenService,
@@ -21,11 +21,11 @@ export abstract class AbstractAuthenticationApp {
   /**
    * Provides user use cases.
    */
-  protected readonly usersApp: AbstractUsersApp;
+  protected readonly userApp: AbstractUserApp;
   /**
    * Provides access to user data.
    */
-  protected readonly usersRepository: IUsersRepository;
+  protected readonly userRepository: IUserRepository;
 
   /**
    * The constructor is protected to ensure this abstract class cannot be
@@ -36,13 +36,13 @@ export abstract class AbstractAuthenticationApp {
   protected constructor({
     cryptographyService,
     tokenService,
-    usersApp,
-    usersRepository
+    userApp,
+    userRepository
   }: IAuthenticationAppConfiguration) {
     this.cryptographyService = cryptographyService;
     this.tokenService = tokenService;
-    this.usersApp = usersApp;
-    this.usersRepository = usersRepository;
+    this.userApp = userApp;
+    this.userRepository = userRepository;
   }
 
   /**

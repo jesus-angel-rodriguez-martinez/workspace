@@ -24,7 +24,7 @@
     "test": "npm run start:test"
   },
   "dependencies": {
-    "@libs/core": "workspace:*",
+    "@libs/kernel": "workspace:*",
     "@libs/logger": "workspace:*",
     "@libs/security": "workspace:*",
     "@nestjs/common": "~11.1.28",

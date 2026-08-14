@@ -1,5 +1,5 @@
 import { AbstractAuthenticationApp, type IUserCredentials } from '@domains/authentication';
-import { type ICreateUser } from '@domains/users';
+import { type ICreateUser } from '@domains/user';
 import {
   AbstractAuthenticationResponseMapper,
   type IAuthenticationTokenResponse

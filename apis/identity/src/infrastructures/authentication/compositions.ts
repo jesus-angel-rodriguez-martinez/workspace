@@ -8,16 +8,16 @@ import {
 export const composeAuthentication: ComposeAuthentication = ({
   cryptographyService,
   tokenService,
-  usersApp,
-  usersRepository
+  userApp,
+  userRepository
 }) => {
   const authenticationApiMapper = new AuthenticationApiMapper();
 
   const authenticationApp = new AuthenticationApp({
     cryptographyService,
     tokenService,
-    usersApp,
-    usersRepository
+    userApp,
+    userRepository
   });
 
   const authenticationResponseMapper = new AuthenticationResponseMapper();

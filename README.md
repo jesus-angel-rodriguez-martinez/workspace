@@ -16,7 +16,7 @@ Each package ships its own `README.md` with full usage and examples. Follow the 
 
 | Package                                               | Description                                                                                                 |
 | ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| [`@libs/core`](libs/core/README.md)                   | Foundational library providing shared contracts for error handling and service lifecycle management.        |
+| [`@libs/kernel`](libs/kernel/README.md)               | Foundational library providing shared contracts for error handling and service lifecycle management.        |
 | [`@libs/configuration`](libs/configuration/README.md) | Type-safe runtime validator for environment variables.                                                      |
 | [`@libs/logger`](libs/logger/README.md)               | Lightweight, extensible logging service with structured output and optional prettification for development. |
 | [`@libs/security`](libs/security/README.md)           | Security utilities for credential processing, identity validation, and authentication token management.     |

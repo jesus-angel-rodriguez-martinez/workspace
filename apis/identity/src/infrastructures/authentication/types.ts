@@ -1,5 +1,5 @@
 import { type AbstractAuthenticationApp } from '@domains/authentication';
-import { type AbstractUsersApp, type IUsersRepository } from '@domains/users';
+import { type AbstractUserApp, type IUserRepository } from '@domains/user';
 import {
   type AbstractAuthenticationApiMapper,
   type AbstractAuthenticationResponseMapper
@@ -22,11 +22,11 @@ export interface IComposeAuthenticationConfiguration {
   /**
    * Provides user use cases.
    */
-  usersApp: AbstractUsersApp;
+  userApp: AbstractUserApp;
   /**
    * Provides access to user data.
    */
-  usersRepository: IUsersRepository;
+  userRepository: IUserRepository;
 }
 
 export interface IComposedAuthentication {

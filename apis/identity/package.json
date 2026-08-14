@@ -26,7 +26,7 @@
   "dependencies": {
     "@libs/api": "workspace:*",
     "@libs/configuration": "workspace:*",
-    "@libs/core": "workspace:*",
+    "@libs/kernel": "workspace:*",
     "@libs/logger": "workspace:*",
     "@libs/security": "workspace:*",
     "@nestjs/common": "~11.1.28",

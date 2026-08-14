@@ -28,8 +28,8 @@
       "projectFolder": "libs/configuration"
     },
     {
-      "packageName": "@libs/core",
-      "projectFolder": "libs/core"
+      "packageName": "@libs/kernel",
+      "projectFolder": "libs/kernel"
     },
     {
       "packageName": "@libs/logger",

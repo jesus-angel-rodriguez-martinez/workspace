@@ -1,10 +1,10 @@
-import { CoreError, type ICoreErrorOptions } from '@libs/core';
+import { type IKernelErrorOptions, KernelError } from '@libs/kernel';
 
 /**
  * Error thrown when the username or password is incorrect.
  */
-export class WrongCredentialsError extends CoreError {
-  constructor(options: ICoreErrorOptions = {}) {
+export class WrongCredentialsError extends KernelError {
+  constructor(options: IKernelErrorOptions = {}) {
     super({
       cause: options.cause,
       code: 'AUTHENTICATION.WRONG_CREDENTIALS',

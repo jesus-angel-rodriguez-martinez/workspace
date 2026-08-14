@@ -19,14 +19,14 @@ Declare a domain-specific abstract mapper by extending `AbstractApiMapper`:
 ```ts
 import { type UserApiError } from '@infrastructures/users';
 import { AbstractApiMapper } from '@libs/api';
-import { type CoreError } from '@libs/core';
+import { type KernelError } from '@libs/kernel';
 
 export abstract class AbstractUsersApiMapper extends AbstractApiMapper {
   protected constructor() {
     super();
   }
 
-  public abstract override toApiError(error: CoreError): UserApiError | undefined;
+  public abstract override toApiError(error: KernelError): UserApiError | undefined;
 }
 ```
 
@@ -81,7 +81,7 @@ app.useGlobalFilters(apiExceptionFilter);
 app.useGlobalInterceptors(apiInterceptor);
 ```
 
-The filter catches both domain errors (`CoreError`, mapped via the `ApiMapper`) and API errors (`ApiError`, used as-is); unmapped errors fall back to a generic `InternalServerError`, serialized as `{ errors: [...] }`. Successful responses are wrapped by the `ApiInterceptor` as `{ data: ... }`.
+The filter catches both domain errors (`KernelError`, mapped via the `ApiMapper`) and API errors (`ApiError`, used as-is); unmapped errors fall back to a generic `InternalServerError`, serialized as `{ errors: [...] }`. Successful responses are wrapped by the `ApiInterceptor` as `{ data: ... }`.
 
 Route Nest's own logs through your application logger (and silence its bootstrap noise) with the `LoggerAdapter` when creating the app:
 

@@ -1,25 +1,25 @@
 import { composeApi } from '@infrastructures/api';
 import { composeAuthentication } from '@infrastructures/authentication';
-import { composeConfigurations } from '@infrastructures/configurations';
+import { composeConfiguration } from '@infrastructures/configuration';
 import { composeCryptography } from '@infrastructures/cryptography';
 import { shutdown } from '@infrastructures/lifecycle';
-import { composeLoggers } from '@infrastructures/loggers';
-import { composeTokens } from '@infrastructures/tokens';
-import { composeUsers } from '@infrastructures/users';
+import { composeLogger } from '@infrastructures/logger';
+import { composeToken } from '@infrastructures/token';
+import { composeUser } from '@infrastructures/user';
 import { type AbstractLoggerService } from '@libs/logger';
 
 let loggerService: AbstractLoggerService | undefined;
 
 const init = async () => {
   try {
-    const { API_PORT, ENVIRONMENT, JWT_SECRET } = composeConfigurations({
+    const { API_PORT, ENVIRONMENT, JWT_SECRET } = composeConfiguration({
       API_PORT: 'number',
       ENVIRONMENT: 'string',
       JWT_SECRET: 'string'
     });
 
     const isDevelopment = ENVIRONMENT === 'development';
-    loggerService = composeLoggers({
+    loggerService = composeLogger({
       applicationName: '@apis/identity',
       level: isDevelopment ? 'trace' : 'info',
       loggerName: import.meta.url,
@@ -35,14 +35,14 @@ const init = async () => {
     });
     loggerService.debug('🔧 Cryptography service ready');
 
-    const tokenService = composeTokens({
+    const tokenService = composeToken({
       algorithm: 'HS256',
       expiresIn: 3_600,
       secret: JWT_SECRET
     });
     loggerService.debug('🔧 Token service ready');
 
-    const { usersApiMapper, usersApp, usersRepository } = composeUsers({
+    const { userApiMapper, userApp, userRepository } = composeUser({
       cryptographyService
     });
     loggerService.debug('📦 User repository ready');
@@ -52,8 +52,8 @@ const init = async () => {
       composeAuthentication({
         cryptographyService,
         tokenService,
-        usersApp,
-        usersRepository
+        userApp,
+        userRepository
       });
     loggerService.debug('🧩 Authentication application ready');
 
@@ -62,7 +62,7 @@ const init = async () => {
       authenticationApp,
       authenticationResponseMapper,
       loggerService,
-      usersApiMapper
+      userApiMapper
     });
     loggerService.debug('🌐 API ready');
 

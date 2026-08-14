@@ -7,11 +7,11 @@ export const composeApi: ComposeApi = async ({
   authenticationApp,
   authenticationResponseMapper,
   loggerService,
-  usersApiMapper
+  userApiMapper
 }) => {
   const logger = new LoggerAdapter(loggerService);
 
-  const apiMapper = new ApiMapper({ mappers: [usersApiMapper, authenticationApiMapper] });
+  const apiMapper = new ApiMapper({ mappers: [userApiMapper, authenticationApiMapper] });
   const apiExceptionFilter = new ApiExceptionFilter({ apiMapper, loggerService });
   const apiInterceptor = new ApiInterceptor();
 

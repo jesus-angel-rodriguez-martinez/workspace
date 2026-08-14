@@ -1,6 +1,6 @@
 import { type AuthenticationApiError } from '@infrastructures/authentication';
 import { AbstractApiMapper } from '@libs/api';
-import { type CoreError } from '@libs/core';
+import { type KernelError } from '@libs/kernel';
 
 /**
  * Abstract base class for the Authentication API mapper.
@@ -21,5 +21,5 @@ export abstract class AbstractAuthenticationApiMapper extends AbstractApiMapper 
    *
    * @returns The corresponding authentication API error, or `undefined` if the error does not belong to the authentication domain.
    */
-  public abstract override toApiError(error: CoreError): AuthenticationApiError | undefined;
+  public abstract override toApiError(error: KernelError): AuthenticationApiError | undefined;
 }

@@ -1,5 +1,5 @@
 import { type AuthenticationError } from '@domains/authentication';
-import { type ISecureUser, type UserError } from '@domains/users';
+import { type ISecureUser, type UserError } from '@domains/user';
 
 export type DomainError = AuthenticationError | UserError;
 

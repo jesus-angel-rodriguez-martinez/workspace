@@ -3,7 +3,7 @@ import {
   type AbstractAuthenticationApiMapper,
   type AbstractAuthenticationResponseMapper
 } from '@infrastructures/authentication';
-import { type AbstractUsersApiMapper } from '@infrastructures/users';
+import { type AbstractUserApiMapper } from '@infrastructures/user';
 import { type AbstractLoggerService } from '@libs/logger';
 import { type INestApplication } from '@nestjs/common';
 
@@ -29,5 +29,5 @@ export interface IComposeApiConfiguration {
   /**
    * Responsible for mapping user API errors.
    */
-  usersApiMapper: AbstractUsersApiMapper;
+  userApiMapper: AbstractUserApiMapper;
 }

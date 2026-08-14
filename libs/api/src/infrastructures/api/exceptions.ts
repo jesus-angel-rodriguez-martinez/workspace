@@ -8,12 +8,12 @@ import {
 } from '@domains/api';
 import { STATUS_CODE } from '@domains/status-code';
 import { type IApiExceptionFilterConfiguration } from '@infrastructures/api';
-import { CoreError } from '@libs/core';
+import { KernelError } from '@libs/kernel';
 import { type AbstractLoggerService } from '@libs/logger';
 import { type ArgumentsHost, Catch, type ExceptionFilter } from '@nestjs/common';
 import { type Response } from 'express';
 
-@Catch(ApiError, CoreError)
+@Catch(ApiError, KernelError)
 export class ApiExceptionFilter implements ExceptionFilter {
   private readonly apiMapper: AbstractApiMapper;
   private readonly loggerService: AbstractLoggerService;

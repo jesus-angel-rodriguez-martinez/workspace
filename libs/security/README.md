@@ -32,7 +32,7 @@ const hashedPassword = await cryptographyService.hashPassword(password, salt);
 const isPasswordValid = await cryptographyService.verifyPassword(password, salt, hashedPassword);
 ```
 
-### Tokens
+### Token
 
 `TokenService` generates and verifies signed JWT authentication tokens from a user id:
 
@@ -52,7 +52,8 @@ const tokenService = new TokenService({
   secret: SECRET
 });
 
-const token = tokenService.generateToken('550e8400-e29b-41d4-a716-446655440000');
+const userId = '550e8400-e29b-41d4-a716-446655440000';
+const token = tokenService.generateToken(userId);
 ```
 
 Use `verifyToken` to validate the signature and expiration of a token. It throws if the token is invalid or expired:

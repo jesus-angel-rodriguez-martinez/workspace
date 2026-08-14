@@ -1,6 +1,6 @@
 import { type ApiError } from '@domains/api';
 import { type StatusCode } from '@domains/status-code';
-import { type CoreError } from '@libs/core';
+import { type KernelError } from '@libs/kernel';
 
 export interface IApiError {
   /**
@@ -35,4 +35,4 @@ export interface IApiErrorOptions extends Partial<Omit<IApiError, keyof Pick<IAp
 /**
  * Represents any error type that can be intercepted and processed by the API.
  */
-export type UnknownError = ApiError | CoreError;
+export type UnknownError = ApiError | KernelError;

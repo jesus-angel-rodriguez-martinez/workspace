@@ -65,7 +65,7 @@ loggerService.error(message, context);
 loggerService.fatal(message, context);
 ```
 
-The `loggerName` is normalized into a concise, package-scoped identifier that appears in the `logger` field of every entry. Passing `import.meta.url` from `libs/logger/src/infrastructures/loggers/services.ts` yields `@libs/logger/infrastructures/loggers`: the absolute path, the `file://` scheme and the file name are dropped, keeping only the package and feature. A file at the package root collapses to the bare package name (e.g. `@libs/logger`). Any non-`file:` value is used verbatim, so explicit logical names also work.
+The `loggerName` is normalized into a concise, package-scoped identifier that appears in the `logger` field of every entry. Passing `import.meta.url` from `libs/logger/src/infrastructures/logger/services.ts` yields `@libs/logger/infrastructures/logger`: the absolute path, the `file://` scheme and the file name are dropped, keeping only the package and feature. A file at the package root collapses to the bare package name (e.g. `@libs/logger`). Any non-`file:` value is used verbatim, so explicit logical names also work.
 
 ### Shutdown
 

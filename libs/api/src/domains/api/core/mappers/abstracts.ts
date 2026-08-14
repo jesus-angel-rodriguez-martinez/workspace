@@ -1,5 +1,5 @@
 import { type ApiError } from '@domains/api';
-import { type CoreError } from '@libs/core';
+import { type KernelError } from '@libs/kernel';
 
 /**
  * Abstract base class for the API Mapper.
@@ -16,5 +16,5 @@ export abstract class AbstractApiMapper {
    *
    * @returns The corresponding API error.
    */
-  public abstract toApiError(error: CoreError): ApiError | undefined;
+  public abstract toApiError(error: KernelError): ApiError | undefined;
 }

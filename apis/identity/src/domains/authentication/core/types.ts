@@ -1,5 +1,5 @@
 import { type WrongCredentialsError } from '@domains/authentication';
-import { type IUser } from '@domains/users';
+import { type IUser } from '@domains/user';
 
 /**
  * Represents the data required to authenticate a user.

@@ -4,7 +4,7 @@ import {
   type IUserCredentials,
   WrongCredentialsError
 } from '@domains/authentication';
-import { type ICreateUser } from '@domains/users';
+import { type ICreateUser } from '@domains/user';
 import { type AuthenticationToken } from '@libs/security';
 
 export class AuthenticationApp extends AbstractAuthenticationApp {
@@ -15,7 +15,7 @@ export class AuthenticationApp extends AbstractAuthenticationApp {
   public async logIn(userCredentials: IUserCredentials): Promise<AuthenticationToken> {
     const { password, username } = userCredentials;
 
-    const userModel = await this.usersRepository.findOne({
+    const userModel = await this.userRepository.findOne({
       username
     });
     if (!userModel) {
@@ -36,7 +36,7 @@ export class AuthenticationApp extends AbstractAuthenticationApp {
   }
 
   public async signUp(payload: ICreateUser): Promise<AuthenticationToken> {
-    const secureUser = await this.usersApp.create(payload);
+    const secureUser = await this.userApp.create(payload);
 
     const token = this.tokenService.generateToken(secureUser.id);
     return token;

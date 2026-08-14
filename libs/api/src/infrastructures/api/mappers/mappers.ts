@@ -1,6 +1,6 @@
 import { AbstractApiMapper, type ApiError } from '@domains/api';
 import { type IApiMapperConfiguration } from '@infrastructures/api';
-import { type CoreError } from '@libs/core';
+import { type KernelError } from '@libs/kernel';
 
 export class ApiMapper extends AbstractApiMapper {
   private readonly mappers: AbstractApiMapper[];
@@ -10,7 +10,7 @@ export class ApiMapper extends AbstractApiMapper {
     this.mappers = mappers;
   }
 
-  public toApiError(error: CoreError): ApiError | undefined {
+  public toApiError(error: KernelError): ApiError | undefined {
     for (const mapper of this.mappers) {
       const apiError = mapper.toApiError(error);
       if (apiError) {
