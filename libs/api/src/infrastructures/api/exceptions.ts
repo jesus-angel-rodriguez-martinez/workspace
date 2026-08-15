@@ -27,13 +27,13 @@ export class ApiExceptionFilter implements ExceptionFilter {
     const error =
       unknownError instanceof ApiError
         ? unknownError
-        : (this.apiMapper.toApiError(unknownError) ?? new InternalServerError());
+        : (this.apiMapper.toApiError(unknownError) ?? new InternalServerError({ cause: unknownError }));
 
     const statusCode = parseInt(error.status, 10);
     if (statusCode >= STATUS_CODE.INTERNAL_SERVER_ERROR) {
       this.loggerService.error('Server-side failure.', { error });
     } else {
-      this.loggerService.warn('Client-side failure.', { error });
+      this.loggerService.debug('Client-side failure.', { error });
     }
 
     const apiSafeErrorResponse: IApiSafeErrorResponse = {
