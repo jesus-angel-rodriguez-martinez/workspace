@@ -3,15 +3,18 @@ import {
   type UserNameConsecutiveWhitespaceError,
   type UserNameEndsWithWhitespaceError,
   type UserNameInvalidCharactersError,
+  type UserNameInvalidTypeError,
   type UserNameLengthOutOfRangeError,
   type UserNameStartsWithWhitespaceError,
   type UserNotFoundError,
+  type UserPasswordInvalidTypeError,
   type UserPasswordLengthOutOfRangeError,
   type UserPasswordMissingLowercaseCharacterError,
   type UserPasswordMissingNumericDigitError,
   type UserPasswordMissingUppercaseCharacterError,
   type UserUnauthorizedError,
   type UserUsernameInvalidCharactersError,
+  type UserUsernameInvalidTypeError,
   type UserUsernameLengthOutOfRangeError
 } from '@domains/user';
 
@@ -56,13 +59,16 @@ export type UserError =
   | UserNameConsecutiveWhitespaceError
   | UserNameEndsWithWhitespaceError
   | UserNameInvalidCharactersError
+  | UserNameInvalidTypeError
   | UserNameLengthOutOfRangeError
   | UserNameStartsWithWhitespaceError
   | UserNotFoundError
+  | UserPasswordInvalidTypeError
   | UserPasswordLengthOutOfRangeError
   | UserPasswordMissingLowercaseCharacterError
   | UserPasswordMissingNumericDigitError
   | UserPasswordMissingUppercaseCharacterError
   | UserUnauthorizedError
   | UserUsernameInvalidCharactersError
+  | UserUsernameInvalidTypeError
   | UserUsernameLengthOutOfRangeError;

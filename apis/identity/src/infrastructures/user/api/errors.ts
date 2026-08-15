@@ -3,15 +3,18 @@ import {
   type UserNameConsecutiveWhitespaceError,
   type UserNameEndsWithWhitespaceError,
   type UserNameInvalidCharactersError,
+  type UserNameInvalidTypeError,
   type UserNameLengthOutOfRangeError,
   type UserNameStartsWithWhitespaceError,
   type UserNotFoundError,
+  type UserPasswordInvalidTypeError,
   type UserPasswordLengthOutOfRangeError,
   type UserPasswordMissingLowercaseCharacterError,
   type UserPasswordMissingNumericDigitError,
   type UserPasswordMissingUppercaseCharacterError,
   type UserUnauthorizedError,
   type UserUsernameInvalidCharactersError,
+  type UserUsernameInvalidTypeError,
   type UserUsernameLengthOutOfRangeError
 } from '@domains/user';
 import { BadRequestError, ConflictError, ForbiddenError, NotFoundError } from '@libs/api';
@@ -73,6 +76,20 @@ export class UserNameInvalidCharactersApiError extends BadRequestError {
 }
 
 /**
+ * Error thrown when a name is not a string.
+ */
+export class UserNameInvalidTypeApiError extends BadRequestError {
+  constructor(userNameInvalidTypeError: UserNameInvalidTypeError) {
+    super({
+      cause: userNameInvalidTypeError,
+      code: userNameInvalidTypeError.code,
+      detail: userNameInvalidTypeError.detail,
+      title: userNameInvalidTypeError.title
+    });
+  }
+}
+
+/**
  * Error thrown when a provided name's length is outside the allowed range.
  */
 export class UserNameLengthOutOfRangeApiError extends BadRequestError {
@@ -110,6 +127,20 @@ export class UserNotFoundApiError extends NotFoundError {
       code: userNotFoundError.code,
       detail: userNotFoundError.detail,
       title: userNotFoundError.title
+    });
+  }
+}
+
+/**
+ * Error thrown when a password is not a string.
+ */
+export class UserPasswordInvalidTypeApiError extends BadRequestError {
+  constructor(userPasswordInvalidTypeError: UserPasswordInvalidTypeError) {
+    super({
+      cause: userPasswordInvalidTypeError,
+      code: userPasswordInvalidTypeError.code,
+      detail: userPasswordInvalidTypeError.detail,
+      title: userPasswordInvalidTypeError.title
     });
   }
 }
@@ -194,6 +225,20 @@ export class UserUsernameInvalidCharactersApiError extends BadRequestError {
       code: userUsernameInvalidCharactersError.code,
       detail: userUsernameInvalidCharactersError.detail,
       title: userUsernameInvalidCharactersError.title
+    });
+  }
+}
+
+/**
+ * Error thrown when a username is not a string.
+ */
+export class UserUsernameInvalidTypeApiError extends BadRequestError {
+  constructor(userUsernameInvalidTypeError: UserUsernameInvalidTypeError) {
+    super({
+      cause: userUsernameInvalidTypeError,
+      code: userUsernameInvalidTypeError.code,
+      detail: userUsernameInvalidTypeError.detail,
+      title: userUsernameInvalidTypeError.title
     });
   }
 }

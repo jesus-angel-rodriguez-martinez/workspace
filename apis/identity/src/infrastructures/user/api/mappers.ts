@@ -4,15 +4,18 @@ import {
   UserNameConsecutiveWhitespaceError,
   UserNameEndsWithWhitespaceError,
   UserNameInvalidCharactersError,
+  UserNameInvalidTypeError,
   UserNameLengthOutOfRangeError,
   UserNameStartsWithWhitespaceError,
   UserNotFoundError,
+  UserPasswordInvalidTypeError,
   UserPasswordLengthOutOfRangeError,
   UserPasswordMissingLowercaseCharacterError,
   UserPasswordMissingNumericDigitError,
   UserPasswordMissingUppercaseCharacterError,
   UserUnauthorizedError,
   UserUsernameInvalidCharactersError,
+  UserUsernameInvalidTypeError,
   UserUsernameLengthOutOfRangeError
 } from '@domains/user';
 import {
@@ -22,15 +25,18 @@ import {
   UserNameConsecutiveWhitespaceApiError,
   UserNameEndsWithWhitespaceApiError,
   UserNameInvalidCharactersApiError,
+  UserNameInvalidTypeApiError,
   UserNameLengthOutOfRangeApiError,
   UserNameStartsWithWhitespaceApiError,
   UserNotFoundApiError,
+  UserPasswordInvalidTypeApiError,
   UserPasswordLengthOutOfRangeApiError,
   UserPasswordMissingLowercaseCharacterApiError,
   UserPasswordMissingNumericDigitApiError,
   UserPasswordMissingUppercaseCharacterApiError,
   UserUnauthorizedApiError,
   UserUsernameInvalidCharactersApiError,
+  UserUsernameInvalidTypeApiError,
   UserUsernameLengthOutOfRangeApiError
 } from '@infrastructures/user';
 
@@ -56,6 +62,10 @@ export class UserApiMapper extends AbstractUserApiMapper {
       return new UserNameInvalidCharactersApiError(error);
     }
 
+    if (error instanceof UserNameInvalidTypeError) {
+      return new UserNameInvalidTypeApiError(error);
+    }
+
     if (error instanceof UserNameLengthOutOfRangeError) {
       return new UserNameLengthOutOfRangeApiError(error);
     }
@@ -66,6 +76,10 @@ export class UserApiMapper extends AbstractUserApiMapper {
 
     if (error instanceof UserNotFoundError) {
       return new UserNotFoundApiError(error);
+    }
+
+    if (error instanceof UserPasswordInvalidTypeError) {
+      return new UserPasswordInvalidTypeApiError(error);
     }
 
     if (error instanceof UserPasswordLengthOutOfRangeError) {
@@ -90,6 +104,10 @@ export class UserApiMapper extends AbstractUserApiMapper {
 
     if (error instanceof UserUsernameInvalidCharactersError) {
       return new UserUsernameInvalidCharactersApiError(error);
+    }
+
+    if (error instanceof UserUsernameInvalidTypeError) {
+      return new UserUsernameInvalidTypeApiError(error);
     }
 
     if (error instanceof UserUsernameLengthOutOfRangeError) {

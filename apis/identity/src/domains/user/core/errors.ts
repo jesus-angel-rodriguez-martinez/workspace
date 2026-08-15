@@ -58,14 +58,29 @@ export class UserNameInvalidCharactersError extends KernelError {
 }
 
 /**
+ * Error thrown when a name is not a string.
+ */
+export class UserNameInvalidTypeError extends KernelError {
+  constructor(options: IKernelErrorOptions = {}) {
+    super({
+      cause: options.cause,
+      code: 'USER.NAME_INVALID_TYPE',
+      detail: 'The name must be a string.',
+      title: 'Invalid name type'
+    });
+  }
+}
+
+/**
  * Error thrown when a provided name's length is outside the allowed range.
  */
 export class UserNameLengthOutOfRangeError extends KernelError {
   constructor(length: number, options: IKernelErrorOptions = {}) {
+    const isSingular = length === 1;
     super({
       cause: options.cause,
       code: 'USER.NAME_LENGTH_OUT_OF_RANGE',
-      detail: `The provided name has '${length}' characters, but it must be between '${USER_RULES.name.MIN_LENGTH}' and '${USER_RULES.name.MAX_LENGTH}' characters long.`,
+      detail: `The provided name has '${length}' ${isSingular ? 'character' : 'characters'}, but it must be between '${USER_RULES.name.MIN_LENGTH}' and '${USER_RULES.name.MAX_LENGTH}' characters long.`,
       title: 'Invalid name length'
     });
   }
@@ -100,14 +115,29 @@ export class UserNotFoundError extends KernelError {
 }
 
 /**
+ * Error thrown when a password is not a string.
+ */
+export class UserPasswordInvalidTypeError extends KernelError {
+  constructor(options: IKernelErrorOptions = {}) {
+    super({
+      cause: options.cause,
+      code: 'USER.PASSWORD_INVALID_TYPE',
+      detail: 'The password must be a string.',
+      title: 'Invalid password type'
+    });
+  }
+}
+
+/**
  * Error thrown when a provided password's length is outside the allowed range.
  */
 export class UserPasswordLengthOutOfRangeError extends KernelError {
   constructor(length: number, options: IKernelErrorOptions = {}) {
+    const isSingular = length === 1;
     super({
       cause: options.cause,
       code: 'USER.PASSWORD_LENGTH_OUT_OF_RANGE',
-      detail: `The provided password has '${length}' characters, but it must be between '${USER_RULES.password.MIN_LENGTH}' and '${USER_RULES.password.MAX_LENGTH}' characters long.`,
+      detail: `The provided password has '${length}' ${isSingular ? 'character' : 'characters'}, but it must be between '${USER_RULES.password.MIN_LENGTH}' and '${USER_RULES.password.MAX_LENGTH}' characters long.`,
       title: 'Invalid password length'
     });
   }
@@ -184,14 +214,29 @@ export class UserUsernameInvalidCharactersError extends KernelError {
 }
 
 /**
+ * Error thrown when a username is not a string.
+ */
+export class UserUsernameInvalidTypeError extends KernelError {
+  constructor(options: IKernelErrorOptions = {}) {
+    super({
+      cause: options.cause,
+      code: 'USER.USERNAME_INVALID_TYPE',
+      detail: 'The username must be a string.',
+      title: 'Invalid username type'
+    });
+  }
+}
+
+/**
  * Error thrown when a provided username's length is outside the allowed range.
  */
 export class UserUsernameLengthOutOfRangeError extends KernelError {
   constructor(length: number, options: IKernelErrorOptions = {}) {
+    const isSingular = length === 1;
     super({
       cause: options.cause,
       code: 'USER.USERNAME_LENGTH_OUT_OF_RANGE',
-      detail: `The provided username has '${length}' characters, but it must be between '${USER_RULES.username.MIN_LENGTH}' and '${USER_RULES.username.MAX_LENGTH}' characters long.`,
+      detail: `The provided username has '${length}' ${isSingular ? 'character' : 'characters'}, but it must be between '${USER_RULES.username.MIN_LENGTH}' and '${USER_RULES.username.MAX_LENGTH}' characters long.`,
       title: 'Invalid username length'
     });
   }

@@ -5,13 +5,16 @@ import {
   UserNameConsecutiveWhitespaceError,
   UserNameEndsWithWhitespaceError,
   UserNameInvalidCharactersError,
+  UserNameInvalidTypeError,
   UserNameLengthOutOfRangeError,
   UserNameStartsWithWhitespaceError,
+  UserPasswordInvalidTypeError,
   UserPasswordLengthOutOfRangeError,
   UserPasswordMissingLowercaseCharacterError,
   UserPasswordMissingNumericDigitError,
   UserPasswordMissingUppercaseCharacterError,
   UserUsernameInvalidCharactersError,
+  UserUsernameInvalidTypeError,
   UserUsernameLengthOutOfRangeError
 } from '@domains/user';
 
@@ -20,13 +23,17 @@ export class CreateUserValidator extends AbstractCreateUserValidator {
     super();
   }
 
-  public validate(payload: ICreateUser): void {
+  public validate(payload: Partial<ICreateUser> = {}): void {
     this.validateName(payload.name);
     this.validateUsername(payload.username);
     this.validatePassword(payload.password);
   }
 
-  protected validateName(name: string): void {
+  protected validateName(name: string | undefined): void {
+    if (typeof name !== 'string') {
+      throw new UserNameInvalidTypeError();
+    }
+
     const { MAX_LENGTH, MIN_LENGTH, REGEX_PATTERNS } = USER_RULES.name;
     const { ALLOWED_CHARACTERS, CONSECUTIVE_WHITESPACE } = REGEX_PATTERNS;
 
@@ -51,7 +58,11 @@ export class CreateUserValidator extends AbstractCreateUserValidator {
     }
   }
 
-  protected validatePassword(password: string): void {
+  protected validatePassword(password: string | undefined): void {
+    if (typeof password !== 'string') {
+      throw new UserPasswordInvalidTypeError();
+    }
+
     const { MAX_LENGTH, MIN_LENGTH, REGEX_PATTERNS } = USER_RULES.password;
     const { HAS_LOWERCASE, HAS_NUMBER, HAS_UPPERCASE } = REGEX_PATTERNS;
 
@@ -71,7 +82,11 @@ export class CreateUserValidator extends AbstractCreateUserValidator {
     }
   }
 
-  protected validateUsername(username: string): void {
+  protected validateUsername(username: string | undefined): void {
+    if (typeof username !== 'string') {
+      throw new UserUsernameInvalidTypeError();
+    }
+
     const { MAX_LENGTH, MIN_LENGTH, REGEX_PATTERNS } = USER_RULES.username;
     const { ALLOWED_CHARACTERS } = REGEX_PATTERNS;
 
