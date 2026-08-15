@@ -12,7 +12,7 @@ export abstract class AbstractApiMapper {
   protected constructor() {}
 
   /**
-   * Converts a persistent core error into an API error.
+   * Converts a persistent kernel error into an API error.
    *
    * @returns The corresponding API error.
    */
