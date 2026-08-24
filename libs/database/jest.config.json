@@ -1,0 +1,20 @@
+{
+  "moduleNameMapper": {
+    "^@domains$": "<rootDir>/src/domains/index.ts",
+    "^@domains/(.*)$": "<rootDir>/src/domains/$1",
+    "^@infrastructures$": "<rootDir>/src/infrastructures/index.ts",
+    "^@infrastructures/(.*)$": "<rootDir>/src/infrastructures/$1"
+  },
+  "coveragePathIgnorePatterns": ["abstracts?\\.ts$"],
+  "extensionsToTreatAsEsm": [".ts"],
+  "testEnvironment": "node",
+  "transform": {
+    "^.+\\.ts$": [
+      "ts-jest",
+      {
+        "useESM": true,
+        "tsconfig": "tsconfig.json"
+      }
+    ]
+  }
+}

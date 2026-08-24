@@ -28,6 +28,10 @@
       "projectFolder": "libs/configuration"
     },
     {
+      "packageName": "@libs/database",
+      "projectFolder": "libs/database"
+    },
+    {
       "packageName": "@libs/kernel",
       "projectFolder": "libs/kernel"
     },
