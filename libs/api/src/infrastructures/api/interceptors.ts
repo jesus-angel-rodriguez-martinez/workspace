@@ -3,6 +3,8 @@ import { type CallHandler, type ExecutionContext, type NestInterceptor } from '@
 import { map, type Observable } from 'rxjs';
 
 export class ApiInterceptor<T> implements NestInterceptor<T, IApiResponse<T> | undefined> {
+  public constructor() {}
+
   intercept(_context: ExecutionContext, next: CallHandler<T>): Observable<IApiResponse<T> | undefined> {
     const observable = next.handle();
 
