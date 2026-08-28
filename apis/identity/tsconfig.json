@@ -2,19 +2,14 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "lib": ["ES2022"],
-    "module": "ESNext",
-    "moduleResolution": "Node",
+    "experimentalDecorators": true,
     "outDir": "dist",
     "paths": {
       "@domains/*": ["./src/domains/*"],
       "@infrastructures/*": ["./src/infrastructures/*"]
     },
-    "rootDir": "src",
-    "target": "ES2022",
-    "types": ["jest", "node"]
+    "rootDir": "src"
   },
   "include": ["src"]
 }
