@@ -1,4 +1,4 @@
-import { type IClientConfiguration } from './types';
+import { type IClientServiceConfiguration } from '@domains/client';
 
 /**
  * Abstract base class for client services.
@@ -9,7 +9,7 @@ export abstract class AbstractClientService {
   /**
    * Client configuration options.
    */
-  protected readonly configuration: IClientConfiguration;
+  protected readonly configuration: IClientServiceConfiguration;
 
   /**
    * The constructor is protected to ensure this abstract class cannot be
@@ -17,7 +17,7 @@ export abstract class AbstractClientService {
    *
    * @param configuration - Client configuration options.
    */
-  protected constructor(configuration: IClientConfiguration) {
+  protected constructor(configuration: IClientServiceConfiguration) {
     this.configuration = configuration;
   }
 

@@ -6,9 +6,9 @@ import { ConfigurationService } from '@infrastructures/configuration';
 
 describe('ConfigurationService', () => {
   beforeAll(() => {
-    const filename = '.env.integration.sample';
+    const fileName = '.env.integration.sample';
     const directory = process.cwd();
-    const path = join(directory, filename);
+    const path = join(directory, fileName);
 
     dotenv.config({ override: true, path });
   });

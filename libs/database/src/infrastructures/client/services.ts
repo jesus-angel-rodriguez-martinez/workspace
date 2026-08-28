@@ -1,7 +1,7 @@
 import {
   AbstractClientService,
   AggregateConfigurationError,
-  type IClientConfiguration,
+  type IClientServiceConfiguration,
   MissingDatabaseError,
   MissingHostError,
   MissingPasswordError,
@@ -13,7 +13,7 @@ import { CamelCasePlugin, Kysely, PostgresDialect } from 'kysely';
 import { Pool } from 'pg';
 
 export class ClientService<Schema> extends AbstractClientService {
-  public constructor(configuration: IClientConfiguration) {
+  public constructor(configuration: IClientServiceConfiguration) {
     super(configuration);
   }
 
@@ -22,9 +22,11 @@ export class ClientService<Schema> extends AbstractClientService {
 
     const pool = new Pool({ connectionString });
     const dialect = new PostgresDialect({ pool });
+    const plugins = [new CamelCasePlugin()];
+
     const client = new Kysely<Schema>({
       dialect,
-      plugins: [new CamelCasePlugin()]
+      plugins
     });
     return client;
   }
