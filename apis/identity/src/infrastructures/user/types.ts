@@ -1,4 +1,5 @@
 import { type AbstractUserApp, type IUserRepository } from '@domains/user';
+import { type IDatabase } from '@infrastructures/database';
 import { type AbstractUserApiMapper } from '@infrastructures/user';
 import { type AbstractCryptographyService } from '@libs/security';
 
@@ -9,6 +10,10 @@ export interface IComposeUserConfiguration {
    * Provides cryptographic utilities.
    */
   cryptographyService: AbstractCryptographyService;
+  /**
+   * Provides access to the database.
+   */
+  database: IDatabase;
 }
 
 export interface IComposedUser {

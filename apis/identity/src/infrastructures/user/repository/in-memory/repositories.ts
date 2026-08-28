@@ -6,8 +6,10 @@ import {
 } from '@domains/user';
 import { randomUUID } from 'node:crypto';
 
-export class UserRepository implements IUserRepository {
+export class InMemoryUserRepository implements IUserRepository {
   protected readonly users: IUserModel[] = [];
+
+  public constructor() {}
 
   async findOne(filters: IUserModelFilters): Promise<IUserModel | null> {
     const user = this.users.find((user) => {

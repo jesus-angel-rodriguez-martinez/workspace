@@ -1,6 +1,9 @@
 import { type Shutdown } from '@infrastructures/lifecycle';
 
-export const shutdown: Shutdown = async ({ loggerService, reason }) => {
+export const shutdown: Shutdown = async ({ database, loggerService, reason }) => {
+  if (database) {
+    await database.destroy();
+  }
   if ('error' in reason) {
     const { error } = reason;
     const message = 'Critical error encountered.';

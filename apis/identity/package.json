@@ -12,6 +12,10 @@
   "main": "dist/main.js",
   "scripts": {
     "build": "npm run start:clean && npm run start:build",
+    "database:migrate": "database-migrate",
+    "database:migrate:down": "database-migrate down",
+    "database:migrate:reset": "database-migrate reset",
+    "database:migration:create": "database-scaffold",
     "start:build": "tsc && tsc-alias",
     "start:clean": "rimraf dist",
     "start:development": "tsx watch --require dotenv/config --require tsconfig-paths/register src/main.ts",
@@ -26,6 +30,7 @@
   "dependencies": {
     "@libs/api": "workspace:*",
     "@libs/configuration": "workspace:*",
+    "@libs/database": "workspace:*",
     "@libs/kernel": "workspace:*",
     "@libs/logger": "workspace:*",
     "@libs/security": "workspace:*",
@@ -33,6 +38,7 @@
     "@nestjs/core": "~11.1.28",
     "@nestjs/platform-express": "~11.1.28",
     "dotenv": "~17.3.1",
+    "kysely": "~0.29.5",
     "reflect-metadata": "~0.2.2",
     "rxjs": "~7.8.2",
     "tsconfig-paths": "^4.2.0"

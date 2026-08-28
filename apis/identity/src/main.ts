@@ -2,18 +2,38 @@ import { composeApi } from '@infrastructures/api';
 import { composeAuthentication } from '@infrastructures/authentication';
 import { composeConfiguration } from '@infrastructures/configuration';
 import { composeCryptography } from '@infrastructures/cryptography';
+import { type IDatabase, type IDatabaseSchema } from '@infrastructures/database';
 import { shutdown } from '@infrastructures/lifecycle';
 import { composeLogger } from '@infrastructures/logger';
 import { composeToken } from '@infrastructures/token';
 import { composeUser } from '@infrastructures/user';
+import { ClientService } from '@libs/database';
 import { type AbstractLoggerService } from '@libs/logger';
 
+let database: IDatabase | undefined;
 let loggerService: AbstractLoggerService | undefined;
 
 const init = async () => {
   try {
-    const { API_PORT, ENVIRONMENT, JWT_SECRET } = composeConfiguration({
+    const {
+      /* 📡 API configuration. */
+      API_PORT,
+      DATABASE,
+      DATABASE_HOST,
+      DATABASE_PASSWORD,
+      DATABASE_PORT,
+      DATABASE_USER,
+      /* ⚙️ Environment configuration. */
+      ENVIRONMENT,
+      /* 🔒 JWT configuration. */
+      JWT_SECRET
+    } = composeConfiguration({
       API_PORT: 'number',
+      DATABASE: 'string',
+      DATABASE_HOST: 'string',
+      DATABASE_PASSWORD: 'string',
+      DATABASE_PORT: 'number',
+      DATABASE_USER: 'string',
       ENVIRONMENT: 'string',
       JWT_SECRET: 'string'
     });
@@ -42,8 +62,21 @@ const init = async () => {
     });
     loggerService.debug('🔧 Token service ready');
 
+    const clientService = new ClientService<IDatabaseSchema>({
+      database: DATABASE,
+      host: DATABASE_HOST,
+      password: DATABASE_PASSWORD,
+      port: DATABASE_PORT,
+      user: DATABASE_USER
+    });
+    loggerService.debug('🔧 Client service ready');
+
+    database = clientService.createClient();
+    loggerService.debug('🔧 Database client ready');
+
     const { userApiMapper, userApp, userRepository } = composeUser({
-      cryptographyService
+      cryptographyService,
+      database
     });
     loggerService.debug('📦 User repository ready');
     loggerService.debug('🧩 User application ready');
@@ -72,11 +105,11 @@ const init = async () => {
       port: API_PORT
     });
   } catch (e) {
-    await shutdown({ loggerService, reason: { error: e as Error } });
+    await shutdown({ database, loggerService, reason: { error: e as Error } });
   }
 };
 
 await init();
 
-process.on('SIGINT', () => shutdown({ loggerService, reason: { signal: 'SIGINT' } }));
-process.on('SIGTERM', () => shutdown({ loggerService, reason: { signal: 'SIGTERM' } }));
+process.on('SIGINT', () => shutdown({ database, loggerService, reason: { signal: 'SIGINT' } }));
+process.on('SIGTERM', () => shutdown({ database, loggerService, reason: { signal: 'SIGTERM' } }));
