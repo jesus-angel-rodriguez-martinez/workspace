@@ -31,6 +31,22 @@ export class UserNotFoundError extends KernelError {
 }
 ```
 
+For errors that gather several related failures into one, extend `AggregateKernelError`. It formats the collected errors into a bulleted detail message, so each domain only supplies its own `code` and `title`:
+
+```ts
+import { AggregateKernelError, type IKernelError, type IKernelErrorOptions } from '@libs/kernel';
+
+export class AggregateConfigurationError extends AggregateKernelError {
+  constructor(errors: IKernelError[], options: IKernelErrorOptions = {}) {
+    super(errors, {
+      cause: options.cause,
+      code: 'CONFIGURATION.INVALID_CONFIGURATION',
+      title: 'Invalid configuration'
+    });
+  }
+}
+```
+
 ### Services
 
 Implement `IKernelService` to standardize the lifecycle of your services:

@@ -1,4 +1,9 @@
 /**
+ * Standardized interface for aggregating one or more related errors into a single error.
+ */
+export interface IAggregateKernelErrorOptions extends Omit<IKernelError, 'detail'> {}
+
+/**
  * Standardized interface for managing kernel application errors.
  */
 export interface IKernelError extends IKernelErrorOptions {
