@@ -1,6 +1,7 @@
 import jsonwebtoken from 'jsonwebtoken';
 import {
   AbstractTokenService,
+  AggregateTokenConfigurationError,
   type AuthenticationToken,
   type ITokenPayload,
   type ITokenServiceConfiguration,
@@ -8,8 +9,9 @@ import {
   TokenExpiryError,
   TokenIssuanceError,
   TokenValidationError,
-  WeakTokenConfigurationError
+  WeakTokenSecretError
 } from '@domains/token';
+import { type IKernelError } from '@libs/kernel';
 
 const { TokenExpiredError, sign, verify } = jsonwebtoken;
 
@@ -40,11 +42,17 @@ export class TokenService extends AbstractTokenService {
     }
   }
 
-  protected validateConfiguration(): void {
-    const { secret } = this.configuration;
+  protected validateConfiguration(configuration: ITokenServiceConfiguration): void {
+    const { secret } = configuration;
+
+    const errors: IKernelError[] = [];
 
     if (secret.length < TOKEN_RULES.secret.MIN_LENGTH) {
-      throw new WeakTokenConfigurationError('secret', TOKEN_RULES.secret.MIN_LENGTH);
+      errors.push(new WeakTokenSecretError());
+    }
+
+    if (errors.length) {
+      throw new AggregateTokenConfigurationError(errors);
     }
   }
 

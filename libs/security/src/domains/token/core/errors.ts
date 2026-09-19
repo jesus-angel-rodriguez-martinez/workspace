@@ -1,4 +1,22 @@
-import { type IKernelErrorOptions, KernelError } from '@libs/kernel';
+import { TOKEN_RULES } from '@domains/token';
+import { AggregateKernelError, type IKernelError, type IKernelErrorOptions, KernelError } from '@libs/kernel';
+
+/**
+ * Error thrown when one or more token configuration validation errors are found.
+ */
+export class AggregateTokenConfigurationError extends AggregateKernelError {
+  /**
+   * @param errors - The collection of configuration errors.
+   * @param options - Optional error configuration options.
+   */
+  constructor(errors: IKernelError[], options: IKernelErrorOptions = {}) {
+    super(errors, {
+      cause: options.cause,
+      code: 'TOKEN.INVALID_CONFIGURATION',
+      title: 'Invalid token configuration'
+    });
+  }
+}
 
 /**
  * Error thrown when an authentication token has expired.
@@ -10,7 +28,7 @@ export class TokenExpiryError extends KernelError {
   constructor(options: IKernelErrorOptions = {}) {
     super({
       cause: options.cause,
-      code: 'SECURITY.TOKEN_EXPIRY',
+      code: 'TOKEN.EXPIRY',
       detail: 'The authentication token has expired.',
       title: 'Token expiry'
     });
@@ -27,7 +45,7 @@ export class TokenIssuanceError extends KernelError {
   constructor(options: IKernelErrorOptions = {}) {
     super({
       cause: options.cause,
-      code: 'SECURITY.TOKEN_ISSUANCE',
+      code: 'TOKEN.ISSUANCE',
       detail: 'The authentication token could not be issued.',
       title: 'Token issuance failed'
     });
@@ -44,7 +62,7 @@ export class TokenValidationError extends KernelError {
   constructor(options: IKernelErrorOptions = {}) {
     super({
       cause: options.cause,
-      code: 'SECURITY.TOKEN_VALIDATION',
+      code: 'TOKEN.VALIDATION',
       detail: 'The authentication token is invalid.',
       title: 'Token validation failed'
     });
@@ -52,21 +70,18 @@ export class TokenValidationError extends KernelError {
 }
 
 /**
- * Error thrown when a token configuration value is below its minimum
- * security requirement.
+ * Error thrown when the configured secret is below its minimum security requirement.
  */
-export class WeakTokenConfigurationError extends KernelError {
+export class WeakTokenSecretError extends KernelError {
   /**
-   * @param key - The token configuration key that is too weak.
-   * @param minimum - The minimum accepted value for the configuration key.
    * @param options - Optional error configuration options.
    */
-  constructor(key: string, minimum: number, options: IKernelErrorOptions = {}) {
+  constructor(options: IKernelErrorOptions = {}) {
     super({
       cause: options.cause,
-      code: 'SECURITY.WEAK_TOKEN_CONFIGURATION',
-      detail: `Token configuration '${key}' must be at least ${minimum}.`,
-      title: 'Weak token configuration'
+      code: 'TOKEN.WEAK_SECRET',
+      detail: `The token secret must be at least '${TOKEN_RULES.secret.MIN_LENGTH}' characters.`,
+      title: 'Weak token secret'
     });
   }
 }

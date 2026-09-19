@@ -17,9 +17,9 @@ export abstract class AbstractTokenService {
    * @param configuration - Token configuration options.
    */
   protected constructor(configuration: ITokenServiceConfiguration) {
-    this.configuration = configuration;
+    this.validateConfiguration(configuration);
 
-    this.validateConfiguration();
+    this.configuration = configuration;
   }
 
   /**
@@ -33,9 +33,9 @@ export abstract class AbstractTokenService {
   /**
    * Validates that the configuration meets the minimum security requirements.
    *
-   * @throws When a configuration value does not meet its minimum requirement.
+   * @param configuration - Token configuration options to validate.
    */
-  protected abstract validateConfiguration(): void;
+  protected abstract validateConfiguration(configuration: ITokenServiceConfiguration): void;
   /**
    * Verifies the signature and expiration of an authentication token.
    *

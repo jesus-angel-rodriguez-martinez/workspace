@@ -13,9 +13,9 @@ export abstract class AbstractCryptographyService {
    * @param configuration - Cryptography configuration options.
    */
   protected constructor(configuration: ICryptographyServiceConfiguration) {
-    this.configuration = configuration;
+    this.validateConfiguration(configuration);
 
-    this.validateConfiguration();
+    this.configuration = configuration;
   }
 
   /**
@@ -35,8 +35,10 @@ export abstract class AbstractCryptographyService {
   public abstract hashPassword(password: string, salt: Buffer): Promise<Buffer>;
   /**
    * Validates that the configuration meets the minimum security requirements.
+   *
+   * @param configuration - Cryptography configuration options to validate.
    */
-  protected abstract validateConfiguration(): void;
+  protected abstract validateConfiguration(configuration: ICryptographyServiceConfiguration): void;
   /**
    * Validates whether a plain-text password corresponds to a stored password hash.
    * Implementations must perform a constant-time comparison to prevent timing attacks.

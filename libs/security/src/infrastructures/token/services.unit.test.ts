@@ -1,10 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
 import {
+  AggregateTokenConfigurationError,
   type ITokenServiceConfiguration,
   TokenExpiryError,
   TokenIssuanceError,
-  TokenValidationError,
-  WeakTokenConfigurationError
+  TokenValidationError
 } from '@domains/token';
 
 class MockTokenExpiredError extends Error {}
@@ -47,7 +47,7 @@ describe('TokenService', () => {
     it('throws when the secret is shorter than the minimum length', () => {
       const secret = 'fake-short-secret';
 
-      expect(() => new TokenService({ ...configuration, secret })).toThrow(WeakTokenConfigurationError);
+      expect(() => new TokenService({ ...configuration, secret })).toThrow(AggregateTokenConfigurationError);
     });
   });
 

@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
 import {
-  type ICryptographyServiceConfiguration,
-  WeakCryptographyConfigurationError
+  AggregateCryptographyConfigurationError,
+  type ICryptographyServiceConfiguration
 } from '@domains/cryptography';
 
 const generatedSalt = Buffer.alloc(16, 1);
@@ -46,21 +46,51 @@ describe('CryptographyService', () => {
   });
 
   describe('constructor', () => {
-    it('throws when the iterations are below the minimum', () => {
+    it('throws an AggregateCryptographyConfigurationError when the iterations are below the minimum', () => {
       expect(() => new CryptographyService({ ...configuration, iterations: 0 })).toThrow(
-        WeakCryptographyConfigurationError
+        AggregateCryptographyConfigurationError
+      );
+      expect(() => new CryptographyService({ ...configuration, iterations: 0 })).toThrow(
+        'CRYPTOGRAPHY.WEAK_ITERATIONS'
       );
     });
 
-    it('throws when the key length is below the minimum', () => {
+    it('throws an AggregateCryptographyConfigurationError when the key length is below the minimum', () => {
       expect(() => new CryptographyService({ ...configuration, keyLength: 0 })).toThrow(
-        WeakCryptographyConfigurationError
+        AggregateCryptographyConfigurationError
+      );
+      expect(() => new CryptographyService({ ...configuration, keyLength: 0 })).toThrow(
+        'CRYPTOGRAPHY.WEAK_KEY_LENGTH'
       );
     });
 
-    it('throws when the salt length is below the minimum', () => {
+    it('throws an AggregateCryptographyConfigurationError when the salt length is below the minimum', () => {
       expect(() => new CryptographyService({ ...configuration, saltLength: 0 })).toThrow(
-        WeakCryptographyConfigurationError
+        AggregateCryptographyConfigurationError
+      );
+      expect(() => new CryptographyService({ ...configuration, saltLength: 0 })).toThrow(
+        'CRYPTOGRAPHY.WEAK_SALT_LENGTH'
+      );
+    });
+
+    it('aggregates every configuration error when multiple values are below the minimum', () => {
+      let caught: unknown;
+
+      try {
+        new CryptographyService({ ...configuration, iterations: 0, keyLength: 0, saltLength: 0 });
+      } catch (error) {
+        caught = error;
+      }
+
+      expect(caught).toBeInstanceOf(AggregateCryptographyConfigurationError);
+      expect((caught as AggregateCryptographyConfigurationError).message).toContain(
+        'CRYPTOGRAPHY.WEAK_ITERATIONS'
+      );
+      expect((caught as AggregateCryptographyConfigurationError).message).toContain(
+        'CRYPTOGRAPHY.WEAK_KEY_LENGTH'
+      );
+      expect((caught as AggregateCryptographyConfigurationError).message).toContain(
+        'CRYPTOGRAPHY.WEAK_SALT_LENGTH'
       );
     });
   });

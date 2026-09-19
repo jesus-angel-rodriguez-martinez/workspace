@@ -37,38 +37,30 @@ const areCredentialsValid = await cryptographyService.verifyPassword(password, s
 `TokenService` generates and verifies signed JWT authentication tokens from a user id:
 
 ```ts
-import { type Configuration, ConfigurationService } from '@libs/configuration';
 import { TokenService } from '@libs/security';
-
-const configuration = {
-  SECRET: 'string'
-} as const satisfies Configuration;
-
-const { SECRET } = new ConfigurationService(configuration).getAll();
 
 const tokenService = new TokenService({
   algorithm: 'HS256',
   expiresIn: 3_600,
-  secret: SECRET
+  secret: 'SECRET'
 });
 
 const userId = '550e8400-e29b-41d4-a716-446655440000';
 const token = tokenService.generateToken(userId);
-```
-
-Use `verifyToken` to validate the signature and expiration of a token. It throws if the token is invalid or expired:
-
-```ts
 const { exp, iat, sub } = tokenService.verifyToken(token);
 ```
 
 ### Errors
 
+- `AggregateCryptographyConfigurationError`: Thrown when constructing a `CryptographyService` with one or more configuration values below their minimum security requirement. Its message lists each underlying error (`code` and `detail`).
+- `AggregateTokenConfigurationError`: Thrown when constructing a `TokenService` with one or more configuration values below their minimum security requirement. Its message lists each underlying error (`code` and `detail`).
 - `TokenExpiryError`: Thrown when verifying a token that has expired.
 - `TokenIssuanceError`: Thrown when an authentication token cannot be issued.
 - `TokenValidationError`: Thrown when verifying a token whose signature or format is invalid.
-- `WeakCryptographyConfigurationError`: Thrown when constructing a `CryptographyService` with a configuration value below its minimum security requirement.
-- `WeakTokenConfigurationError`: Thrown when constructing a `TokenService` with a configuration value below its minimum security requirement.
+- `WeakCryptographyIterationsError`: Thrown when the configured number of iterations is below its minimum security requirement.
+- `WeakCryptographyKeyLengthError`: Thrown when the configured key length is below its minimum security requirement.
+- `WeakCryptographySaltLengthError`: Thrown when the configured salt length is below its minimum security requirement.
+- `WeakTokenSecretError`: Thrown when the configured token secret is below its minimum security requirement.
 
 ## 🧪 Testing
 
