@@ -52,5 +52,5 @@ export interface IUserRepository {
    *
    * @returns A promise that resolves with the created user.
    */
-  insert(payload: ICreateUserModel): Promise<IUserModel>;
+  insertOne(payload: ICreateUserModel): Promise<IUserModel>;
 }

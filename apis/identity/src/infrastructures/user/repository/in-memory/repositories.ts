@@ -25,7 +25,7 @@ export class InMemoryUserRepository implements IUserRepository {
     return user ? { ...user } : null;
   }
 
-  async insert(payload: ICreateUserModel): Promise<IUserModel> {
+  async insertOne(payload: ICreateUserModel): Promise<IUserModel> {
     const user: IUserModel = {
       about: payload.about,
       id: randomUUID(),

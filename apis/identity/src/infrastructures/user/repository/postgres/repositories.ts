@@ -27,7 +27,7 @@ export class PostgresUserRepository implements IUserRepository {
     return userModel ?? null;
   }
 
-  async insert(payload: ICreateUserModel): Promise<IUserModel> {
+  async insertOne(payload: ICreateUserModel): Promise<IUserModel> {
     const userModel = await this.db
       .insertInto('users')
       .values({
