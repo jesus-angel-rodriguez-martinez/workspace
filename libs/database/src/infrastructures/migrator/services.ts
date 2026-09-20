@@ -8,8 +8,8 @@ import { join, resolve } from 'node:path';
 export class MigratorService<Schema> extends AbstractMigratorService {
   protected readonly clientService: ClientService<Schema>;
 
-  public constructor({ clientService, ...configuration }: IMigratorServiceOptions<Schema>) {
-    super(configuration);
+  public constructor({ clientService, loggerService }: IMigratorServiceOptions<Schema>) {
+    super({ loggerService });
     this.clientService = clientService;
   }
 
