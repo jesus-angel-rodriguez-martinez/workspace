@@ -19,7 +19,7 @@ export abstract class AbstractTokenService {
   protected constructor(configuration: ITokenServiceConfiguration) {
     this.validateConfiguration(configuration);
 
-    this.configuration = configuration;
+    this.configuration = Object.freeze({ ...configuration });
   }
 
   /**

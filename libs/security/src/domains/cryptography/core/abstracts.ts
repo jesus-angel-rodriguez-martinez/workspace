@@ -15,7 +15,7 @@ export abstract class AbstractCryptographyService {
   protected constructor(configuration: ICryptographyServiceConfiguration) {
     this.validateConfiguration(configuration);
 
-    this.configuration = configuration;
+    this.configuration = Object.freeze({ ...configuration });
   }
 
   /**

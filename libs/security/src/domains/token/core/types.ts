@@ -22,13 +22,13 @@ export interface ITokenServiceConfiguration {
   /**
    * The signing algorithm to use.
    */
-  algorithm: 'HS256';
+  readonly algorithm: 'HS256';
   /**
    * The token expiration time in seconds.
    */
-  expiresIn: number;
+  readonly expiresIn: number;
   /**
    * The secret key used to sign tokens.
    */
-  secret: string;
+  readonly secret: string;
 }
