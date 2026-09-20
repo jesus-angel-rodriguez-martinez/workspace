@@ -1,21 +1,17 @@
-import { type IKernelError, type IKernelErrorOptions, KernelError } from '@libs/kernel';
+import { AggregateKernelError, type IKernelError, type IKernelErrorOptions, KernelError } from '@libs/kernel';
 
 /**
  * Error thrown when one or more configuration validation errors are found.
  */
-export class AggregateConfigurationError extends KernelError {
+export class AggregateConfigurationError extends AggregateKernelError {
   /**
    * @param errors - The collection of configuration errors.
    * @param options - Optional error configuration options.
    */
   constructor(errors: IKernelError[], options: IKernelErrorOptions = {}) {
-    const count = errors.length;
-    const details = errors.map(({ code, detail }) => `- [${code}] ${detail}`).join('\n');
-    const isSingular = count === 1;
-    super({
+    super(errors, {
       cause: options.cause,
-      code: 'CONFIGURATION.INVALID',
-      detail: `Found ${count} configuration ${isSingular ? 'error' : 'errors'}:\n${details}`,
+      code: 'CONFIGURATION.INVALID_CONFIGURATION',
       title: 'Invalid configuration'
     });
   }
