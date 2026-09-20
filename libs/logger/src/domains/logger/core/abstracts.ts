@@ -18,7 +18,7 @@ export abstract class AbstractLoggerService {
    * @param configuration - Logger configuration options.
    */
   protected constructor(configuration: ILoggerServiceConfiguration) {
-    this.configuration = configuration;
+    this.configuration = Object.freeze({ ...configuration });
   }
 
   /**

@@ -5,7 +5,7 @@ export interface ILoggerServiceConfiguration {
   /**
    * Logical name of the logger instance representing the module, file, or feature.
    */
-  loggerName: string;
+  readonly loggerName: string;
 }
 
 /**
@@ -15,15 +15,15 @@ export interface ILoggerServiceInitConfiguration {
   /**
    * Name of the application that produces the logs.
    */
-  applicationName: string;
+  readonly applicationName: string;
   /**
    * The minimum severity level to log.
    */
-  level: LoggerLevel;
+  readonly level: LoggerLevel;
   /**
    * Enables human-readable log output.
    */
-  prettify: boolean;
+  readonly prettify: boolean;
 }
 
 /**
