@@ -33,49 +33,55 @@ const database = clientService.createClient();
 
 ### Migrator
 
-`MigratorService` runs migrations with `up()`, `down()`, and `reset()`, reporting progress through the injected logger:
+Migrations are run through the `database-migrate` binary, not by instantiating `MigratorService` directly.
 
-```ts
-import { type IDatabaseSchema } from '@infrastructures/database';
-import { ClientService, MigratorService } from '@libs/database';
-import { LoggerService } from '@libs/logger';
-
-LoggerService.init({
-  applicationName: '@libs/database',
-  level: 'info',
-  prettify: true
-});
-
-const clientService = new ClientService<IDatabaseSchema>({
-  database: 'identity',
-  host: 'localhost',
-  password: 'postgres',
-  port: 5_432,
-  user: 'postgres'
-});
-
-const loggerService = new LoggerService({
-  loggerName: import.meta.url
-});
-
-const migratorService = new MigratorService({ clientService, loggerService });
-
-await migratorService.up();
+```json
+{
+  "scripts": {
+    "database:migrate": "database-migrate",
+    "database:migrate:down": "database-migrate down",
+    "database:migrate:reset": "database-migrate reset"
+  }
+}
 ```
 
-The migration folder defaults to `<cwd>/database/migrations`, so a command run from an API package targets that API's own migrations without extra configuration.
+The binary reads the connection settings from the environment (loaded via `dotenv`):
+
+```bash
+DATABASE=database
+DATABASE_HOST=localhost
+DATABASE_PASSWORD=postgres
+DATABASE_PORT=5432
+DATABASE_USER=user
+```
+
+Then run:
+
+```bash
+rushx database:migrate
+rushx database:migrate:down
+rushx database:migrate:reset
+```
+
+Migrations are read from `<cwd>/database/migrations`, so a command run from an API package targets that API's own migrations without extra configuration.
 
 ### Scaffolder
 
-`ScaffolderService` scaffolds a timestamped migration file and returns its path:
+New migration files are scaffolded through the `database-scaffold` binary:
 
-```ts
-import { ScaffolderService } from '@libs/database';
-
-const scaffolderService = new ScaffolderService();
-
-const migrationPath = await scaffolderService.create('create-users');
+```json
+{
+  "scripts": {
+    "database:migration:create": "database-scaffold"
+  }
+}
 ```
+
+```bash
+rushx database:migration:create create-users
+```
+
+This writes a timestamped `<YYYYMMDDHHMMSS>_create-users.ts` file (with empty `up` and `down` exports) to `<cwd>/database/migrations` and logs its path.
 
 ### Errors
 
