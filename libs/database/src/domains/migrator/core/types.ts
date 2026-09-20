@@ -7,7 +7,7 @@ export interface IMigratorServiceConfiguration {
   /**
    * Logging service used for structured output and diagnostics.
    */
-  loggerService: AbstractLoggerService;
+  readonly loggerService: AbstractLoggerService;
 }
 
 /**

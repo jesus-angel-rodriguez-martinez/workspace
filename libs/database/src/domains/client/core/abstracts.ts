@@ -18,7 +18,9 @@ export abstract class AbstractClientService {
    * @param configuration - Client configuration options.
    */
   protected constructor(configuration: IClientServiceConfiguration) {
-    this.configuration = configuration;
+    this.validateConfiguration(configuration);
+
+    this.configuration = Object.freeze({ ...configuration });
   }
 
   /**
@@ -29,4 +31,10 @@ export abstract class AbstractClientService {
    * @returns The connection string.
    */
   protected abstract createConnectionString(): string;
+  /**
+   * Validates that the configuration provides every required connection value.
+   *
+   * @param configuration - Client configuration options to validate.
+   */
+  protected abstract validateConfiguration(configuration: IClientServiceConfiguration): void;
 }

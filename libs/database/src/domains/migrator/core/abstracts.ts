@@ -18,7 +18,7 @@ export abstract class AbstractMigratorService {
    * @param configuration - Migrator configuration options.
    */
   protected constructor(configuration: IMigratorServiceConfiguration) {
-    this.configuration = configuration;
+    this.configuration = Object.freeze({ ...configuration });
   }
 
   /**

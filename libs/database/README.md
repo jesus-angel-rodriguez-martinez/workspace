@@ -21,11 +21,11 @@ import { type IDatabaseSchema } from '@infrastructures/database';
 import { ClientService } from '@libs/database';
 
 const clientService = new ClientService<IDatabaseSchema>({
-  database: 'identity',
+  database: 'database',
   host: 'localhost',
-  password: 'postgres',
-  port: 5_432,
-  user: 'postgres'
+  password: 'password',
+  port: 5432,
+  user: 'user'
 });
 
 const database = clientService.createClient();
@@ -79,9 +79,14 @@ const migrationPath = await scaffolderService.create('create-users');
 
 ### Errors
 
-- `AggregateConfigurationError`: Thrown when constructing a `ClientService` with one or more missing connection values (`MissingDatabaseError`, `MissingHostError`, `MissingPasswordError`, `MissingPortError`, `MissingUserError`).
+- `AggregateClientConfigurationError`: Thrown when constructing a `ClientService` with one or more missing connection values. Its message lists each underlying error (`code` and `detail`).
 - `InvalidMigrationNameError`: Thrown when scaffolding a migration whose name contains characters other than lowercase letters, digits, and hyphens.
 - `MigrationFailedError`: Thrown when a migration fails to run.
+- `MissingClientDatabaseError`: Thrown when the database name is missing.
+- `MissingClientHostError`: Thrown when the database host is missing.
+- `MissingClientPasswordError`: Thrown when the database password is missing.
+- `MissingClientPortError`: Thrown when the database port is missing.
+- `MissingClientUserError`: Thrown when the database user is missing.
 - `MissingMigrationNameError`: Thrown when scaffolding a migration without a name.
 
 ## 🧪 Testing

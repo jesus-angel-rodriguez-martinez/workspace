@@ -11,7 +11,7 @@ export class MigrationFailedError extends KernelError {
   constructor(name: string, options: IKernelErrorOptions = {}) {
     super({
       cause: options.cause,
-      code: 'DATABASE.MIGRATION_FAILED',
+      code: 'MIGRATOR.MIGRATION_FAILED',
       detail: `Migration '${name}' failed to run.`,
       title: 'Migration failed'
     });

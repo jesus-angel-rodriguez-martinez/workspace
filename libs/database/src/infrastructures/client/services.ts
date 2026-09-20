@@ -1,12 +1,12 @@
 import {
   AbstractClientService,
-  AggregateConfigurationError,
+  AggregateClientConfigurationError,
   type IClientServiceConfiguration,
-  MissingDatabaseError,
-  MissingHostError,
-  MissingPasswordError,
-  MissingPortError,
-  MissingUserError
+  MissingClientDatabaseError,
+  MissingClientHostError,
+  MissingClientPasswordError,
+  MissingClientPortError,
+  MissingClientUserError
 } from '@domains/client';
 import { type IKernelError } from '@libs/kernel';
 import { CamelCasePlugin, Kysely, PostgresDialect } from 'kysely';
@@ -34,29 +34,33 @@ export class ClientService<Schema> extends AbstractClientService {
   protected createConnectionString(): string {
     const { database, host, password, port, user } = this.configuration;
 
+    const connectionString = `postgresql://${user}:${password}@${host}:${port}/${database}`;
+    return connectionString;
+  }
+
+  protected validateConfiguration(configuration: IClientServiceConfiguration): void {
+    const { database, host, password, port, user } = configuration;
+
     const errors: IKernelError[] = [];
 
     if (!database) {
-      errors.push(new MissingDatabaseError());
+      errors.push(new MissingClientDatabaseError());
     }
     if (!host) {
-      errors.push(new MissingHostError());
+      errors.push(new MissingClientHostError());
     }
     if (!password) {
-      errors.push(new MissingPasswordError());
+      errors.push(new MissingClientPasswordError());
     }
     if (!port) {
-      errors.push(new MissingPortError());
+      errors.push(new MissingClientPortError());
     }
     if (!user) {
-      errors.push(new MissingUserError());
+      errors.push(new MissingClientUserError());
     }
 
     if (errors.length) {
-      throw new AggregateConfigurationError(errors);
+      throw new AggregateClientConfigurationError(errors);
     }
-
-    const connectionString = `postgresql://${user}:${password}@${host}:${port}/${database}`;
-    return connectionString;
   }
 }
