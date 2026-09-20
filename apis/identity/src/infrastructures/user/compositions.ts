@@ -1,7 +1,6 @@
-import { UserApp } from '@domains/user';
+import { CreateUserValidator, UserApp } from '@domains/user';
 import {
   type ComposeUser,
-  CreateUserValidator,
   PostgresUserRepository,
   UserApiMapper,
   UserModelMapper
