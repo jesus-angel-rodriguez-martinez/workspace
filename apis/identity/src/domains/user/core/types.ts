@@ -54,6 +54,9 @@ export interface IUser {
   username: string;
 }
 
+/**
+ * Represents the complete list of user domain errors.
+ */
 export type UserError =
   | UserAlreadyExistsError
   | UserNameConsecutiveWhitespaceError

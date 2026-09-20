@@ -1,6 +1,9 @@
 import { type AuthenticationError } from '@domains/authentication';
 import { type ISecureUser, type UserError } from '@domains/user';
 
+/**
+ * Represents the complete list of identity domain errors.
+ */
 export type DomainError = AuthenticationError | UserError;
 
 /**

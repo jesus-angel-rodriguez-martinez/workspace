@@ -18,6 +18,9 @@ import {
   type UserUsernameLengthOutOfRangeApiError
 } from '@infrastructures/user';
 
+/**
+ * Represents the complete list of user API errors.
+ */
 export type UserApiError =
   | UserAlreadyExistsApiError
   | UserNameConsecutiveWhitespaceApiError
