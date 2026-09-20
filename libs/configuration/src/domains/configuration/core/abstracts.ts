@@ -22,7 +22,9 @@ export abstract class AbstractConfigurationService<C extends Configuration> {
    * @param configuration - The configuration defining keys and their expected primitive types.
    */
   protected constructor(configuration: C) {
-    this.configuration = Object.freeze(this.parseAll(configuration));
+    const parsedConfiguration = this.parseAll(configuration);
+
+    this.configuration = Object.freeze(parsedConfiguration);
   }
 
   /**

@@ -62,15 +62,12 @@ Because parsing happens at construction time, later changes to `process.env` do 
 
 Validation runs over the whole configuration in a single pass: every invalid or missing variable is collected and reported together, so a misconfigured deployment surfaces all its problems at once instead of one restart at a time.
 
-- `AggregateConfigurationError`: Thrown by the constructor when one or more variables fail validation. Its message lists each underlying error (`code` and `detail`).
-
-The following errors describe the individual failures gathered into the `AggregateConfigurationError`:
-
-- `EmptyConfigurationError`: A required variable is present but empty.
-- `InvalidBooleanConfigurationError`: A value cannot be parsed as `"true"` or `"false"`.
-- `InvalidNumberConfigurationError`: A value cannot be parsed as a finite number.
-- `MissingConfigurationError`: A required variable is not defined in `process.env`.
-- `UnsupportedPrimitiveError`: A configuration declares an unsupported primitive type.
+- `AggregateConfigurationError`: Thrown when constructing a `ConfigurationService` with one or more variables that fail validation. Its message lists each underlying error (`code` and `detail`).
+- `EmptyConfigurationError`: Thrown when a required variable is present but empty.
+- `InvalidBooleanConfigurationError`: Thrown when a value cannot be parsed as `"true"` or `"false"`.
+- `InvalidNumberConfigurationError`: Thrown when a value cannot be parsed as a finite number.
+- `MissingConfigurationError`: Thrown when a required variable is not defined in `process.env`.
+- `UnsupportedPrimitiveError`: Thrown when a configuration declares an unsupported primitive type.
 
 ## 🧪 Testing
 
