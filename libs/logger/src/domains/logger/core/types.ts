@@ -1,4 +1,18 @@
 /**
+ * Describes the critical severity level of a log message.
+ *
+ * Ordered from **least severe** ('warn') to **most severe** ('fatal').
+ */
+export type CriticalLoggerLevel = 'warn' | 'error' | 'fatal';
+
+/**
+ * Describes the diagnostic severity level of a log message.
+ *
+ * Ordered from **most verbose** ('trace') to **least verbose** ('info').
+ */
+export type DiagnosticLoggerLevel = 'trace' | 'debug' | 'info';
+
+/**
  * Defines the complete configuration options for initializing the logger service.
  */
 export interface ILoggerServiceInitConfiguration {
@@ -38,4 +52,4 @@ export type LoggerErrorContext = {
  *
  * Ordered from **most verbose** ('trace') to **most severe** ('fatal').
  */
-export type LoggerLevel = 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal';
+export type LoggerLevel = DiagnosticLoggerLevel | CriticalLoggerLevel;
