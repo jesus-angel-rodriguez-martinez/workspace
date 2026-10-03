@@ -9,7 +9,10 @@ services:
       PGTZ: UTC
       TZ: UTC
     ports:
-      - '127.0.0.1:${IDENTITY_DATABASE_PORT}:5432'
+      - host_ip: 127.0.0.1
+        protocol: tcp
+        published: ${IDENTITY_DATABASE_PORT}
+        target: 5432
     restart: unless-stopped
     volumes:
       - ./apis/identity/database/volume:/var/lib/postgresql/data
