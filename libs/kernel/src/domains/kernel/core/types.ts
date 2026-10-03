@@ -27,21 +27,3 @@ export interface IKernelErrorOptions {
    */
   cause?: unknown;
 }
-
-/**
- * Standardized interface for managing the lifecycle of kernel application services.
- */
-export interface IKernelService {
-  /**
-   * Gracefully shuts down the service, releasing any held resources.
-   *
-   * @returns A promise that resolves when cleanup is finished.
-   */
-  close(): Promise<void>;
-  /**
-   * Initializes the service with the provided configuration.
-   *
-   * @returns A promise that resolves when the initialization is complete.
-   */
-  init(): Promise<void>;
-}

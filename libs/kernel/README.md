@@ -47,20 +47,6 @@ export class AggregateConfigurationError extends AggregateKernelError {
 }
 ```
 
-### Services
-
-Implement `IKernelService` to standardize the lifecycle of your services:
-
-```ts
-import { type IKernelService } from '@libs/kernel';
-
-export class Service implements IKernelService {
-  async init(): Promise<void> {}
-
-  async close(): Promise<void> {}
-}
-```
-
 ## 🧪 Testing
 
 Uses Jest with ESM support.
