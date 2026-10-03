@@ -17,33 +17,23 @@ rush add -p @libs/logger
 `LoggerService` must be initialized once at application startup before any instance is created:
 
 ```ts
-import { type Configuration, ConfigurationService } from '@libs/configuration';
 import { LoggerService } from '@libs/logger';
 
-const configuration = {
-  ENVIRONMENT: 'string'
-} as const satisfies Configuration;
-
-const { ENVIRONMENT } = new ConfigurationService(configuration).getAll();
-const isDevelopment = ENVIRONMENT === 'development';
-
 LoggerService.init({
-  applicationName: '@libs/logger',
-  level: isDevelopment ? 'trace' : 'info',
-  prettify: isDevelopment
+  level: 'info',
+  name: '@libs/logger',
+  prettify: true
 });
 ```
 
 ### Logging
 
-Create an instance per module, passing a unique `loggerName`:
+Once initialized, create an instance and log at any level. Every entry is tagged with the `name` passed to `init`:
 
 ```ts
 import { type LoggerContext, LoggerService } from '@libs/logger';
 
-const loggerService = new LoggerService({
-  loggerName: import.meta.url
-});
+const loggerService = new LoggerService();
 
 const data = {};
 const error = new Error('...');
@@ -65,16 +55,14 @@ loggerService.error(message, context);
 loggerService.fatal(message, context);
 ```
 
-The `loggerName` is normalized into a concise, package-scoped identifier that appears in the `logger` field of every entry. Passing `import.meta.url` from `libs/logger/src/infrastructures/logger/services.ts` yields `@libs/logger/infrastructures/logger`: the absolute path, the `file://` scheme and the file name are dropped, keeping only the package and feature. A file at the package root collapses to the bare package name (e.g. `@libs/logger`). Any non-`file:` value is used verbatim, so explicit logical names also work.
-
 ### Shutdown
 
-On graceful shutdown, flush any buffered logs and reset the service. After closing, `LoggerService.init()` can be called again:
+On graceful shutdown, reset the service. After closing, `LoggerService.init()` can be called again:
 
 ```ts
 import { LoggerService } from '@libs/logger';
 
-await LoggerService.close();
+LoggerService.close();
 ```
 
 ### Errors

@@ -16,11 +16,11 @@ const { DATABASE, DATABASE_HOST, DATABASE_PASSWORD, DATABASE_PORT, DATABASE_USER
 ).getAll();
 
 LoggerService.init({
-  applicationName: '@libs/database',
   level: 'info',
+  name: '@libs/database',
   prettify: true
 });
-const loggerService = new LoggerService({ loggerName: import.meta.url });
+const loggerService = new LoggerService();
 
 const clientService = new ClientService({
   database: DATABASE,

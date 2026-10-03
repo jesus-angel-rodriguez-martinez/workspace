@@ -3,11 +3,11 @@ import { ScaffolderService } from '@infrastructures/scaffolder';
 import { LoggerService } from '@libs/logger';
 
 LoggerService.init({
-  applicationName: '@libs/database',
   level: 'info',
+  name: '@libs/database',
   prettify: true
 });
-const loggerService = new LoggerService({ loggerName: import.meta.url });
+const loggerService = new LoggerService();
 
 const [name] = process.argv.slice(2);
 

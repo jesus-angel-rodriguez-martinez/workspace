@@ -1,25 +1,15 @@
 /**
- * Represents the configuration settings for an individual logger instance.
- */
-export interface ILoggerServiceConfiguration {
-  /**
-   * Logical name of the logger instance representing the module, file, or feature.
-   */
-  readonly loggerName: string;
-}
-
-/**
  * Defines the complete configuration options for initializing the logger service.
  */
 export interface ILoggerServiceInitConfiguration {
   /**
-   * Name of the application that produces the logs.
-   */
-  readonly applicationName: string;
-  /**
    * The minimum severity level to log.
    */
   readonly level: LoggerLevel;
+  /**
+   * Name of the application that produces the logs.
+   */
+  readonly name: string;
   /**
    * Enables human-readable log output.
    */

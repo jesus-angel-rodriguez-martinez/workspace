@@ -1,4 +1,4 @@
-import { type ILoggerServiceConfiguration, type LoggerContext, type LoggerLevel } from '@domains/logger';
+import { type LoggerContext, type LoggerLevel } from '@domains/logger';
 
 /**
  * Abstract base class for logging services.
@@ -7,19 +7,10 @@ import { type ILoggerServiceConfiguration, type LoggerContext, type LoggerLevel 
  */
 export abstract class AbstractLoggerService {
   /**
-   * Logger configuration options.
-   */
-  protected readonly configuration: ILoggerServiceConfiguration;
-
-  /**
    * The constructor is protected to ensure this abstract class cannot be
    * instantiated directly, but only through subclasses.
-   *
-   * @param configuration - Logger configuration options.
    */
-  protected constructor(configuration: ILoggerServiceConfiguration) {
-    this.configuration = Object.freeze({ ...configuration });
-  }
+  protected constructor() {}
 
   /**
    * Logs a `trace` level message.
@@ -75,15 +66,6 @@ export abstract class AbstractLoggerService {
    * @param context - The optional context to log.
    */
   public abstract fatal(message: string, context?: LoggerContext): void;
-  /**
-   * Formats a raw logger name into the stable identifier shown in log entries.
-   *
-   * Converts a module reference to a concise, package-scoped name.
-   *
-   * @param loggerName - The configured logger name.
-   * @returns The formatted logger name.
-   */
-  protected abstract formatLoggerName(loggerName: string): string;
   /**
    * Logs a message at the specified log level.
    *

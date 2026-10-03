@@ -40,9 +40,8 @@ const init = async () => {
 
     const isDevelopment = ENVIRONMENT === 'development';
     loggerService = composeLogger({
-      applicationName: '@apis/identity',
       level: isDevelopment ? 'trace' : 'info',
-      loggerName: import.meta.url,
+      name: '@apis/identity',
       prettify: isDevelopment
     });
     loggerService.debug('🔧 Logger service ready');
