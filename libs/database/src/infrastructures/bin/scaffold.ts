@@ -1,4 +1,5 @@
 #!/usr/bin/env -S tsx
+import { PathService } from '@infrastructures/path';
 import { ScaffolderService } from '@infrastructures/scaffolder';
 import { LoggerService } from '@libs/logger';
 
@@ -11,7 +12,8 @@ const loggerService = new LoggerService();
 
 const [name] = process.argv.slice(2);
 
-const scaffolderService = new ScaffolderService();
-const migration = await scaffolderService.create(name);
+const pathService = new PathService();
+const scaffolderService = new ScaffolderService({ pathService });
 
+const migration = await scaffolderService.create(name);
 loggerService.info(`Migration created successfully [migration="${migration}"]`);

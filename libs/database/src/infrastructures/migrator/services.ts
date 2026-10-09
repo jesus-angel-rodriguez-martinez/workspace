@@ -3,30 +3,33 @@ import { type ClientService } from '@infrastructures/client';
 import { type IMigratorServiceOptions } from '@infrastructures/migrator';
 import { FileMigrationProvider, Migrator, NO_MIGRATIONS } from 'kysely/migration';
 import { promises } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { join } from 'node:path';
 
 export class MigratorService<Schema> extends AbstractMigratorService {
   protected readonly clientService: ClientService<Schema>;
 
-  public constructor({ clientService, loggerService }: IMigratorServiceOptions<Schema>) {
-    super({ loggerService });
-    this.clientService = clientService;
-  }
+  public constructor({ clientService, loggerService, pathService }: IMigratorServiceOptions<Schema>) {
+    super({ loggerService, pathService });
 
-  protected createFolderPath(): string {
-    const directory = process.cwd();
-    const folderPath = resolve(directory, 'database', 'migrations');
-    return folderPath;
+    this.clientService = clientService;
   }
 
   public down(): Promise<void> {
     return this.migrate('down');
   }
 
-  protected async migrate(command: MigrationCommand): Promise<void> {
-    const { loggerService } = this.configuration;
+  public reset(): Promise<void> {
+    return this.migrate('reset');
+  }
 
-    const migrationFolder = this.createFolderPath();
+  public up(): Promise<void> {
+    return this.migrate('up');
+  }
+
+  protected async migrate(command: MigrationCommand): Promise<void> {
+    const { loggerService, pathService } = this.configuration;
+
+    const migrationFolder = pathService.resolveMigrationsFolder();
     const db = this.clientService.createClient();
     const provider = new FileMigrationProvider({ fs: promises, migrationFolder, path: { join } });
 
@@ -54,13 +57,5 @@ export class MigratorService<Schema> extends AbstractMigratorService {
       const failed = results.find(({ status }) => status === 'Error');
       throw new MigrationFailedError(failed?.migrationName ?? 'unknown', { cause: error });
     }
-  }
-
-  public reset(): Promise<void> {
-    return this.migrate('reset');
-  }
-
-  public up(): Promise<void> {
-    return this.migrate('up');
   }
 }

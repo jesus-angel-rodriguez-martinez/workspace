@@ -50,7 +50,7 @@ The binary reads the connection settings from the environment (loaded via `doten
 ```bash
 DATABASE=database
 DATABASE_HOST=localhost
-DATABASE_PASSWORD=postgres
+DATABASE_PASSWORD=password
 DATABASE_PORT=5432
 DATABASE_USER=user
 ```
@@ -81,7 +81,7 @@ New migration files are scaffolded through the `database-scaffold` binary:
 rushx database:migration:create create-users
 ```
 
-This writes a timestamped `<YYYYMMDDHHMMSS>_create-users.ts` file (with empty `up` and `down` exports) to `<cwd>/database/migrations` and logs its path.
+This writes a timestamped `<YYYYMMDDHHMMSS>_<name>.ts` file (with empty `up` and `down` exports) to `<cwd>/database/migrations` and logs its path.
 
 ### Errors
 

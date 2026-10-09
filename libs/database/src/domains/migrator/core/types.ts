@@ -1,3 +1,4 @@
+import { type AbstractPathService } from '@domains/path';
 import { type AbstractLoggerService } from '@libs/logger';
 
 /**
@@ -8,6 +9,10 @@ export interface IMigratorServiceConfiguration {
    * Logging service used for structured output and diagnostics.
    */
   readonly loggerService: AbstractLoggerService;
+  /**
+   * Resolves the folder migration files are read from.
+   */
+  readonly pathService: AbstractPathService;
 }
 
 /**

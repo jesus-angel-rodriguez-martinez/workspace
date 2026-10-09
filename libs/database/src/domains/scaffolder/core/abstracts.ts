@@ -1,3 +1,5 @@
+import { type IScaffolderServiceConfiguration } from '@domains/scaffolder';
+
 /**
  * Abstract base class for scaffolder services.
  *
@@ -5,10 +7,19 @@
  */
 export abstract class AbstractScaffolderService {
   /**
+   * Scaffolder configuration options.
+   */
+  protected readonly configuration: IScaffolderServiceConfiguration;
+
+  /**
    * The constructor is protected to ensure this abstract class cannot be
    * instantiated directly, but only through subclasses.
+   *
+   * @param configuration - Scaffolder configuration options.
    */
-  protected constructor() {}
+  protected constructor(configuration: IScaffolderServiceConfiguration) {
+    this.configuration = Object.freeze({ ...configuration });
+  }
 
   /**
    * Scaffolds a new migration file and returns its path.
@@ -26,12 +37,6 @@ export abstract class AbstractScaffolderService {
    * @returns The migration file name.
    */
   protected abstract createFileName(name: string): string;
-  /**
-   * Resolves the absolute path of the folder migration files are scaffolded into.
-   *
-   * @returns The absolute path migration files are scaffolded into.
-   */
-  protected abstract createFolderPath(): string;
   /**
    * Builds the contents every scaffolded migration file starts with.
    *

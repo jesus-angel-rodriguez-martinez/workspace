@@ -2,6 +2,7 @@
 import 'dotenv/config';
 import { ClientService } from '@infrastructures/client';
 import { MigratorService } from '@infrastructures/migrator';
+import { PathService } from '@infrastructures/path';
 import { ConfigurationService } from '@libs/configuration';
 import { LoggerService } from '@libs/logger';
 
@@ -30,9 +31,10 @@ const clientService = new ClientService({
   user: DATABASE_USER
 });
 
-const migratorService = new MigratorService({ clientService, loggerService });
-const [command] = process.argv.slice(2);
+const pathService = new PathService();
+const migratorService = new MigratorService({ clientService, loggerService, pathService });
 
+const [command] = process.argv.slice(2);
 if (command === 'down') {
   await migratorService.down();
 } else if (command === 'reset') {

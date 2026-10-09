@@ -1,15 +1,16 @@
 import {
   AbstractScaffolderService,
+  type IScaffolderServiceConfiguration,
   InvalidMigrationNameError,
   MissingMigrationNameError,
   SCAFFOLDER_RULES
 } from '@domains/scaffolder';
 import { promises } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { join } from 'node:path';
 
 export class ScaffolderService extends AbstractScaffolderService {
-  public constructor() {
-    super();
+  public constructor(configuration: IScaffolderServiceConfiguration) {
+    super(configuration);
   }
 
   public async create(name: string | undefined): Promise<string> {
@@ -22,8 +23,10 @@ export class ScaffolderService extends AbstractScaffolderService {
       throw new InvalidMigrationNameError(name);
     }
 
+    const { pathService } = this.configuration;
+
     const fileName = this.createFileName(name);
-    const folderPath = this.createFolderPath();
+    const folderPath = pathService.resolveMigrationsFolder();
     const template = this.createTemplate();
 
     const filePath = join(folderPath, fileName);
@@ -38,12 +41,6 @@ export class ScaffolderService extends AbstractScaffolderService {
     const timestamp = this.createTimestamp();
     const fileName = `${timestamp}_${name}.ts`;
     return fileName;
-  }
-
-  protected createFolderPath(): string {
-    const directory = process.cwd();
-    const folderPath = resolve(directory, 'database', 'migrations');
-    return folderPath;
   }
 
   protected createTemplate(): string {

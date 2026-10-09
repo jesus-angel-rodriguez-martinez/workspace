@@ -22,12 +22,6 @@ export abstract class AbstractMigratorService {
   }
 
   /**
-   * Resolves the absolute path of the folder migration files are read from.
-   *
-   * @returns The absolute path migration files are read from.
-   */
-  protected abstract createFolderPath(): string;
-  /**
    * Rolls back the most recently applied migration.
    *
    * @returns A promise that resolves once the migration is rolled back.
