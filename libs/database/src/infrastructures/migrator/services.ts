@@ -29,8 +29,9 @@ export class MigratorService<Schema> extends AbstractMigratorService {
   protected async migrate(command: MigrationCommand): Promise<void> {
     const { loggerService, pathService } = this.configuration;
 
-    const migrationFolder = pathService.resolveMigrationsFolder();
+    const migrationFolder = pathService.resolveMigrationFolder();
     const db = this.clientService.createClient();
+
     const provider = new FileMigrationProvider({ fs: promises, migrationFolder, path: { join } });
 
     const migrator = new Migrator({

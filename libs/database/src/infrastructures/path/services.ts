@@ -6,7 +6,7 @@ export class PathService extends AbstractPathService {
     super();
   }
 
-  public resolveMigrationsFolder(): string {
+  public resolveMigrationFolder(): string {
     const directory = process.cwd();
     const folderPath = resolve(directory, 'database', 'migrations');
     return folderPath;

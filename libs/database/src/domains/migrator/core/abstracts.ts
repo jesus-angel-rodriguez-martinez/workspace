@@ -28,14 +28,6 @@ export abstract class AbstractMigratorService {
    */
   public abstract down(): Promise<void>;
   /**
-   * Runs the migrations in the given direction.
-   *
-   * @param command - The migration direction to run.
-   *
-   * @returns A promise that resolves once the run completes.
-   */
-  protected abstract migrate(command: MigrationCommand): Promise<void>;
-  /**
    * Rolls back every applied migration.
    *
    * @returns A promise that resolves once the migrations are rolled back.
@@ -47,4 +39,12 @@ export abstract class AbstractMigratorService {
    * @returns A promise that resolves once the migrations are applied.
    */
   public abstract up(): Promise<void>;
+  /**
+   * Runs the migrations in the given direction.
+   *
+   * @param command - The migration direction to run.
+   *
+   * @returns A promise that resolves once the run completes.
+   */
+  protected abstract migrate(command: MigrationCommand): Promise<void>;
 }

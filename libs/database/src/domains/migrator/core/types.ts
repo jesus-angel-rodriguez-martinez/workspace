@@ -10,7 +10,7 @@ export interface IMigratorServiceConfiguration {
    */
   readonly loggerService: AbstractLoggerService;
   /**
-   * Resolves the folder migration files are read from.
+   * Resolves the filesystem paths.
    */
   readonly pathService: AbstractPathService;
 }

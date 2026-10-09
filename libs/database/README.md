@@ -86,7 +86,7 @@ This writes a timestamped `<YYYYMMDDHHMMSS>_<name>.ts` file (with empty `up` and
 ### Errors
 
 - `AggregateClientConfigurationError`: Thrown when constructing a `ClientService` with one or more missing connection values. Its message lists each underlying error (`code` and `detail`).
-- `InvalidMigrationNameError`: Thrown when scaffolding a migration whose name contains characters other than lowercase letters, digits, and hyphens.
+- `InvalidMigrationNameError`: Thrown when scaffolding a migration whose name is not lowercase letters and digits separated by single hyphens (no leading, trailing, or consecutive hyphens).
 - `MigrationFailedError`: Thrown when a migration fails to run.
 - `MissingClientDatabaseError`: Thrown when the database name is missing.
 - `MissingClientHostError`: Thrown when the database host is missing.

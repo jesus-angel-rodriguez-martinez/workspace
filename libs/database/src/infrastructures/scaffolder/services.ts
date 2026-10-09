@@ -26,12 +26,12 @@ export class ScaffolderService extends AbstractScaffolderService {
     const { pathService } = this.configuration;
 
     const fileName = this.createFileName(name);
-    const folderPath = pathService.resolveMigrationsFolder();
+    const migrationFolder = pathService.resolveMigrationFolder();
     const template = this.createTemplate();
 
-    const filePath = join(folderPath, fileName);
+    const filePath = join(migrationFolder, fileName);
 
-    await promises.mkdir(folderPath, { recursive: true });
+    await promises.mkdir(migrationFolder, { recursive: true });
     await promises.writeFile(filePath, template, { flag: 'wx' });
 
     return filePath;

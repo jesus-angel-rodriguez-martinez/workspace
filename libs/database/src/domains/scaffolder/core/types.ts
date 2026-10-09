@@ -5,7 +5,7 @@ import { type AbstractPathService } from '@domains/path';
  */
 export interface IScaffolderServiceConfiguration {
   /**
-   * Resolves the folder scaffolded migration files are written to.
+   * Resolves the filesystem paths.
    */
   readonly pathService: AbstractPathService;
 }

@@ -8,5 +8,5 @@ export interface IMigratorServiceOptions<Schema> extends IMigratorServiceConfigu
   /**
    * Provides the database client migrations run against.
    */
-  clientService: ClientService<Schema>;
+  readonly clientService: ClientService<Schema>;
 }

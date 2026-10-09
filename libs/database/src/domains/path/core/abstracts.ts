@@ -15,5 +15,5 @@ export abstract class AbstractPathService {
    *
    * @returns The absolute path migration files live in.
    */
-  public abstract resolveMigrationsFolder(): string;
+  public abstract resolveMigrationFolder(): string;
 }

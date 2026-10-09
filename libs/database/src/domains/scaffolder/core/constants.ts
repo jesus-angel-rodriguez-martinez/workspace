@@ -8,9 +8,9 @@ export const SCAFFOLDER_RULES = {
      */
     REGEX_PATTERNS: {
       /**
-       * Regex pattern to allow only lowercase letters, digits, and hyphens.
+       * Regex pattern to allow only lowercase letters and digits, separated by single hyphens.
        */
-      ALLOWED_CHARACTERS: /^[a-z0-9-]+$/
+      ALLOWED_CHARACTERS: /^[a-z0-9]+(?:-[a-z0-9]+)*$/
     }
   },
   timestamp: {

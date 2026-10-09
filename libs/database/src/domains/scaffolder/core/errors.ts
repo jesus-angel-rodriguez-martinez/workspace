@@ -12,7 +12,7 @@ export class InvalidMigrationNameError extends KernelError {
     super({
       cause: options.cause,
       code: 'SCAFFOLDER.INVALID_MIGRATION_NAME',
-      detail: `Migration name '${name}' may only contain lowercase letters, digits, and hyphens.`,
+      detail: `Migration name '${name}' may only contain lowercase letters, digits, and single hyphens between them.`,
       title: 'Invalid migration name'
     });
   }
