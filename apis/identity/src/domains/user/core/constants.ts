@@ -68,7 +68,11 @@ export const USER_RULES = {
       /**
        * Allows only letters, numbers, and hyphens.
        */
-      ALLOWED_CHARACTERS: /^[a-zA-Z0-9-]+$/
+      ALLOWED_CHARACTERS: /^[a-zA-Z0-9-]+$/,
+      /**
+       * Regex pattern to detect two or more consecutive hyphens.
+       */
+      CONSECUTIVE_HYPHENS: /-{2,}/
     }
   }
 } as const;

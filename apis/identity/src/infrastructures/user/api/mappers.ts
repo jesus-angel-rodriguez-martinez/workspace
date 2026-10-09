@@ -14,9 +14,12 @@ import {
   UserPasswordMissingNumericDigitError,
   UserPasswordMissingUppercaseCharacterError,
   UserUnauthorizedError,
+  UserUsernameConsecutiveHyphensError,
+  UserUsernameEndsWithHyphenError,
   UserUsernameInvalidCharactersError,
   UserUsernameInvalidTypeError,
-  UserUsernameLengthOutOfRangeError
+  UserUsernameLengthOutOfRangeError,
+  UserUsernameStartsWithHyphenError
 } from '@domains/user';
 import {
   AbstractUserApiMapper,
@@ -35,9 +38,12 @@ import {
   UserPasswordMissingNumericDigitApiError,
   UserPasswordMissingUppercaseCharacterApiError,
   UserUnauthorizedApiError,
+  UserUsernameConsecutiveHyphensApiError,
+  UserUsernameEndsWithHyphenApiError,
   UserUsernameInvalidCharactersApiError,
   UserUsernameInvalidTypeApiError,
-  UserUsernameLengthOutOfRangeApiError
+  UserUsernameLengthOutOfRangeApiError,
+  UserUsernameStartsWithHyphenApiError
 } from '@infrastructures/user';
 
 export class UserApiMapper extends AbstractUserApiMapper {
@@ -102,6 +108,14 @@ export class UserApiMapper extends AbstractUserApiMapper {
       return new UserUnauthorizedApiError(error);
     }
 
+    if (error instanceof UserUsernameConsecutiveHyphensError) {
+      return new UserUsernameConsecutiveHyphensApiError(error);
+    }
+
+    if (error instanceof UserUsernameEndsWithHyphenError) {
+      return new UserUsernameEndsWithHyphenApiError(error);
+    }
+
     if (error instanceof UserUsernameInvalidCharactersError) {
       return new UserUsernameInvalidCharactersApiError(error);
     }
@@ -112,6 +126,10 @@ export class UserApiMapper extends AbstractUserApiMapper {
 
     if (error instanceof UserUsernameLengthOutOfRangeError) {
       return new UserUsernameLengthOutOfRangeApiError(error);
+    }
+
+    if (error instanceof UserUsernameStartsWithHyphenError) {
+      return new UserUsernameStartsWithHyphenApiError(error);
     }
 
     const exhaustiveCheck: never = error;

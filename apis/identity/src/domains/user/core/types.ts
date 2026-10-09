@@ -13,9 +13,12 @@ import {
   type UserPasswordMissingNumericDigitError,
   type UserPasswordMissingUppercaseCharacterError,
   type UserUnauthorizedError,
+  type UserUsernameConsecutiveHyphensError,
+  type UserUsernameEndsWithHyphenError,
   type UserUsernameInvalidCharactersError,
   type UserUsernameInvalidTypeError,
-  type UserUsernameLengthOutOfRangeError
+  type UserUsernameLengthOutOfRangeError,
+  type UserUsernameStartsWithHyphenError
 } from '@domains/user';
 
 /**
@@ -72,6 +75,9 @@ export type UserError =
   | UserPasswordMissingNumericDigitError
   | UserPasswordMissingUppercaseCharacterError
   | UserUnauthorizedError
+  | UserUsernameConsecutiveHyphensError
+  | UserUsernameEndsWithHyphenError
   | UserUsernameInvalidCharactersError
   | UserUsernameInvalidTypeError
-  | UserUsernameLengthOutOfRangeError;
+  | UserUsernameLengthOutOfRangeError
+  | UserUsernameStartsWithHyphenError;

@@ -200,6 +200,34 @@ export class UserUnauthorizedError extends KernelError {
 }
 
 /**
+ * Error thrown when a username contains two or more consecutive hyphens.
+ */
+export class UserUsernameConsecutiveHyphensError extends KernelError {
+  constructor(options: IKernelErrorOptions = {}) {
+    super({
+      cause: options.cause,
+      code: 'USER.USERNAME_CONSECUTIVE_HYPHENS',
+      detail: 'The username must not contain consecutive hyphens.',
+      title: 'Consecutive hyphens in username'
+    });
+  }
+}
+
+/**
+ * Error thrown when a username ends with a hyphen.
+ */
+export class UserUsernameEndsWithHyphenError extends KernelError {
+  constructor(options: IKernelErrorOptions = {}) {
+    super({
+      cause: options.cause,
+      code: 'USER.USERNAME_ENDS_WITH_HYPHEN',
+      detail: 'The username must not end with a hyphen.',
+      title: 'Username ends with hyphen'
+    });
+  }
+}
+
+/**
  * Error thrown when a username contains characters that are not allowed.
  */
 export class UserUsernameInvalidCharactersError extends KernelError {
@@ -238,6 +266,20 @@ export class UserUsernameLengthOutOfRangeError extends KernelError {
       code: 'USER.USERNAME_LENGTH_OUT_OF_RANGE',
       detail: `The provided username has '${length}' ${isSingular ? 'character' : 'characters'}, but it must be between '${USER_RULES.username.MIN_LENGTH}' and '${USER_RULES.username.MAX_LENGTH}' characters long.`,
       title: 'Invalid username length'
+    });
+  }
+}
+
+/**
+ * Error thrown when a username starts with a hyphen.
+ */
+export class UserUsernameStartsWithHyphenError extends KernelError {
+  constructor(options: IKernelErrorOptions = {}) {
+    super({
+      cause: options.cause,
+      code: 'USER.USERNAME_STARTS_WITH_HYPHEN',
+      detail: 'The username must not start with a hyphen.',
+      title: 'Username starts with hyphen'
     });
   }
 }

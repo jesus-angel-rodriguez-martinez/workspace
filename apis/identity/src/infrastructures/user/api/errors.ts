@@ -13,9 +13,12 @@ import {
   type UserPasswordMissingNumericDigitError,
   type UserPasswordMissingUppercaseCharacterError,
   type UserUnauthorizedError,
+  type UserUsernameConsecutiveHyphensError,
+  type UserUsernameEndsWithHyphenError,
   type UserUsernameInvalidCharactersError,
   type UserUsernameInvalidTypeError,
-  type UserUsernameLengthOutOfRangeError
+  type UserUsernameLengthOutOfRangeError,
+  type UserUsernameStartsWithHyphenError
 } from '@domains/user';
 import { BadRequestError, ConflictError, ForbiddenError, NotFoundError } from '@libs/api';
 
@@ -216,6 +219,34 @@ export class UserUnauthorizedApiError extends ForbiddenError {
 }
 
 /**
+ * Error thrown when a username contains two or more consecutive hyphens.
+ */
+export class UserUsernameConsecutiveHyphensApiError extends BadRequestError {
+  constructor(userUsernameConsecutiveHyphensError: UserUsernameConsecutiveHyphensError) {
+    super({
+      cause: userUsernameConsecutiveHyphensError,
+      code: userUsernameConsecutiveHyphensError.code,
+      detail: userUsernameConsecutiveHyphensError.detail,
+      title: userUsernameConsecutiveHyphensError.title
+    });
+  }
+}
+
+/**
+ * Error thrown when a username ends with a hyphen.
+ */
+export class UserUsernameEndsWithHyphenApiError extends BadRequestError {
+  constructor(userUsernameEndsWithHyphenError: UserUsernameEndsWithHyphenError) {
+    super({
+      cause: userUsernameEndsWithHyphenError,
+      code: userUsernameEndsWithHyphenError.code,
+      detail: userUsernameEndsWithHyphenError.detail,
+      title: userUsernameEndsWithHyphenError.title
+    });
+  }
+}
+
+/**
  * Error thrown when a username contains characters that are not allowed.
  */
 export class UserUsernameInvalidCharactersApiError extends BadRequestError {
@@ -253,6 +284,20 @@ export class UserUsernameLengthOutOfRangeApiError extends BadRequestError {
       code: userUsernameLengthOutOfRangeError.code,
       detail: userUsernameLengthOutOfRangeError.detail,
       title: userUsernameLengthOutOfRangeError.title
+    });
+  }
+}
+
+/**
+ * Error thrown when a username starts with a hyphen.
+ */
+export class UserUsernameStartsWithHyphenApiError extends BadRequestError {
+  constructor(userUsernameStartsWithHyphenError: UserUsernameStartsWithHyphenError) {
+    super({
+      cause: userUsernameStartsWithHyphenError,
+      code: userUsernameStartsWithHyphenError.code,
+      detail: userUsernameStartsWithHyphenError.detail,
+      title: userUsernameStartsWithHyphenError.title
     });
   }
 }

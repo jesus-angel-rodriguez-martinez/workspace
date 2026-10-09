@@ -13,9 +13,12 @@ import {
   UserPasswordMissingLowercaseCharacterError,
   UserPasswordMissingNumericDigitError,
   UserPasswordMissingUppercaseCharacterError,
+  UserUsernameConsecutiveHyphensError,
+  UserUsernameEndsWithHyphenError,
   UserUsernameInvalidCharactersError,
   UserUsernameInvalidTypeError,
-  UserUsernameLengthOutOfRangeError
+  UserUsernameLengthOutOfRangeError,
+  UserUsernameStartsWithHyphenError
 } from '@domains/user';
 
 export class CreateUserValidator extends AbstractCreateUserValidator {
@@ -88,13 +91,24 @@ export class CreateUserValidator extends AbstractCreateUserValidator {
     }
 
     const { MAX_LENGTH, MIN_LENGTH, REGEX_PATTERNS } = USER_RULES.username;
-    const { ALLOWED_CHARACTERS } = REGEX_PATTERNS;
+    const { ALLOWED_CHARACTERS, CONSECUTIVE_HYPHENS } = REGEX_PATTERNS;
 
     const length = username.length;
     if (length < MIN_LENGTH || length > MAX_LENGTH) {
       throw new UserUsernameLengthOutOfRangeError(length);
     }
 
+    const hyphen = '-';
+    if (username.startsWith(hyphen)) {
+      throw new UserUsernameStartsWithHyphenError();
+    }
+    if (username.endsWith(hyphen)) {
+      throw new UserUsernameEndsWithHyphenError();
+    }
+
+    if (CONSECUTIVE_HYPHENS.test(username)) {
+      throw new UserUsernameConsecutiveHyphensError();
+    }
     if (!ALLOWED_CHARACTERS.test(username)) {
       throw new UserUsernameInvalidCharactersError();
     }

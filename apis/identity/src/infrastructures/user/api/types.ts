@@ -13,9 +13,12 @@ import {
   type UserPasswordMissingNumericDigitApiError,
   type UserPasswordMissingUppercaseCharacterApiError,
   type UserUnauthorizedApiError,
+  type UserUsernameConsecutiveHyphensApiError,
+  type UserUsernameEndsWithHyphenApiError,
   type UserUsernameInvalidCharactersApiError,
   type UserUsernameInvalidTypeApiError,
-  type UserUsernameLengthOutOfRangeApiError
+  type UserUsernameLengthOutOfRangeApiError,
+  type UserUsernameStartsWithHyphenApiError
 } from '@infrastructures/user';
 
 /**
@@ -36,6 +39,9 @@ export type UserApiError =
   | UserPasswordMissingNumericDigitApiError
   | UserPasswordMissingUppercaseCharacterApiError
   | UserUnauthorizedApiError
+  | UserUsernameConsecutiveHyphensApiError
+  | UserUsernameEndsWithHyphenApiError
   | UserUsernameInvalidCharactersApiError
   | UserUsernameInvalidTypeApiError
-  | UserUsernameLengthOutOfRangeApiError;
+  | UserUsernameLengthOutOfRangeApiError
+  | UserUsernameStartsWithHyphenApiError;
