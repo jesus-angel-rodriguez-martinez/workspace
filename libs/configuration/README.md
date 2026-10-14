@@ -20,7 +20,8 @@ rush add -p @libs/configuration
 
 ### Configuration
 
-Define a configuration with the expected keys and their primitive types and pass it to the constructor. The whole configuration is validated and parsed once, when the service is created, and the result is cached.
+Define a configuration with the expected keys and pass it to the constructor. Each key declares its primitive `type` (`'boolean'`, `'number'` or `'string'`) and whether it is `required`. Both properties are mandatory. A variable with `required: false` resolves to `undefined` when it is not defined.
+The whole configuration is validated and parsed once, when the service is created, and the result is cached.
 
 Read the resolved values with full type safety through `getAll` (every value):
 
@@ -28,14 +29,15 @@ Read the resolved values with full type safety through `getAll` (every value):
 import { type Configuration, ConfigurationService } from '@libs/configuration';
 
 const configuration = {
-  API_PORT: 'number',
-  DEBUG: 'boolean',
-  JWT_SECRET: 'string'
+  API_PORT: { required: true, type: 'number' },
+  DEBUG: { required: true, type: 'boolean' },
+  JWT_SECRET: { required: true, type: 'string' },
+  LOG_LEVEL: { required: false, type: 'string' }
 } as const satisfies Configuration;
 
 const configurationService = new ConfigurationService(configuration);
 
-export const { API_PORT, DEBUG, JWT_SECRET } = configurationService.getAll();
+export const { API_PORT, DEBUG, JWT_SECRET, LOG_LEVEL } = configurationService.getAll();
 ```
 
 Or read the resolved values with full type safety through `get` (a single value):
@@ -44,9 +46,10 @@ Or read the resolved values with full type safety through `get` (a single value)
 import { type Configuration, ConfigurationService } from '@libs/configuration';
 
 const configuration = {
-  API_PORT: 'number',
-  DEBUG: 'boolean',
-  JWT_SECRET: 'string'
+  API_PORT: { required: true, type: 'number' },
+  DEBUG: { required: true, type: 'boolean' },
+  JWT_SECRET: { required: true, type: 'string' },
+  LOG_LEVEL: { required: false, type: 'string' }
 } as const satisfies Configuration;
 
 const configurationService = new ConfigurationService(configuration);
@@ -54,6 +57,7 @@ const configurationService = new ConfigurationService(configuration);
 export const API_PORT = configurationService.get('API_PORT');
 export const DEBUG = configurationService.get('DEBUG');
 export const JWT_SECRET = configurationService.get('JWT_SECRET');
+export const LOG_LEVEL = configurationService.get('LOG_LEVEL');
 ```
 
 Because parsing happens at construction time, later changes to `process.env` do not affect an already-created service.
@@ -63,7 +67,7 @@ Because parsing happens at construction time, later changes to `process.env` do 
 Validation runs over the whole configuration in a single pass: every invalid or missing variable is collected and reported together, so a misconfigured deployment surfaces all its problems at once instead of one restart at a time.
 
 - `AggregateConfigurationError`: Thrown when constructing a `ConfigurationService` with one or more variables that fail validation. Its message lists each underlying error (`code` and `detail`).
-- `EmptyConfigurationError`: Thrown when a required variable is present but empty.
+- `EmptyConfigurationError`: Thrown when a variable is present but empty.
 - `InvalidBooleanConfigurationError`: Thrown when a value cannot be parsed as `"true"` or `"false"`.
 - `InvalidNumberConfigurationError`: Thrown when a value cannot be parsed as a finite number.
 - `MissingConfigurationError`: Thrown when a required variable is not defined in `process.env`.

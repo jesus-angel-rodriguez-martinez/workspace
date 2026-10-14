@@ -8,11 +8,11 @@ import { LoggerService } from '@libs/logger';
 
 const { DATABASE, DATABASE_HOST, DATABASE_PASSWORD, DATABASE_PORT, DATABASE_USER } = new ConfigurationService(
   {
-    DATABASE: 'string',
-    DATABASE_HOST: 'string',
-    DATABASE_PASSWORD: 'string',
-    DATABASE_PORT: 'number',
-    DATABASE_USER: 'string'
+    DATABASE: { required: true, type: 'string' },
+    DATABASE_HOST: { required: true, type: 'string' },
+    DATABASE_PASSWORD: { required: true, type: 'string' },
+    DATABASE_PORT: { required: true, type: 'number' },
+    DATABASE_USER: { required: true, type: 'string' }
   }
 ).getAll();
 

@@ -21,11 +21,11 @@ export class ConfigurationService<C extends Configuration> extends AbstractConfi
     const entries = Object.entries(configuration);
     const errors: IKernelError[] = [];
 
-    const result = entries.reduce((previous, [key, type]) => {
+    const result = entries.reduce((previous, [key, value]) => {
       try {
         return {
           ...previous,
-          [key]: this.parseOne(key, type)
+          [key]: this.parseOne(key, value)
         };
       } catch (error) {
         if (error instanceof KernelError) {
@@ -62,11 +62,16 @@ export class ConfigurationService<C extends Configuration> extends AbstractConfi
 
   protected parseOne<T extends Configuration, K extends ConfigurationKey<T>>(
     key: K,
-    type: T[K]
+    value: T[K]
   ): ResolvedConfiguration<T>[K] {
+    const { required, type } = value;
+
     const rawValue = process.env[key];
     if (rawValue === undefined) {
-      throw new MissingConfigurationError(key);
+      if (required) {
+        throw new MissingConfigurationError(key);
+      }
+      return undefined as ResolvedConfiguration<T>[K];
     }
 
     let parsedValue: boolean | number | string;

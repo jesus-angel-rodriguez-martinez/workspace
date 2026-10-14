@@ -16,26 +16,23 @@ let loggerService: AbstractLoggerService | undefined;
 const init = async () => {
   try {
     const {
-      /* 📡 API configuration. */
       API_PORT,
       DATABASE,
       DATABASE_HOST,
       DATABASE_PASSWORD,
       DATABASE_PORT,
       DATABASE_USER,
-      /* ⚙️ Environment configuration. */
       ENVIRONMENT,
-      /* 🔒 JWT configuration. */
       JWT_SECRET
     } = composeConfiguration({
-      API_PORT: 'number',
-      DATABASE: 'string',
-      DATABASE_HOST: 'string',
-      DATABASE_PASSWORD: 'string',
-      DATABASE_PORT: 'number',
-      DATABASE_USER: 'string',
-      ENVIRONMENT: 'string',
-      JWT_SECRET: 'string'
+      API_PORT: { required: true, type: 'number' },
+      DATABASE: { required: true, type: 'string' },
+      DATABASE_HOST: { required: true, type: 'string' },
+      DATABASE_PASSWORD: { required: true, type: 'string' },
+      DATABASE_PORT: { required: true, type: 'number' },
+      DATABASE_USER: { required: true, type: 'string' },
+      ENVIRONMENT: { required: true, type: 'string' },
+      JWT_SECRET: { required: true, type: 'string' }
     });
 
     const isDevelopment = ENVIRONMENT === 'development';

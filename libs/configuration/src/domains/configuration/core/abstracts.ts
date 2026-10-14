@@ -19,7 +19,7 @@ export abstract class AbstractConfigurationService<C extends Configuration> {
    * The constructor is protected to ensure this abstract class cannot be
    * instantiated directly, but only by subclasses.
    *
-   * @param configuration - The configuration defining keys and their expected primitive types.
+   * @param configuration - The configuration defining the type of each key and whether it is required.
    */
   protected constructor(configuration: C) {
     const parsedConfiguration = this.parseAll(configuration);
@@ -32,7 +32,7 @@ export abstract class AbstractConfigurationService<C extends Configuration> {
    *
    * @param key - The configuration key to retrieve.
    *
-   * @returns The parsed value for the given key with its appropriate native type.
+   * @returns The parsed value for the given key, or `undefined` if `required` is `false` and it is missing.
    */
   public get<K extends ConfigurationKey<C>>(key: K): ResolvedConfiguration<C>[K] {
     return this.configuration[key];
@@ -51,7 +51,7 @@ export abstract class AbstractConfigurationService<C extends Configuration> {
    * Each value is parsed according to its declared type in the configuration
    * and returned as a fully typed object.
    *
-   * @param configuration - The configuration defining keys and their expected primitive types.
+   * @param configuration - The configuration defining the type of each key and whether it is required.
    *
    * @returns An object containing all configuration entries with correctly parsed types.
    */
@@ -78,16 +78,17 @@ export abstract class AbstractConfigurationService<C extends Configuration> {
    * Reads and parses a single configuration value based on its expected type.
    *
    * The value is returned as the native JavaScript type (`string`, `number`, or `boolean`)
-   * corresponding to the provided primitive type in the configuration.
+   * corresponding to the provided primitive type in the configuration, or as `undefined`
+   * when `required` is `false`.
    *
    * @param key - The configuration key to read.
-   * @param type - The expected primitive type of the configuration key.
+   * @param value - The definition of the configuration key (its type and whether it is required).
    *
    * @returns The parsed configuration value with the appropriate native type.
    */
   protected abstract parseOne<T extends Configuration, K extends ConfigurationKey<T>>(
     key: K,
-    type: T[K]
+    value: T[K]
   ): ResolvedConfiguration<T>[K];
   /**
    * Parses a string configuration value.
