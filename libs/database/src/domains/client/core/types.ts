@@ -1,7 +1,13 @@
+import { type AbstractPathService } from '@domains/path';
+
 /**
  * Options to construct the client service.
  */
 export interface IClientServiceConfiguration {
+  /**
+   * The certificate file name used to verify the database server.
+   */
+  readonly certificateFileName?: string | undefined;
   /**
    * The name of the database to connect to.
    */
@@ -14,6 +20,10 @@ export interface IClientServiceConfiguration {
    * The password used to authenticate.
    */
   readonly password: string;
+  /**
+   * Resolves the filesystem paths.
+   */
+  readonly pathService: AbstractPathService;
   /**
    * The port the database server listens on.
    */

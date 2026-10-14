@@ -32,6 +32,12 @@ export abstract class AbstractClientService {
    */
   protected abstract createConnectionString(): string;
   /**
+   * Reads the certificate authority used to verify the database server.
+   *
+   * @returns The certificate content, or `undefined` when no certificate is configured.
+   */
+  protected abstract readCertificate(): string | undefined;
+  /**
    * Validates that the configuration provides every required connection value.
    *
    * @param configuration - Client configuration options to validate.

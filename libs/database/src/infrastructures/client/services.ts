@@ -1,7 +1,9 @@
 import {
   AbstractClientService,
   AggregateClientConfigurationError,
+  CLIENT_RULES,
   type IClientServiceConfiguration,
+  InvalidClientCertificateFileNameError,
   MissingClientDatabaseError,
   MissingClientHostError,
   MissingClientPasswordError,
@@ -10,6 +12,7 @@ import {
 } from '@domains/client';
 import { type IKernelError } from '@libs/kernel';
 import { CamelCasePlugin, Kysely, PostgresDialect } from 'kysely';
+import { readFileSync } from 'node:fs';
 import { Pool } from 'pg';
 
 export class ClientService<Schema> extends AbstractClientService {
@@ -19,8 +22,10 @@ export class ClientService<Schema> extends AbstractClientService {
 
   public createClient(): Kysely<Schema> {
     const connectionString = this.createConnectionString();
+    const certificate = this.readCertificate();
 
-    const pool = new Pool({ connectionString });
+    const ssl = certificate ? { ca: certificate, rejectUnauthorized: true } : undefined;
+    const pool = new Pool({ connectionString, ssl });
     const dialect = new PostgresDialect({ pool });
     const plugins = [new CamelCasePlugin()];
 
@@ -38,10 +43,27 @@ export class ClientService<Schema> extends AbstractClientService {
     return connectionString;
   }
 
+  protected readCertificate(): string | undefined {
+    const { certificateFileName, pathService } = this.configuration;
+    if (!certificateFileName) {
+      return undefined;
+    }
+
+    const certificatePath = pathService.resolveCertificateFile(certificateFileName);
+
+    const content = readFileSync(certificatePath, 'utf8');
+    return content;
+  }
+
   protected validateConfiguration(configuration: IClientServiceConfiguration): void {
-    const { database, host, password, port, user } = configuration;
+    const { certificateFileName, database, host, password, port, user } = configuration;
 
     const errors: IKernelError[] = [];
+
+    const { ALLOWED_CHARACTERS } = CLIENT_RULES.certificateFileName.REGEX_PATTERNS;
+    if (certificateFileName !== undefined && !ALLOWED_CHARACTERS.test(certificateFileName)) {
+      errors.push(new InvalidClientCertificateFileNameError(certificateFileName));
+    }
 
     if (!database) {
       errors.push(new MissingClientDatabaseError());

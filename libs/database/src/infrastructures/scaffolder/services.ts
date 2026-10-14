@@ -6,7 +6,6 @@ import {
   SCAFFOLDER_RULES
 } from '@domains/scaffolder';
 import { promises } from 'node:fs';
-import { join } from 'node:path';
 
 export class ScaffolderService extends AbstractScaffolderService {
   public constructor(configuration: IScaffolderServiceConfiguration) {
@@ -27,9 +26,8 @@ export class ScaffolderService extends AbstractScaffolderService {
 
     const fileName = this.createFileName(name);
     const migrationFolder = pathService.resolveMigrationFolder();
+    const filePath = pathService.resolveMigrationFile(fileName);
     const template = this.createTemplate();
-
-    const filePath = join(migrationFolder, fileName);
 
     await promises.mkdir(migrationFolder, { recursive: true });
     await promises.writeFile(filePath, template, { flag: 'wx' });

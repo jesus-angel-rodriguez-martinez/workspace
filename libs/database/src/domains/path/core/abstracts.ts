@@ -11,6 +11,28 @@ export abstract class AbstractPathService {
   protected constructor() {}
 
   /**
+   * Resolves the absolute path of a certificate file.
+   *
+   * @param certificateFileName - The file name of the certificate.
+   *
+   * @returns The absolute path of the certificate file.
+   */
+  public abstract resolveCertificateFile(certificateFileName: string): string;
+  /**
+   * Resolves the absolute path of the folder certificate files live in.
+   *
+   * @returns The absolute path certificate files live in.
+   */
+  public abstract resolveCertificateFolder(): string;
+  /**
+   * Resolves the absolute path of a migration file.
+   *
+   * @param migrationFileName - The file name of the migration.
+   *
+   * @returns The absolute path of the migration file.
+   */
+  public abstract resolveMigrationFile(migrationFileName: string): string;
+  /**
    * Resolves the absolute path of the folder migration files live in.
    *
    * @returns The absolute path migration files live in.

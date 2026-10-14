@@ -18,18 +18,23 @@ rush add -p @libs/database
 
 ```ts
 import { type IDatabaseSchema } from '@infrastructures/database';
-import { ClientService } from '@libs/database';
+import { ClientService, PathService } from '@libs/database';
+
+const pathService = new PathService();
 
 const clientService = new ClientService<IDatabaseSchema>({
   database: 'database',
   host: 'localhost',
   password: 'password',
+  pathService,
   port: 5432,
   user: 'user'
 });
 
 const database = clientService.createClient();
 ```
+
+Set `certificateFileName` to a file name (e.g. `'global-bundle.pem'`) to connect over TLS, verifying the server against that certificate authority. Certificates are read from `<cwd>/database/certificates`, next to the migrations; without it the connection does not use TLS.
 
 ### Migrator
 
@@ -49,6 +54,7 @@ The binary reads the connection settings from the environment (loaded via `doten
 
 ```bash
 DATABASE=database
+DATABASE_CERTIFICATE_FILE_NAME=global-bundle.pem
 DATABASE_HOST=localhost
 DATABASE_PASSWORD=password
 DATABASE_PORT=5432
@@ -86,6 +92,7 @@ This writes a timestamped `<YYYYMMDDHHMMSS>_<name>.ts` file (with empty `up` and
 ### Errors
 
 - `AggregateClientConfigurationError`: Thrown when constructing a `ClientService` with one or more missing connection values. Its message lists each underlying error (`code` and `detail`).
+- `InvalidClientCertificateFileNameError`: Thrown when the certificate file name is not a plain file name (e.g. it contains path separators).
 - `InvalidMigrationNameError`: Thrown when scaffolding a migration whose name is not lowercase letters and digits separated by single hyphens (no leading, trailing, or consecutive hyphens).
 - `MigrationFailedError`: Thrown when a migration fails to run.
 - `MissingClientDatabaseError`: Thrown when the database name is missing.
