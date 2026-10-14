@@ -7,7 +7,7 @@ import { shutdown } from '@infrastructures/lifecycle';
 import { composeLogger } from '@infrastructures/logger';
 import { composeToken } from '@infrastructures/token';
 import { composeUser } from '@infrastructures/user';
-import { ClientService } from '@libs/database';
+import { ClientService, PathService } from '@libs/database';
 import { type AbstractLoggerService } from '@libs/logger';
 
 let database: IDatabase | undefined;
@@ -18,6 +18,7 @@ const init = async () => {
     const {
       API_PORT,
       DATABASE,
+      DATABASE_CERTIFICATE_FILE_NAME,
       DATABASE_HOST,
       DATABASE_PASSWORD,
       DATABASE_PORT,
@@ -27,6 +28,7 @@ const init = async () => {
     } = composeConfiguration({
       API_PORT: { required: true, type: 'number' },
       DATABASE: { required: true, type: 'string' },
+      DATABASE_CERTIFICATE_FILE_NAME: { required: true, type: 'string' },
       DATABASE_HOST: { required: true, type: 'string' },
       DATABASE_PASSWORD: { required: true, type: 'string' },
       DATABASE_PORT: { required: true, type: 'number' },
@@ -34,8 +36,8 @@ const init = async () => {
       ENVIRONMENT: { required: true, type: 'string' },
       JWT_SECRET: { required: true, type: 'string' }
     });
-
     const isDevelopment = ENVIRONMENT === 'development';
+
     loggerService = composeLogger({
       level: isDevelopment ? 'trace' : 'info',
       name: '@apis/identity',
@@ -58,10 +60,15 @@ const init = async () => {
     });
     loggerService.debug('🔧 Token service ready');
 
+    const pathService = new PathService();
+    loggerService.debug('🔧 Path service ready');
+
     const clientService = new ClientService<IDatabaseSchema>({
+      certificateFileName: DATABASE_CERTIFICATE_FILE_NAME,
       database: DATABASE,
       host: DATABASE_HOST,
       password: DATABASE_PASSWORD,
+      pathService,
       port: DATABASE_PORT,
       user: DATABASE_USER
     });
