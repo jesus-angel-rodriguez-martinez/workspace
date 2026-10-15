@@ -1,17 +1,17 @@
-import { AbstractMigratorService, type MigrationCommand, MigrationFailedError } from '@domains/migrator';
-import { type ClientService } from '@infrastructures/client';
-import { type IMigratorServiceOptions } from '@infrastructures/migrator';
+import {
+  AbstractMigratorService,
+  type IMigratorServiceOptions,
+  type MigrationCommand,
+  MigrationFailedError
+} from '@domains/migrator';
+import { type Kysely } from 'kysely';
 import { FileMigrationProvider, Migrator, NO_MIGRATIONS } from 'kysely/migration';
 import { promises } from 'node:fs';
 import { join } from 'node:path';
 
-export class MigratorService<Schema> extends AbstractMigratorService {
-  protected readonly clientService: ClientService<Schema>;
-
-  public constructor({ clientService, loggerService, pathService }: IMigratorServiceOptions<Schema>) {
-    super({ loggerService, pathService });
-
-    this.clientService = clientService;
+export class MigratorService<Schema> extends AbstractMigratorService<Kysely<Schema>> {
+  public constructor(options: IMigratorServiceOptions<Kysely<Schema>>) {
+    super(options);
   }
 
   public down(): Promise<void> {
@@ -27,9 +27,7 @@ export class MigratorService<Schema> extends AbstractMigratorService {
   }
 
   protected async migrate(command: MigrationCommand): Promise<void> {
-    const { loggerService, pathService } = this.configuration;
-
-    const migrationFolder = pathService.resolveMigrationFolder();
+    const migrationFolder = this.pathService.resolveMigrationFolder();
     const db = this.clientService.createClient();
 
     const provider = new FileMigrationProvider({ fs: promises, migrationFolder, path: { join } });
@@ -47,7 +45,7 @@ export class MigratorService<Schema> extends AbstractMigratorService {
           : await migrator.migrateToLatest();
 
     for (const result of results) {
-      loggerService.info(
+      this.loggerService.info(
         `Migration [direction="${result.direction}", migration="${result.migrationName}", status="${result.status}"]`
       );
     }

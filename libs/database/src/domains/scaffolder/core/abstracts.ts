@@ -1,4 +1,5 @@
-import { type IScaffolderServiceConfiguration } from '@domains/scaffolder';
+import { type AbstractPathService } from '@domains/path';
+import { type IScaffolderServiceOptions } from '@domains/scaffolder';
 
 /**
  * Abstract base class for scaffolder services.
@@ -7,17 +8,17 @@ import { type IScaffolderServiceConfiguration } from '@domains/scaffolder';
  */
 export abstract class AbstractScaffolderService {
   /**
-   * Scaffolder configuration options.
+   * Resolves the filesystem paths.
    */
-  protected readonly configuration: IScaffolderServiceConfiguration;
+  protected readonly pathService: AbstractPathService;
 
   /**
    * Restricts instantiation to subclasses.
    *
-   * @param configuration - Scaffolder configuration options.
+   * @param options - Scaffolder service options.
    */
-  protected constructor(configuration: IScaffolderServiceConfiguration) {
-    this.configuration = Object.freeze({ ...configuration });
+  protected constructor({ pathService }: IScaffolderServiceOptions) {
+    this.pathService = pathService;
   }
 
   /**

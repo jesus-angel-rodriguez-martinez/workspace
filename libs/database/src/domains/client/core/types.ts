@@ -26,7 +26,7 @@ export interface IClientServiceConfiguration {
 
 export interface IClientServiceOptions {
   /**
-   * Reads the certificate used to verify the database server, when TLS is enabled.
+   * Provides the certificate for TLS connections.
    */
   readonly certificateService?: AbstractCertificateService | undefined;
   /**

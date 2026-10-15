@@ -2,7 +2,7 @@ import { AbstractClientService, type IClientServiceOptions } from '@domains/clie
 import { CamelCasePlugin, Kysely, PostgresDialect } from 'kysely';
 import { Pool } from 'pg';
 
-export class ClientService<Schema> extends AbstractClientService {
+export class ClientService<Schema> extends AbstractClientService<Kysely<Schema>> {
   public constructor(options: IClientServiceOptions) {
     super(options);
   }

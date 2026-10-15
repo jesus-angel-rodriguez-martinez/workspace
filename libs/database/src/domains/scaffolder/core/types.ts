@@ -1,9 +1,6 @@
 import { type AbstractPathService } from '@domains/path';
 
-/**
- * Options to construct a scaffolder service.
- */
-export interface IScaffolderServiceConfiguration {
+export interface IScaffolderServiceOptions {
   /**
    * Resolves the filesystem paths.
    */

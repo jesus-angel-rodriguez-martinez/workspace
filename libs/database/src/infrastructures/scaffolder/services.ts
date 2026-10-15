@@ -1,6 +1,6 @@
 import {
   AbstractScaffolderService,
-  type IScaffolderServiceConfiguration,
+  type IScaffolderServiceOptions,
   InvalidMigrationNameError,
   MissingMigrationNameError,
   SCAFFOLDER_RULES
@@ -8,8 +8,8 @@ import {
 import { promises } from 'node:fs';
 
 export class ScaffolderService extends AbstractScaffolderService {
-  public constructor(configuration: IScaffolderServiceConfiguration) {
-    super(configuration);
+  public constructor(options: IScaffolderServiceOptions) {
+    super(options);
   }
 
   public async create(name: string | undefined): Promise<string> {
@@ -22,11 +22,9 @@ export class ScaffolderService extends AbstractScaffolderService {
       throw new InvalidMigrationNameError(name);
     }
 
-    const { pathService } = this.configuration;
-
     const fileName = this.createFileName(name);
-    const migrationFolder = pathService.resolveMigrationFolder();
-    const filePath = pathService.resolveMigrationFile(fileName);
+    const migrationFolder = this.pathService.resolveMigrationFolder();
+    const filePath = this.pathService.resolveMigrationFile(fileName);
     const template = this.createTemplate();
 
     await promises.mkdir(migrationFolder, { recursive: true });

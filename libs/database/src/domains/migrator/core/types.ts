@@ -1,10 +1,12 @@
+import { type AbstractClientService } from '@domains/client';
 import { type AbstractPathService } from '@domains/path';
 import { type AbstractLoggerService } from '@libs/logger';
 
-/**
- * Options to construct a migrator service.
- */
-export interface IMigratorServiceConfiguration {
+export interface IMigratorServiceOptions<Client> {
+  /**
+   * Provides the database client migrations run against.
+   */
+  readonly clientService: AbstractClientService<Client>;
   /**
    * Logging service used for structured output and diagnostics.
    */

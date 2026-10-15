@@ -1,14 +1,9 @@
 import { type AbstractCertificateService } from '@domains/certificate';
 import { type IClientServiceConfiguration, type IClientServiceOptions } from '@domains/client';
 
-/**
- * Abstract base class for client services.
- *
- * Provides the connection configuration while leaving client construction to the infrastructure.
- */
-export abstract class AbstractClientService {
+export abstract class AbstractClientService<Client> {
   /**
-   * Reads the certificate used to verify the database server, when TLS is enabled.
+   * Provides the certificate for TLS connections.
    */
   protected readonly certificateService: AbstractCertificateService | undefined;
   /**
@@ -28,6 +23,12 @@ export abstract class AbstractClientService {
     this.configuration = Object.freeze({ ...configuration });
   }
 
+  /**
+   * Creates the client used to query the database.
+   *
+   * @returns The database client.
+   */
+  public abstract createClient(): Client;
   /**
    * Creates the connection string used to reach the database.
    *
