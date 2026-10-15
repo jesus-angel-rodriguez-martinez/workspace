@@ -1,5 +1,3 @@
-import { type AbstractCryptographyService, type ICryptographyServiceConfiguration } from '@libs/security';
+import { type AbstractCryptographyService, type ICryptographyServiceOptions } from '@libs/security';
 
-export type ComposeCryptography = (
-  configuration: ICryptographyServiceConfiguration
-) => AbstractCryptographyService;
+export type ComposeCryptography = (options: ICryptographyServiceOptions) => AbstractCryptographyService;

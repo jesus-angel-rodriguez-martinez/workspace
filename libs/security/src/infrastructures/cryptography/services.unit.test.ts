@@ -22,7 +22,7 @@ jest.unstable_mockModule('node:crypto', () => ({
   timingSafeEqual: timingSafeEqualMock
 }));
 
-const { CryptographyService } = await import('@infrastructures/cryptography');
+const { CryptographyService, CryptographyValidator } = await import('@infrastructures/cryptography');
 
 describe('CryptographyService', () => {
   const configuration = {
@@ -32,13 +32,15 @@ describe('CryptographyService', () => {
     saltLength: 16
   } satisfies ICryptographyServiceConfiguration;
 
+  const cryptographyValidator = new CryptographyValidator();
+
   const password = 'fake-password';
 
   let cryptographyService: InstanceType<typeof CryptographyService>;
 
   beforeEach(() => {
     jest.clearAllMocks();
-    cryptographyService = new CryptographyService(configuration);
+    cryptographyService = new CryptographyService({ configuration, cryptographyValidator });
   });
 
   afterEach(() => {
@@ -47,37 +49,36 @@ describe('CryptographyService', () => {
 
   describe('constructor', () => {
     it('throws an AggregateCryptographyConfigurationError when the iterations are below the minimum', () => {
-      expect(() => new CryptographyService({ ...configuration, iterations: 0 })).toThrow(
-        AggregateCryptographyConfigurationError
-      );
-      expect(() => new CryptographyService({ ...configuration, iterations: 0 })).toThrow(
-        'CRYPTOGRAPHY.WEAK_ITERATIONS'
-      );
+      const options = { configuration: { ...configuration, iterations: 0 }, cryptographyValidator };
+
+      expect(() => new CryptographyService(options)).toThrow(AggregateCryptographyConfigurationError);
+      expect(() => new CryptographyService(options)).toThrow('CRYPTOGRAPHY.WEAK_ITERATIONS');
     });
 
     it('throws an AggregateCryptographyConfigurationError when the key length is below the minimum', () => {
-      expect(() => new CryptographyService({ ...configuration, keyLength: 0 })).toThrow(
-        AggregateCryptographyConfigurationError
-      );
-      expect(() => new CryptographyService({ ...configuration, keyLength: 0 })).toThrow(
-        'CRYPTOGRAPHY.WEAK_KEY_LENGTH'
-      );
+      const options = { configuration: { ...configuration, keyLength: 0 }, cryptographyValidator };
+
+      expect(() => new CryptographyService(options)).toThrow(AggregateCryptographyConfigurationError);
+      expect(() => new CryptographyService(options)).toThrow('CRYPTOGRAPHY.WEAK_KEY_LENGTH');
     });
 
     it('throws an AggregateCryptographyConfigurationError when the salt length is below the minimum', () => {
-      expect(() => new CryptographyService({ ...configuration, saltLength: 0 })).toThrow(
-        AggregateCryptographyConfigurationError
-      );
-      expect(() => new CryptographyService({ ...configuration, saltLength: 0 })).toThrow(
-        'CRYPTOGRAPHY.WEAK_SALT_LENGTH'
-      );
+      const options = { configuration: { ...configuration, saltLength: 0 }, cryptographyValidator };
+
+      expect(() => new CryptographyService(options)).toThrow(AggregateCryptographyConfigurationError);
+      expect(() => new CryptographyService(options)).toThrow('CRYPTOGRAPHY.WEAK_SALT_LENGTH');
     });
 
     it('aggregates every configuration error when multiple values are below the minimum', () => {
+      const options = {
+        configuration: { ...configuration, iterations: 0, keyLength: 0, saltLength: 0 },
+        cryptographyValidator
+      };
+
       let caught: unknown;
 
       try {
-        new CryptographyService({ ...configuration, iterations: 0, keyLength: 0, saltLength: 0 });
+        new CryptographyService(options);
       } catch (error) {
         caught = error;
       }

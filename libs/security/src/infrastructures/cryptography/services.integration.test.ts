@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 import { type ICryptographyServiceConfiguration } from '@domains/cryptography';
-import { CryptographyService } from '@infrastructures/cryptography';
+import { CryptographyService, CryptographyValidator } from '@infrastructures/cryptography';
 
 describe('CryptographyService', () => {
   const password = 'fake-plain-text-password';
@@ -12,7 +12,9 @@ describe('CryptographyService', () => {
     saltLength: 16
   } satisfies ICryptographyServiceConfiguration;
 
-  const cryptographyService = new CryptographyService(configuration);
+  const cryptographyValidator = new CryptographyValidator();
+
+  const cryptographyService = new CryptographyService({ configuration, cryptographyValidator });
 
   describe('generateSalt', () => {
     it('generates a salt of the configured length', async () => {

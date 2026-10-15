@@ -9,6 +9,7 @@ import { composeToken } from '@infrastructures/token';
 import { composeUser } from '@infrastructures/user';
 import { ClientService, PathService } from '@libs/database';
 import { type AbstractLoggerService } from '@libs/logger';
+import { CryptographyValidator } from '@libs/security';
 
 let database: IDatabase | undefined;
 let loggerService: AbstractLoggerService | undefined;
@@ -45,11 +46,17 @@ const init = async () => {
     });
     loggerService.debug('🔧 Logger service ready');
 
+    const cryptographyValidator = new CryptographyValidator();
+    loggerService.debug('🔧 Cryptography validator ready');
+
     const cryptographyService = composeCryptography({
-      digest: 'sha256',
-      iterations: 100_000,
-      keyLength: 64,
-      saltLength: 16
+      configuration: {
+        digest: 'sha256',
+        iterations: 100_000,
+        keyLength: 64,
+        saltLength: 16
+      },
+      cryptographyValidator
     });
     loggerService.debug('🔧 Cryptography service ready');
 

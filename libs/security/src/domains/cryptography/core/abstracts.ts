@@ -1,4 +1,7 @@
-import { type ICryptographyServiceConfiguration } from '@domains/cryptography';
+import {
+  type ICryptographyServiceConfiguration,
+  type ICryptographyServiceOptions
+} from '@domains/cryptography';
 
 export abstract class AbstractCryptographyService {
   /**
@@ -7,13 +10,12 @@ export abstract class AbstractCryptographyService {
   protected readonly configuration: ICryptographyServiceConfiguration;
 
   /**
-   * The constructor is protected to ensure this abstract class cannot be
-   * instantiated directly, but only through subclasses.
+   * Restricts instantiation to subclasses.
    *
-   * @param configuration - Cryptography configuration options.
+   * @param options - Cryptography service options.
    */
-  protected constructor(configuration: ICryptographyServiceConfiguration) {
-    this.validateConfiguration(configuration);
+  protected constructor({ configuration, cryptographyValidator }: ICryptographyServiceOptions) {
+    cryptographyValidator.validate(configuration);
 
     this.configuration = Object.freeze({ ...configuration });
   }
@@ -34,12 +36,6 @@ export abstract class AbstractCryptographyService {
    */
   public abstract hashPassword(password: string, salt: Buffer): Promise<Buffer>;
   /**
-   * Validates that the configuration meets the minimum security requirements.
-   *
-   * @param configuration - Cryptography configuration options to validate.
-   */
-  protected abstract validateConfiguration(configuration: ICryptographyServiceConfiguration): void;
-  /**
    * Validates whether a plain-text password corresponds to a stored password hash.
    * Implementations must perform a constant-time comparison to prevent timing attacks.
    *
@@ -50,4 +46,18 @@ export abstract class AbstractCryptographyService {
    * @returns A promise that resolves to true if the password is valid; otherwise, false.
    */
   public abstract verifyPassword(password: string, salt: Buffer, hashedPassword: Buffer): Promise<boolean>;
+}
+
+export abstract class AbstractCryptographyValidator {
+  /**
+   * Restricts instantiation to subclasses.
+   */
+  protected constructor() {}
+
+  /**
+   * Validates that the configuration meets the minimum security requirements.
+   *
+   * @param configuration - Cryptography configuration options to validate.
+   */
+  public abstract validate(configuration: ICryptographyServiceConfiguration): void;
 }

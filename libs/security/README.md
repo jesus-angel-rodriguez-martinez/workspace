@@ -14,16 +14,21 @@ rush add -p @libs/security
 
 ### Cryptography
 
-`CryptographyService` handles salt generation, password hashing via PBKDF2, and constant-time password verification:
+`CryptographyService` handles salt generation, password hashing via PBKDF2, and constant-time password verification. Its configuration is validated on construction by the injected `CryptographyValidator`:
 
 ```ts
-import { CryptographyService } from '@libs/security';
+import { CryptographyService, CryptographyValidator } from '@libs/security';
+
+const cryptographyValidator = new CryptographyValidator();
 
 const cryptographyService = new CryptographyService({
-  digest: 'sha256',
-  iterations: 100_000,
-  keyLength: 64,
-  saltLength: 16
+  configuration: {
+    digest: 'sha256',
+    iterations: 100_000,
+    keyLength: 64,
+    saltLength: 16
+  },
+  cryptographyValidator
 });
 
 const password = 'plain-text-password';
@@ -52,7 +57,7 @@ const { exp, iat, sub } = tokenService.verifyToken(token);
 
 ### Errors
 
-- `AggregateCryptographyConfigurationError`: Thrown when constructing a `CryptographyService` with one or more configuration values below their minimum security requirement. Its message lists each underlying error (`code` and `detail`).
+- `AggregateCryptographyConfigurationError`: Thrown by `CryptographyValidator` when constructing a `CryptographyService` with one or more configuration values below their minimum security requirement. Its message lists each underlying error (`code` and `detail`).
 - `AggregateTokenConfigurationError`: Thrown when constructing a `TokenService` with one or more configuration values below their minimum security requirement. Its message lists each underlying error (`code` and `detail`).
 - `TokenExpiryError`: Thrown when verifying a token that has expired.
 - `TokenIssuanceError`: Thrown when an authentication token cannot be issued.

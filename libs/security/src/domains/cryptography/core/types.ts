@@ -1,3 +1,5 @@
+import { type AbstractCryptographyValidator } from '@domains/cryptography';
+
 export interface ICryptographyServiceConfiguration {
   /**
    * The digest algorithm.
@@ -15,4 +17,15 @@ export interface ICryptographyServiceConfiguration {
    * The length in bytes of the cryptographic salt.
    */
   readonly saltLength: number;
+}
+
+export interface ICryptographyServiceOptions {
+  /**
+   * Cryptography configuration options.
+   */
+  readonly configuration: ICryptographyServiceConfiguration;
+  /**
+   * Validates the cryptography configuration.
+   */
+  readonly cryptographyValidator: AbstractCryptographyValidator;
 }
