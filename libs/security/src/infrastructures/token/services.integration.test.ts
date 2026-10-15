@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from '@jest/globals';
 import { type ITokenServiceConfiguration, TokenExpiryError, TokenValidationError } from '@domains/token';
-import { TokenService } from '@infrastructures/token';
+import { TokenService, TokenValidator } from '@infrastructures/token';
 
 describe('TokenService', () => {
   const configuration = {
@@ -9,12 +9,14 @@ describe('TokenService', () => {
     secret: 'fake-secret-value-used-for-integration-testing'
   } satisfies ITokenServiceConfiguration;
 
+  const tokenValidator = new TokenValidator();
+
   const userId = 'fake-user-id';
 
   let tokenService: TokenService;
 
   beforeEach(() => {
-    tokenService = new TokenService(configuration);
+    tokenService = new TokenService({ configuration, tokenValidator });
   });
 
   describe('generateToken', () => {
@@ -37,8 +39,8 @@ describe('TokenService', () => {
 
     it('throws a TokenValidationError when the token was signed with a different secret', () => {
       const otherTokenService = new TokenService({
-        ...configuration,
-        secret: 'another-fake-secret-value-used-for-integration-testing'
+        configuration: { ...configuration, secret: 'another-fake-secret-value-used-for-integration-testing' },
+        tokenValidator
       });
 
       const token = otherTokenService.generateToken(userId);
@@ -47,7 +49,10 @@ describe('TokenService', () => {
     });
 
     it('throws a TokenExpiryError when the token has expired', () => {
-      const expiredTokenService = new TokenService({ ...configuration, expiresIn: -10 });
+      const expiredTokenService = new TokenService({
+        configuration: { ...configuration, expiresIn: -10 },
+        tokenValidator
+      });
 
       const token = expiredTokenService.generateToken(userId);
 

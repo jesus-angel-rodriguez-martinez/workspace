@@ -20,7 +20,7 @@ jest.unstable_mockModule('jsonwebtoken', () => ({
   }
 }));
 
-const { TokenService } = await import('@infrastructures/token');
+const { TokenService, TokenValidator } = await import('@infrastructures/token');
 
 describe('TokenService', () => {
   const configuration = {
@@ -29,6 +29,8 @@ describe('TokenService', () => {
     secret: 'fake-secret-value-used-for-unit-testing'
   } satisfies ITokenServiceConfiguration;
 
+  const tokenValidator = new TokenValidator();
+
   const token = 'fake.signed.token';
   const userId = 'fake-user-id';
 
@@ -36,7 +38,7 @@ describe('TokenService', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    tokenService = new TokenService(configuration);
+    tokenService = new TokenService({ configuration, tokenValidator });
   });
 
   afterEach(() => {
@@ -45,9 +47,9 @@ describe('TokenService', () => {
 
   describe('constructor', () => {
     it('throws when the secret is shorter than the minimum length', () => {
-      const secret = 'fake-short-secret';
+      const options = { configuration: { ...configuration, secret: 'fake-short-secret' }, tokenValidator };
 
-      expect(() => new TokenService({ ...configuration, secret })).toThrow(AggregateTokenConfigurationError);
+      expect(() => new TokenService(options)).toThrow(AggregateTokenConfigurationError);
     });
   });
 

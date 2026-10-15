@@ -1,3 +1,5 @@
+import { type AbstractTokenValidator } from '@domains/token';
+
 /**
  * The string representation of the issued authentication token.
  */
@@ -31,4 +33,15 @@ export interface ITokenServiceConfiguration {
    * The secret key used to sign tokens.
    */
   readonly secret: string;
+}
+
+export interface ITokenServiceOptions {
+  /**
+   * Token configuration options.
+   */
+  readonly configuration: ITokenServiceConfiguration;
+  /**
+   * Validates the token configuration.
+   */
+  readonly tokenValidator: AbstractTokenValidator;
 }

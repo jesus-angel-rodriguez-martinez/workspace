@@ -1,7 +1,8 @@
 import {
   type AuthenticationToken,
   type ITokenPayload,
-  type ITokenServiceConfiguration
+  type ITokenServiceConfiguration,
+  type ITokenServiceOptions
 } from '@domains/token';
 
 export abstract class AbstractTokenService {
@@ -13,10 +14,10 @@ export abstract class AbstractTokenService {
   /**
    * Restricts instantiation to subclasses.
    *
-   * @param configuration - Token configuration options.
+   * @param options - Token service options.
    */
-  protected constructor(configuration: ITokenServiceConfiguration) {
-    this.validateConfiguration(configuration);
+  protected constructor({ configuration, tokenValidator }: ITokenServiceOptions) {
+    tokenValidator.validate(configuration);
 
     this.configuration = Object.freeze({ ...configuration });
   }
@@ -30,12 +31,6 @@ export abstract class AbstractTokenService {
    */
   public abstract generateToken(userId: string): AuthenticationToken;
   /**
-   * Validates that the configuration meets the minimum security requirements.
-   *
-   * @param configuration - Token configuration options to validate.
-   */
-  protected abstract validateConfiguration(configuration: ITokenServiceConfiguration): void;
-  /**
    * Verifies the signature and expiration of an authentication token.
    *
    * @param token - The authentication token to verify.
@@ -43,4 +38,18 @@ export abstract class AbstractTokenService {
    * @returns The decoded token payload when the token is valid.
    */
   public abstract verifyToken(token: AuthenticationToken): ITokenPayload;
+}
+
+export abstract class AbstractTokenValidator {
+  /**
+   * Restricts instantiation to subclasses.
+   */
+  protected constructor() {}
+
+  /**
+   * Validates that the configuration meets the minimum security requirements.
+   *
+   * @param configuration - Token configuration options to validate.
+   */
+  public abstract validate(configuration: ITokenServiceConfiguration): void;
 }

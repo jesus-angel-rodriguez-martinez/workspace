@@ -39,15 +39,20 @@ const areCredentialsValid = await cryptographyService.verifyPassword(password, s
 
 ### Token
 
-`TokenService` generates and verifies signed JWT authentication tokens from a user id:
+`TokenService` generates and verifies signed JWT authentication tokens from a user id. Its configuration is validated on construction by the injected `TokenValidator`:
 
 ```ts
-import { TokenService } from '@libs/security';
+import { TokenService, TokenValidator } from '@libs/security';
+
+const tokenValidator = new TokenValidator();
 
 const tokenService = new TokenService({
-  algorithm: 'HS256',
-  expiresIn: 3_600,
-  secret: 'SECRET'
+  configuration: {
+    algorithm: 'HS256',
+    expiresIn: 3_600,
+    secret: 'SECRET'
+  },
+  tokenValidator
 });
 
 const userId = '550e8400-e29b-41d4-a716-446655440000';
@@ -58,7 +63,7 @@ const { exp, iat, sub } = tokenService.verifyToken(token);
 ### Errors
 
 - `AggregateCryptographyConfigurationError`: Thrown by `CryptographyValidator` when constructing a `CryptographyService` with one or more configuration values below their minimum security requirement. Its message lists each underlying error (`code` and `detail`).
-- `AggregateTokenConfigurationError`: Thrown when constructing a `TokenService` with one or more configuration values below their minimum security requirement. Its message lists each underlying error (`code` and `detail`).
+- `AggregateTokenConfigurationError`: Thrown by `TokenValidator` when constructing a `TokenService` with one or more configuration values below their minimum security requirement. Its message lists each underlying error (`code` and `detail`).
 - `TokenExpiryError`: Thrown when verifying a token that has expired.
 - `TokenIssuanceError`: Thrown when an authentication token cannot be issued.
 - `TokenValidationError`: Thrown when verifying a token whose signature or format is invalid.

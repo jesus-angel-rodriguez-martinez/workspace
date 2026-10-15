@@ -9,7 +9,7 @@ import { composeToken } from '@infrastructures/token';
 import { composeUser } from '@infrastructures/user';
 import { ClientService, PathService } from '@libs/database';
 import { type AbstractLoggerService } from '@libs/logger';
-import { CryptographyValidator } from '@libs/security';
+import { CryptographyValidator, TokenValidator } from '@libs/security';
 
 let database: IDatabase | undefined;
 let loggerService: AbstractLoggerService | undefined;
@@ -60,10 +60,16 @@ const init = async () => {
     });
     loggerService.debug('🔧 Cryptography service ready');
 
+    const tokenValidator = new TokenValidator();
+    loggerService.debug('🔧 Token validator ready');
+
     const tokenService = composeToken({
-      algorithm: 'HS256',
-      expiresIn: 3_600,
-      secret: JWT_SECRET
+      configuration: {
+        algorithm: 'HS256',
+        expiresIn: 3_600,
+        secret: JWT_SECRET
+      },
+      tokenValidator
     });
     loggerService.debug('🔧 Token service ready');
 

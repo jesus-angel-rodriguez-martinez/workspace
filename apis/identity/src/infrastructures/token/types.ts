@@ -1,3 +1,3 @@
-import { type AbstractTokenService, type ITokenServiceConfiguration } from '@libs/security';
+import { type AbstractTokenService, type ITokenServiceOptions } from '@libs/security';
 
-export type ComposeToken = (configuration: ITokenServiceConfiguration) => AbstractTokenService;
+export type ComposeToken = (options: ITokenServiceOptions) => AbstractTokenService;
