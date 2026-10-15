@@ -1,11 +1,7 @@
+import { type AbstractCertificateService } from '@domains/certificate';
 import { type AbstractClientValidator } from '@domains/client';
-import { type AbstractPathService } from '@domains/path';
 
 export interface IClientServiceConfiguration {
-  /**
-   * The certificate file name used to verify the database server.
-   */
-  readonly certificateFileName?: string | undefined;
   /**
    * The name of the database to connect to.
    */
@@ -30,6 +26,10 @@ export interface IClientServiceConfiguration {
 
 export interface IClientServiceOptions {
   /**
+   * Reads the certificate used to verify the database server, when TLS is enabled.
+   */
+  readonly certificateService?: AbstractCertificateService | undefined;
+  /**
    * Validates the client configuration.
    */
   readonly clientValidator: AbstractClientValidator;
@@ -37,8 +37,4 @@ export interface IClientServiceOptions {
    * Client configuration options.
    */
   readonly configuration: IClientServiceConfiguration;
-  /**
-   * Resolves the filesystem paths.
-   */
-  readonly pathService: AbstractPathService;
 }

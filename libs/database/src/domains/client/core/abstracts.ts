@@ -1,5 +1,5 @@
+import { type AbstractCertificateService } from '@domains/certificate';
 import { type IClientServiceConfiguration, type IClientServiceOptions } from '@domains/client';
-import { type AbstractPathService } from '@domains/path';
 
 /**
  * Abstract base class for client services.
@@ -8,24 +8,24 @@ import { type AbstractPathService } from '@domains/path';
  */
 export abstract class AbstractClientService {
   /**
+   * Reads the certificate used to verify the database server, when TLS is enabled.
+   */
+  protected readonly certificateService: AbstractCertificateService | undefined;
+  /**
    * Client configuration options.
    */
   protected readonly configuration: IClientServiceConfiguration;
-  /**
-   * Resolves the filesystem paths.
-   */
-  protected readonly pathService: AbstractPathService;
 
   /**
    * Restricts instantiation to subclasses.
    *
    * @param options - Client service options.
    */
-  protected constructor({ clientValidator, configuration, pathService }: IClientServiceOptions) {
+  protected constructor({ certificateService, clientValidator, configuration }: IClientServiceOptions) {
     clientValidator.validate(configuration);
 
+    this.certificateService = certificateService;
     this.configuration = Object.freeze({ ...configuration });
-    this.pathService = pathService;
   }
 
   /**
@@ -36,12 +36,6 @@ export abstract class AbstractClientService {
    * @returns The connection string.
    */
   protected abstract createConnectionString(): string;
-  /**
-   * Reads the certificate authority used to verify the database server.
-   *
-   * @returns The certificate content, or `undefined` when no certificate is configured.
-   */
-  protected abstract readCertificate(): string | undefined;
 }
 
 export abstract class AbstractClientValidator {

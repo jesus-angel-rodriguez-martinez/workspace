@@ -1,6 +1,5 @@
 import { AbstractClientService, type IClientServiceOptions } from '@domains/client';
 import { CamelCasePlugin, Kysely, PostgresDialect } from 'kysely';
-import { readFileSync } from 'node:fs';
 import { Pool } from 'pg';
 
 export class ClientService<Schema> extends AbstractClientService {
@@ -10,7 +9,7 @@ export class ClientService<Schema> extends AbstractClientService {
 
   public createClient(): Kysely<Schema> {
     const connectionString = this.createConnectionString();
-    const certificate = this.readCertificate();
+    const certificate = this.certificateService?.read();
 
     const ssl = certificate ? { ca: certificate, rejectUnauthorized: true } : undefined;
     const pool = new Pool({ connectionString, ssl });
@@ -29,17 +28,5 @@ export class ClientService<Schema> extends AbstractClientService {
 
     const connectionString = `postgresql://${user}:${password}@${host}:${port}/${database}`;
     return connectionString;
-  }
-
-  protected readCertificate(): string | undefined {
-    const { certificateFileName } = this.configuration;
-    if (!certificateFileName) {
-      return undefined;
-    }
-
-    const certificatePath = this.pathService.resolveCertificateFile(certificateFileName);
-
-    const content = readFileSync(certificatePath, 'utf8');
-    return content;
   }
 }

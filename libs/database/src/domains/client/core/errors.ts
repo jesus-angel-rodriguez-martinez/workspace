@@ -18,24 +18,6 @@ export class AggregateClientConfigurationError extends AggregateKernelError {
 }
 
 /**
- * Error thrown when the certificate file name is invalid.
- */
-export class InvalidClientCertificateFileNameError extends KernelError {
-  /**
-   * @param certificateFileName - The invalid certificate file name.
-   * @param options - Optional error configuration options.
-   */
-  constructor(certificateFileName: string, options: IKernelErrorOptions = {}) {
-    super({
-      cause: options.cause,
-      code: 'CLIENT.INVALID_CERTIFICATE_FILE_NAME',
-      detail: `Certificate file name '${certificateFileName}' must not contain path separators.`,
-      title: 'Invalid certificate file name'
-    });
-  }
-}
-
-/**
  * Error thrown when the database name is missing.
  */
 export class MissingClientDatabaseError extends KernelError {

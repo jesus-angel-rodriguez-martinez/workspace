@@ -1,5 +1,6 @@
 #!/usr/bin/env -S tsx
 import 'dotenv/config';
+import { CertificateService, CertificateValidator } from '@infrastructures/certificate';
 import { ClientService, ClientValidator } from '@infrastructures/client';
 import { MigratorService } from '@infrastructures/migrator';
 import { PathService } from '@infrastructures/path';
@@ -29,21 +30,30 @@ LoggerService.init({
 });
 const loggerService = new LoggerService();
 
-const clientValidator = new ClientValidator();
-
 const pathService = new PathService();
 
+const certificateValidator = new CertificateValidator({ pathService });
+
+const certificateService = DATABASE_CERTIFICATE_FILE_NAME
+  ? new CertificateService({
+      certificateValidator,
+      configuration: { fileName: DATABASE_CERTIFICATE_FILE_NAME },
+      pathService
+    })
+  : undefined;
+
+const clientValidator = new ClientValidator();
+
 const clientService = new ClientService({
+  certificateService,
   clientValidator,
   configuration: {
-    certificateFileName: DATABASE_CERTIFICATE_FILE_NAME,
     database: DATABASE,
     host: DATABASE_HOST,
     password: DATABASE_PASSWORD,
     port: DATABASE_PORT,
     user: DATABASE_USER
-  },
-  pathService
+  }
 });
 const migratorService = new MigratorService({ clientService, loggerService, pathService });
 

@@ -18,11 +18,9 @@ rush add -p @libs/database
 
 ```ts
 import { type IDatabaseSchema } from '@infrastructures/database';
-import { ClientService, ClientValidator, PathService } from '@libs/database';
+import { ClientService, ClientValidator } from '@libs/database';
 
 const clientValidator = new ClientValidator();
-
-const pathService = new PathService();
 
 const clientService = new ClientService<IDatabaseSchema>({
   clientValidator,
@@ -32,14 +30,37 @@ const clientService = new ClientService<IDatabaseSchema>({
     password: 'password',
     port: 5432,
     user: 'user'
-  },
-  pathService
+  }
 });
 
 const database = clientService.createClient();
 ```
 
-Set `certificateFileName` to a file name (e.g. `'global-bundle.pem'`) to connect over TLS, verifying the server against that certificate authority. Certificates are read from `<cwd>/database/certificates`, next to the migrations; without it the connection does not use TLS.
+### Certificate
+
+Inject a `CertificateService` into `ClientService` to connect over TLS, verifying the server against that certificate authority; without it the connection does not use TLS. Certificates are read from `<cwd>/database/certificates`, next to the migrations. The injected `CertificateValidator` checks on construction that the file name is valid and that the file exists:
+
+```ts
+import { CertificateService, CertificateValidator, ClientService, PathService } from '@libs/database';
+
+const pathService = new PathService();
+
+const certificateValidator = new CertificateValidator({ pathService });
+
+const certificateService = new CertificateService({
+  certificateValidator,
+  configuration: {
+    fileName: 'global-bundle.pem'
+  },
+  pathService
+});
+
+const clientService = new ClientService<IDatabaseSchema>({
+  certificateService,
+  clientValidator,
+  configuration
+});
+```
 
 ### Migrator
 
@@ -96,10 +117,12 @@ This writes a timestamped `<YYYYMMDDHHMMSS>_<name>.ts` file (with empty `up` and
 
 ### Errors
 
+- `AggregateCertificateConfigurationError`: Thrown by `CertificateValidator` when constructing a `CertificateService` with an invalid file name or a missing file. Its message lists each underlying error (`code` and `detail`).
 - `AggregateClientConfigurationError`: Thrown by `ClientValidator` when constructing a `ClientService` with one or more missing connection values. Its message lists each underlying error (`code` and `detail`).
-- `InvalidClientCertificateFileNameError`: Thrown when the certificate file name is not a plain file name (e.g. it contains path separators).
+- `InvalidCertificateFileNameError`: Thrown when the certificate file name is not a plain file name (e.g. it contains path separators).
 - `InvalidMigrationNameError`: Thrown when scaffolding a migration whose name is not lowercase letters and digits separated by single hyphens (no leading, trailing, or consecutive hyphens).
 - `MigrationFailedError`: Thrown when a migration fails to run.
+- `MissingCertificateFileError`: Thrown when the certificate file does not exist in `<cwd>/database/certificates`.
 - `MissingClientDatabaseError`: Thrown when the database name is missing.
 - `MissingClientHostError`: Thrown when the database host is missing.
 - `MissingClientPasswordError`: Thrown when the database password is missing.

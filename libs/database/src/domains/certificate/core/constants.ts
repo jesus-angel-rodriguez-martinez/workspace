@@ -1,8 +1,8 @@
 /**
- * Rules for configuring the client.
+ * Rules for configuring the certificate.
  */
-export const CLIENT_RULES = {
-  certificateFileName: {
+export const CERTIFICATE_RULES = {
+  fileName: {
     /**
      * Regex patterns for validating the certificate file name.
      */
