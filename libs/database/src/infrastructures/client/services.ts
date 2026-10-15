@@ -1,5 +1,6 @@
 import { AbstractClientService, type IClientServiceOptions } from '@domains/client';
-import { CamelCasePlugin, Kysely, PostgresDialect } from 'kysely';
+import { CamelCasePlugin, Kysely, type KyselyPlugin, PostgresDialect } from 'kysely';
+import { type ConnectionOptions } from 'node:tls';
 import { Pool } from 'pg';
 
 export class ClientService<Schema> extends AbstractClientService<Kysely<Schema>> {
@@ -9,12 +10,11 @@ export class ClientService<Schema> extends AbstractClientService<Kysely<Schema>>
 
   public createClient(): Kysely<Schema> {
     const connectionString = this.createConnectionString();
-    const certificate = this.certificateService?.read();
+    const ssl = this.createSslOptions();
+    const plugins = this.createPlugins();
 
-    const ssl = certificate ? { ca: certificate, rejectUnauthorized: true } : undefined;
     const pool = new Pool({ connectionString, ssl });
     const dialect = new PostgresDialect({ pool });
-    const plugins = [new CamelCasePlugin()];
 
     const client = new Kysely<Schema>({
       dialect,
@@ -26,7 +26,28 @@ export class ClientService<Schema> extends AbstractClientService<Kysely<Schema>>
   protected createConnectionString(): string {
     const { database, host, password, port, user } = this.configuration;
 
-    const connectionString = `postgresql://${user}:${password}@${host}:${port}/${database}`;
+    const formattedDatabase = encodeURIComponent(database);
+    const formattedPassword = encodeURIComponent(password);
+    const formattedUser = encodeURIComponent(user);
+
+    const connectionString = `postgresql://${formattedUser}:${formattedPassword}@${host}:${port}/${formattedDatabase}`;
     return connectionString;
+  }
+
+  protected createPlugins(): KyselyPlugin[] {
+    const plugins: KyselyPlugin[] = [new CamelCasePlugin()];
+    return plugins;
+  }
+
+  protected createSslOptions(): ConnectionOptions | undefined {
+    if (!this.certificateService) {
+      return undefined;
+    }
+
+    const sslOptions: ConnectionOptions = {
+      ca: this.certificateService.read(),
+      rejectUnauthorized: true
+    };
+    return sslOptions;
   }
 }
