@@ -5,8 +5,7 @@ import { type ICreateUser } from '@domains/user';
  */
 export abstract class AbstractCreateUserValidator {
   /**
-   * The constructor is protected to ensure this abstract class cannot be
-   * instantiated directly, but only through subclasses.
+   * Restricts instantiation to subclasses.
    */
   protected constructor() {}
 

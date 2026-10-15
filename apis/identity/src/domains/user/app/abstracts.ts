@@ -30,8 +30,7 @@ export abstract class AbstractUserApp {
   protected readonly userRepository: IUserRepository;
 
   /**
-   * The constructor is protected to ensure this abstract class cannot be
-   * instantiated directly, but only through subclasses.
+   * Restricts instantiation to subclasses.
    *
    * @param configuration - User App configuration options.
    */

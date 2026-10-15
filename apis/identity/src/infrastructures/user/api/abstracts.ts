@@ -7,8 +7,7 @@ import { type KernelError } from '@libs/kernel';
  */
 export abstract class AbstractUserApiMapper extends AbstractApiMapper {
   /**
-   * The constructor is protected to ensure this abstract class cannot be
-   * instantiated directly, but only through subclasses.
+   * Restricts instantiation to subclasses.
    */
   protected constructor() {
     super();

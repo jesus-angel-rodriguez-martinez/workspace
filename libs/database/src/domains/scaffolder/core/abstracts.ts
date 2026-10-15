@@ -12,8 +12,7 @@ export abstract class AbstractScaffolderService {
   protected readonly configuration: IScaffolderServiceConfiguration;
 
   /**
-   * The constructor is protected to ensure this abstract class cannot be
-   * instantiated directly, but only through subclasses.
+   * Restricts instantiation to subclasses.
    *
    * @param configuration - Scaffolder configuration options.
    */

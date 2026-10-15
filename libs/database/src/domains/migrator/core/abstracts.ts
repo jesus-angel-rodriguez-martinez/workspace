@@ -12,8 +12,7 @@ export abstract class AbstractMigratorService {
   protected readonly configuration: IMigratorServiceConfiguration;
 
   /**
-   * The constructor is protected to ensure this abstract class cannot be
-   * instantiated directly, but only through subclasses.
+   * Restricts instantiation to subclasses.
    *
    * @param configuration - Migrator configuration options.
    */

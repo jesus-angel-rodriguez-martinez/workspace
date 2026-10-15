@@ -16,8 +16,7 @@ export abstract class AbstractConfigurationService<C extends Configuration> {
   private readonly configuration: ResolvedConfiguration<C>;
 
   /**
-   * The constructor is protected to ensure this abstract class cannot be
-   * instantiated directly, but only by subclasses.
+   * Restricts instantiation to subclasses.
    *
    * @param configuration - The configuration defining the type of each key and whether it is required.
    */

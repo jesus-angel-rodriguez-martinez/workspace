@@ -6,8 +6,7 @@ import { type AuthenticationToken } from '@libs/security';
  */
 export abstract class AbstractAuthenticationResponseMapper {
   /**
-   * The constructor is protected to ensure this abstract class cannot be
-   * instantiated directly, but only through subclasses.
+   * Restricts instantiation to subclasses.
    */
   protected constructor() {}
 

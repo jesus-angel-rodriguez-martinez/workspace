@@ -5,8 +5,7 @@ import { type ISecureUser, type IUserModel } from '@domains/user';
  */
 export abstract class AbstractUserModelMapper {
   /**
-   * The constructor is protected to ensure this abstract class cannot be
-   * instantiated directly, but only through subclasses.
+   * Restricts instantiation to subclasses.
    */
   protected constructor() {}
 
