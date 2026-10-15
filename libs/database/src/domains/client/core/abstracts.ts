@@ -1,4 +1,5 @@
-import { type IClientServiceConfiguration } from '@domains/client';
+import { type IClientServiceConfiguration, type IClientServiceOptions } from '@domains/client';
+import { type AbstractPathService } from '@domains/path';
 
 /**
  * Abstract base class for client services.
@@ -10,16 +11,21 @@ export abstract class AbstractClientService {
    * Client configuration options.
    */
   protected readonly configuration: IClientServiceConfiguration;
+  /**
+   * Resolves the filesystem paths.
+   */
+  protected readonly pathService: AbstractPathService;
 
   /**
    * Restricts instantiation to subclasses.
    *
-   * @param configuration - Client configuration options.
+   * @param options - Client service options.
    */
-  protected constructor(configuration: IClientServiceConfiguration) {
-    this.validateConfiguration(configuration);
+  protected constructor({ clientValidator, configuration, pathService }: IClientServiceOptions) {
+    clientValidator.validate(configuration);
 
     this.configuration = Object.freeze({ ...configuration });
+    this.pathService = pathService;
   }
 
   /**
@@ -36,10 +42,18 @@ export abstract class AbstractClientService {
    * @returns The certificate content, or `undefined` when no certificate is configured.
    */
   protected abstract readCertificate(): string | undefined;
+}
+
+export abstract class AbstractClientValidator {
+  /**
+   * Restricts instantiation to subclasses.
+   */
+  protected constructor() {}
+
   /**
    * Validates that the configuration provides every required connection value.
    *
    * @param configuration - Client configuration options to validate.
    */
-  protected abstract validateConfiguration(configuration: IClientServiceConfiguration): void;
+  public abstract validate(configuration: IClientServiceConfiguration): void;
 }

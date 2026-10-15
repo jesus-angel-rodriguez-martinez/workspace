@@ -14,21 +14,26 @@ rush add -p @libs/database
 
 ### Client
 
-`ClientService` builds a database client for a caller-provided schema, mapping snake_case columns to camelCase:
+`ClientService` builds a database client for a caller-provided schema, mapping snake_case columns to camelCase. Its configuration is validated on construction by the injected `ClientValidator`:
 
 ```ts
 import { type IDatabaseSchema } from '@infrastructures/database';
-import { ClientService, PathService } from '@libs/database';
+import { ClientService, ClientValidator, PathService } from '@libs/database';
+
+const clientValidator = new ClientValidator();
 
 const pathService = new PathService();
 
 const clientService = new ClientService<IDatabaseSchema>({
-  database: 'database',
-  host: 'localhost',
-  password: 'password',
-  pathService,
-  port: 5432,
-  user: 'user'
+  clientValidator,
+  configuration: {
+    database: 'database',
+    host: 'localhost',
+    password: 'password',
+    port: 5432,
+    user: 'user'
+  },
+  pathService
 });
 
 const database = clientService.createClient();
@@ -91,7 +96,7 @@ This writes a timestamped `<YYYYMMDDHHMMSS>_<name>.ts` file (with empty `up` and
 
 ### Errors
 
-- `AggregateClientConfigurationError`: Thrown when constructing a `ClientService` with one or more missing connection values. Its message lists each underlying error (`code` and `detail`).
+- `AggregateClientConfigurationError`: Thrown by `ClientValidator` when constructing a `ClientService` with one or more missing connection values. Its message lists each underlying error (`code` and `detail`).
 - `InvalidClientCertificateFileNameError`: Thrown when the certificate file name is not a plain file name (e.g. it contains path separators).
 - `InvalidMigrationNameError`: Thrown when scaffolding a migration whose name is not lowercase letters and digits separated by single hyphens (no leading, trailing, or consecutive hyphens).
 - `MigrationFailedError`: Thrown when a migration fails to run.

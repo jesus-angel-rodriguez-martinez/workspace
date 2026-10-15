@@ -7,7 +7,7 @@ import { shutdown } from '@infrastructures/lifecycle';
 import { composeLogger } from '@infrastructures/logger';
 import { composeToken } from '@infrastructures/token';
 import { composeUser } from '@infrastructures/user';
-import { ClientService, PathService } from '@libs/database';
+import { ClientService, ClientValidator, PathService } from '@libs/database';
 import { type AbstractLoggerService } from '@libs/logger';
 import { CryptographyValidator, TokenValidator } from '@libs/security';
 
@@ -76,14 +76,20 @@ const init = async () => {
     const pathService = new PathService();
     loggerService.debug('🔧 Path service ready');
 
+    const clientValidator = new ClientValidator();
+    loggerService.debug('🔧 Client validator ready');
+
     const clientService = new ClientService<IDatabaseSchema>({
-      certificateFileName: DATABASE_CERTIFICATE_FILE_NAME,
-      database: DATABASE,
-      host: DATABASE_HOST,
-      password: DATABASE_PASSWORD,
-      pathService,
-      port: DATABASE_PORT,
-      user: DATABASE_USER
+      clientValidator,
+      configuration: {
+        certificateFileName: DATABASE_CERTIFICATE_FILE_NAME,
+        database: DATABASE,
+        host: DATABASE_HOST,
+        password: DATABASE_PASSWORD,
+        port: DATABASE_PORT,
+        user: DATABASE_USER
+      },
+      pathService
     });
     loggerService.debug('🔧 Client service ready');
 
