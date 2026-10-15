@@ -3,7 +3,7 @@ import {
   type AbstractUserModelMapper,
   type ICreateUser,
   type ISecureUser,
-  type IUserAppConfiguration,
+  type IUserAppOptions,
   type IUserRepository
 } from '@domains/user';
 import { type AbstractCryptographyService } from '@libs/security';
@@ -32,14 +32,14 @@ export abstract class AbstractUserApp {
   /**
    * Restricts instantiation to subclasses.
    *
-   * @param configuration - User App configuration options.
+   * @param options - User App options.
    */
   protected constructor({
     createUserValidator,
     cryptographyService,
     userModelMapper,
     userRepository
-  }: IUserAppConfiguration) {
+  }: IUserAppOptions) {
     this.createUserValidator = createUserValidator;
     this.cryptographyService = cryptographyService;
     this.userModelMapper = userModelMapper;

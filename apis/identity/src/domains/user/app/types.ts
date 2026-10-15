@@ -5,21 +5,21 @@ import {
 } from '@domains/user';
 import { type AbstractCryptographyService } from '@libs/security';
 
-export interface IUserAppConfiguration {
+export interface IUserAppOptions {
   /**
    * Validates user creation business rules.
    */
-  createUserValidator: AbstractCreateUserValidator;
+  readonly createUserValidator: AbstractCreateUserValidator;
   /**
    * Provides cryptographic utilities for securely hashing.
    */
-  cryptographyService: AbstractCryptographyService;
+  readonly cryptographyService: AbstractCryptographyService;
   /**
    * Maps user persistence models to domain entities.
    */
-  userModelMapper: AbstractUserModelMapper;
+  readonly userModelMapper: AbstractUserModelMapper;
   /**
    * Provides access to user data.
    */
-  userRepository: IUserRepository;
+  readonly userRepository: IUserRepository;
 }

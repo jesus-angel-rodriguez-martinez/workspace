@@ -6,27 +6,25 @@ import {
 } from '@infrastructures/authentication';
 import { type AbstractCryptographyService, type AbstractTokenService } from '@libs/security';
 
-export type ComposeAuthentication = (
-  configuration: IComposeAuthenticationConfiguration
-) => IComposedAuthentication;
+export type ComposeAuthentication = (options: IComposeAuthenticationOptions) => IComposedAuthentication;
 
-export interface IComposeAuthenticationConfiguration {
+export interface IComposeAuthenticationOptions {
   /**
    * Provides cryptographic utilities.
    */
-  cryptographyService: AbstractCryptographyService;
+  readonly cryptographyService: AbstractCryptographyService;
   /**
    * Provides token utilities.
    */
-  tokenService: AbstractTokenService;
+  readonly tokenService: AbstractTokenService;
   /**
    * Provides user use cases.
    */
-  userApp: AbstractUserApp;
+  readonly userApp: AbstractUserApp;
   /**
    * Provides access to user data.
    */
-  userRepository: IUserRepository;
+  readonly userRepository: IUserRepository;
 }
 
 export interface IComposedAuthentication {

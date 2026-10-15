@@ -3,17 +3,17 @@ import { type IDatabase } from '@infrastructures/database';
 import { type AbstractUserApiMapper } from '@infrastructures/user';
 import { type AbstractCryptographyService } from '@libs/security';
 
-export type ComposeUser = (configuration: IComposeUserConfiguration) => IComposedUser;
+export type ComposeUser = (options: IComposeUserOptions) => IComposedUser;
 
-export interface IComposeUserConfiguration {
+export interface IComposeUserOptions {
   /**
    * Provides cryptographic utilities.
    */
-  cryptographyService: AbstractCryptographyService;
+  readonly cryptographyService: AbstractCryptographyService;
   /**
    * Provides access to the database.
    */
-  database: IDatabase;
+  readonly database: IDatabase;
 }
 
 export interface IComposedUser {

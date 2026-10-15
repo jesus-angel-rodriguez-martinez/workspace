@@ -7,27 +7,27 @@ import { type AbstractUserApiMapper } from '@infrastructures/user';
 import { type AbstractLoggerService } from '@libs/logger';
 import { type INestApplication } from '@nestjs/common';
 
-export type ComposeApi = (configuration: IComposeApiConfiguration) => Promise<INestApplication>;
+export type ComposeApi = (options: IComposeApiOptions) => Promise<INestApplication>;
 
-export interface IComposeApiConfiguration {
+export interface IComposeApiOptions {
   /**
    * Responsible for mapping authentication API errors.
    */
-  authenticationApiMapper: AbstractAuthenticationApiMapper;
+  readonly authenticationApiMapper: AbstractAuthenticationApiMapper;
   /**
    * Provides authentication use cases.
    */
-  authenticationApp: AbstractAuthenticationApp;
+  readonly authenticationApp: AbstractAuthenticationApp;
   /**
    * Responsible for mapping authentication responses.
    */
-  authenticationResponseMapper: AbstractAuthenticationResponseMapper;
+  readonly authenticationResponseMapper: AbstractAuthenticationResponseMapper;
   /**
    * Logging service used for structured output and diagnostics.
    */
-  loggerService: AbstractLoggerService;
+  readonly loggerService: AbstractLoggerService;
   /**
    * Responsible for mapping user API errors.
    */
-  userApiMapper: AbstractUserApiMapper;
+  readonly userApiMapper: AbstractUserApiMapper;
 }

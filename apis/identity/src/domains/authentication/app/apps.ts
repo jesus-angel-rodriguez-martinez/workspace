@@ -1,6 +1,6 @@
 import {
   AbstractAuthenticationApp,
-  type IAuthenticationAppConfiguration,
+  type IAuthenticationAppOptions,
   type IUserCredentials,
   WrongCredentialsError
 } from '@domains/authentication';
@@ -8,8 +8,8 @@ import { type ICreateUser } from '@domains/user';
 import { type AuthenticationToken } from '@libs/security';
 
 export class AuthenticationApp extends AbstractAuthenticationApp {
-  public constructor(configuration: IAuthenticationAppConfiguration) {
-    super(configuration);
+  public constructor(options: IAuthenticationAppOptions) {
+    super(options);
   }
 
   public async logIn(userCredentials: IUserCredentials): Promise<AuthenticationToken> {

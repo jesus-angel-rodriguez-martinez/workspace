@@ -1,11 +1,11 @@
 import { AbstractApiMapper, type ApiError } from '@domains/api';
-import { type IApiMapperConfiguration } from '@infrastructures/api';
+import { type IApiMapperOptions } from '@infrastructures/api';
 import { type KernelError } from '@libs/kernel';
 
 export class ApiMapper extends AbstractApiMapper {
   private readonly mappers: AbstractApiMapper[];
 
-  public constructor({ mappers }: IApiMapperConfiguration) {
+  public constructor({ mappers }: IApiMapperOptions) {
     super();
     this.mappers = mappers;
   }

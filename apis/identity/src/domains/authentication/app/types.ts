@@ -1,21 +1,21 @@
 import { type AbstractUserApp, type IUserRepository } from '@domains/user';
 import { type AbstractCryptographyService, type AbstractTokenService } from '@libs/security';
 
-export interface IAuthenticationAppConfiguration {
+export interface IAuthenticationAppOptions {
   /**
    * Provides cryptographic utilities.
    */
-  cryptographyService: AbstractCryptographyService;
+  readonly cryptographyService: AbstractCryptographyService;
   /**
    * Provides token utilities.
    */
-  tokenService: AbstractTokenService;
+  readonly tokenService: AbstractTokenService;
   /**
    * Provides user use cases.
    */
-  userApp: AbstractUserApp;
+  readonly userApp: AbstractUserApp;
   /**
    * Provides access to user data.
    */
-  userRepository: IUserRepository;
+  readonly userRepository: IUserRepository;
 }

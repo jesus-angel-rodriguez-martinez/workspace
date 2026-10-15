@@ -2,13 +2,13 @@ import {
   AbstractUserApp,
   type ICreateUser,
   type ISecureUser,
-  type IUserAppConfiguration,
+  type IUserAppOptions,
   UserAlreadyExistsError
 } from '@domains/user';
 
 export class UserApp extends AbstractUserApp {
-  public constructor(configuration: IUserAppConfiguration) {
-    super(configuration);
+  public constructor(options: IUserAppOptions) {
+    super(options);
   }
 
   public async create(payload: ICreateUser): Promise<ISecureUser> {

@@ -7,7 +7,7 @@ import {
   type UnknownError
 } from '@domains/api';
 import { STATUS_CODE } from '@domains/status-code';
-import { type IApiExceptionFilterConfiguration } from '@infrastructures/api';
+import { type IApiExceptionFilterOptions } from '@infrastructures/api';
 import { KernelError } from '@libs/kernel';
 import { type AbstractLoggerService } from '@libs/logger';
 import { type ArgumentsHost, Catch, type ExceptionFilter } from '@nestjs/common';
@@ -18,7 +18,7 @@ export class ApiExceptionFilter implements ExceptionFilter {
   private readonly apiMapper: AbstractApiMapper;
   private readonly loggerService: AbstractLoggerService;
 
-  constructor({ apiMapper, loggerService }: IApiExceptionFilterConfiguration) {
+  constructor({ apiMapper, loggerService }: IApiExceptionFilterOptions) {
     this.apiMapper = apiMapper;
     this.loggerService = loggerService;
   }

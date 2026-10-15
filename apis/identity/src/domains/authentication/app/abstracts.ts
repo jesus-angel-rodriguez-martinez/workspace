@@ -1,4 +1,4 @@
-import { type IAuthenticationAppConfiguration, type IUserCredentials } from '@domains/authentication';
+import { type IAuthenticationAppOptions, type IUserCredentials } from '@domains/authentication';
 import { type AbstractUserApp, type ICreateUser, type IUserRepository } from '@domains/user';
 import {
   type AbstractCryptographyService,
@@ -30,14 +30,14 @@ export abstract class AbstractAuthenticationApp {
   /**
    * Restricts instantiation to subclasses.
    *
-   * @param configuration - Authentication App configuration options.
+   * @param options - Authentication App options.
    */
   protected constructor({
     cryptographyService,
     tokenService,
     userApp,
     userRepository
-  }: IAuthenticationAppConfiguration) {
+  }: IAuthenticationAppOptions) {
     this.cryptographyService = cryptographyService;
     this.tokenService = tokenService;
     this.userApp = userApp;
