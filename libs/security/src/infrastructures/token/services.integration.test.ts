@@ -20,23 +20,23 @@ describe('TokenService', () => {
     tokenService = new TokenService({ configuration, tokenValidator });
   });
 
-  describe('generateToken', () => {
+  describe('issueToken', () => {
     it('returns a token with three segments', () => {
-      const token = tokenService.generateToken(userId);
+      const token = tokenService.issueToken(userId);
 
       expect(token.split('.')).toHaveLength(3);
     });
   });
 
   describe('verifyToken', () => {
-    it('returns the payload when the token is valid', () => {
-      const token = tokenService.generateToken(userId);
+    it('returns the decoded token when the token is valid', () => {
+      const token = tokenService.issueToken(userId);
 
-      const payload = tokenService.verifyToken(token);
+      const decodedToken = tokenService.verifyToken(token);
 
-      expect(payload.sub).toBe(userId);
-      expect(payload.type).toBe(configuration.type);
-      expect(payload.exp - payload.iat).toBe(configuration.expiresIn);
+      expect(decodedToken.sub).toBe(userId);
+      expect(decodedToken.type).toBe(configuration.type);
+      expect(decodedToken.exp - decodedToken.iat).toBe(configuration.expiresIn);
     });
 
     it('throws a TokenValidationError when the token type differs, even when signed with the same secret', () => {
@@ -45,7 +45,7 @@ describe('TokenService', () => {
         tokenValidator
       });
 
-      const refreshToken = refreshTokenService.generateToken(userId);
+      const refreshToken = refreshTokenService.issueToken(userId);
 
       expect(() => tokenService.verifyToken(refreshToken)).toThrow(TokenValidationError);
     });
@@ -56,7 +56,7 @@ describe('TokenService', () => {
         tokenValidator
       });
 
-      const token = otherTokenService.generateToken(userId);
+      const token = otherTokenService.issueToken(userId);
 
       expect(() => tokenService.verifyToken(token)).toThrow(TokenValidationError);
     });
@@ -67,7 +67,7 @@ describe('TokenService', () => {
         tokenValidator
       });
 
-      const token = expiredTokenService.generateToken(userId);
+      const token = expiredTokenService.issueToken(userId);
 
       expect(() => tokenService.verifyToken(token)).toThrow(TokenExpiryError);
     });

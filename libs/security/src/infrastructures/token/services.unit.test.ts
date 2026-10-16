@@ -54,8 +54,8 @@ describe('TokenService', () => {
     });
   });
 
-  describe('generateToken', () => {
-    it('signs a payload derived from the user id and type with the configured secret and algorithm', () => {
+  describe('issueToken', () => {
+    it('signs a token derived from the user id and type with the configured secret and algorithm', () => {
       const milliseconds = 1_000;
       const nowInSeconds = 1_700_000_000;
 
@@ -63,7 +63,7 @@ describe('TokenService', () => {
 
       signMock.mockImplementationOnce(() => token);
 
-      const generatedToken = tokenService.generateToken(userId);
+      const issuedToken = tokenService.issueToken(userId);
 
       expect(signMock).toHaveBeenCalledWith(
         {
@@ -75,7 +75,7 @@ describe('TokenService', () => {
         configuration.secret,
         { algorithm: configuration.algorithm }
       );
-      expect(generatedToken).toBe(token);
+      expect(issuedToken).toBe(token);
     });
 
     it('throws a TokenIssuanceError when signing fails', () => {
@@ -83,26 +83,26 @@ describe('TokenService', () => {
         throw new Error();
       });
 
-      expect(() => tokenService.generateToken(userId)).toThrow(TokenIssuanceError);
+      expect(() => tokenService.issueToken(userId)).toThrow(TokenIssuanceError);
     });
   });
 
   describe('verifyToken', () => {
-    it('returns the payload when the token is valid', () => {
-      const expectedPayload = {
+    it('returns the decoded token when the token is valid', () => {
+      const expectedDecodedToken = {
         exp: 1_700_003_600,
         iat: 1_700_000_000,
         sub: userId,
         type: configuration.type
       };
-      verifyMock.mockImplementationOnce(() => expectedPayload);
+      verifyMock.mockImplementationOnce(() => expectedDecodedToken);
 
       const verifiedToken = tokenService.verifyToken(token);
 
       expect(verifyMock).toHaveBeenCalledWith(token, configuration.secret, {
         algorithms: [configuration.algorithm]
       });
-      expect(verifiedToken).toBe(expectedPayload);
+      expect(verifiedToken).toBe(expectedDecodedToken);
     });
 
     it('throws a TokenExpiryError when the token has expired', () => {

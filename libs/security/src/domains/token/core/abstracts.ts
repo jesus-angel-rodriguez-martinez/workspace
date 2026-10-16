@@ -1,6 +1,6 @@
 import {
-  type AuthenticationToken,
-  type ITokenPayload,
+  type DecodedToken,
+  type EncodedToken,
   type ITokenServiceConfiguration,
   type ITokenServiceOptions
 } from '@domains/token';
@@ -23,21 +23,21 @@ export abstract class AbstractTokenService {
   }
 
   /**
-   * Generates and signs a new authentication token for the specified user.
+   * Issues and signs a new token of the configured type for the specified user.
    *
    * @param userId - The unique identifier of the authenticated user for whom the token will be issued.
    *
-   * @returns The generated authentication token string.
+   * @returns The signed encoded token.
    */
-  public abstract generateToken(userId: string): AuthenticationToken;
+  public abstract issueToken(userId: string): EncodedToken;
   /**
-   * Verifies the signature, expiration and type of an authentication token.
+   * Verifies and decodes an encoded token.
    *
-   * @param token - The authentication token to verify.
+   * @param token - The encoded token to verify.
    *
-   * @returns The decoded token payload when the token is valid.
+   * @returns The decoded token when the encoded token is valid.
    */
-  public abstract verifyToken(token: AuthenticationToken): ITokenPayload;
+  public abstract verifyToken(token: EncodedToken): DecodedToken;
 }
 
 export abstract class AbstractTokenValidator {

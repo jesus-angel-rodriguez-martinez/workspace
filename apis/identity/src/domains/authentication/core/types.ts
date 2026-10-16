@@ -1,6 +1,6 @@
 import { type InvalidRefreshTokenError, type WrongCredentialsError } from '@domains/authentication';
 import { type IUser } from '@domains/user';
-import { type AuthenticationToken } from '@libs/security';
+import { type EncodedToken } from '@libs/security';
 
 /**
  * Represents the pair of tokens issued to an authenticated user.
@@ -9,11 +9,11 @@ export interface IAuthenticationTokens {
   /**
    * The short-lived token presented to authorize requests.
    */
-  accessToken: AuthenticationToken;
+  accessToken: EncodedToken;
   /**
    * The long-lived token presented only to obtain a new access token.
    */
-  refreshToken: AuthenticationToken;
+  refreshToken: EncodedToken;
 }
 
 /**

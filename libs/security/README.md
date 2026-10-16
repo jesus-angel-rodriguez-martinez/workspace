@@ -39,7 +39,7 @@ const areCredentialsValid = await cryptographyService.verifyPassword(password, s
 
 ### Token
 
-`TokenService` generates and verifies signed JWT authentication tokens from a user id.
+`TokenService` issues and verifies signed JWT tokens for a user id.
 Each instance issues and accepts a single token `type` (`access` or `refresh`).
 Its configuration is validated on construction by the injected `TokenValidator`.
 
@@ -61,7 +61,7 @@ const accessTokenService = new TokenService({
 });
 
 const userId = '550e8400-e29b-41d4-a716-446655440000';
-const accessToken = accessTokenService.generateToken(userId);
+const accessToken = accessTokenService.issueToken(userId);
 const { exp, iat, sub, type } = accessTokenService.verifyToken(accessToken);
 ```
 
@@ -83,7 +83,7 @@ const refreshTokenService = new TokenService({
 });
 
 const userId = '550e8400-e29b-41d4-a716-446655440000';
-const refreshToken = refreshTokenService.generateToken(userId);
+const refreshToken = refreshTokenService.issueToken(userId);
 const { exp, iat, sub, type } = refreshTokenService.verifyToken(refreshToken);
 ```
 
@@ -96,21 +96,13 @@ const { exp, iat, sub, type } = refreshTokenService.verifyToken(refreshToken);
 3. When the access token expires, the client sends the refresh token — and only the refresh token — to the refresh endpoint, which verifies it and issues a new access token.
 4. When the refresh token expires, the client must log in again.
 
-#### Security model
-
-- **Token confusion is prevented twice.** A refresh token cannot be used as an access token (nor the other way round): the `type` claim is checked on verification, so a token of the wrong type is rejected with `TokenValidationError` even when both services share a secret. Using distinct secrets adds a second barrier and limits the blast radius if one leaks.
-- **Algorithm pinning.** Verification only accepts the configured `algorithm`, which rules out `alg: none` and algorithm-confusion attacks.
-- **Stateless tokens are not revocable.** Neither token is stored, so logging out cannot invalidate them and a stolen refresh token stays valid until it expires. Keep access tokens short-lived, and check on refresh that the user still exists so deleting a user ends their session.
-- **No rotation while stateless.** Rotating a stateless refresh token (issuing a new one on each refresh) does not invalidate the old one, and extends the session indefinitely for whoever holds either token. The refresh token is therefore returned unchanged, so every session has an absolute end. Rotation with reuse detection requires persisting refresh tokens server-side.
-- **Client storage.** Refresh tokens are credentials: they should be sent only to the refresh endpoint, over HTTPS, and stored outside the reach of scripts (e.g. an `HttpOnly`, `Secure`, `SameSite=Strict` cookie scoped to that path) rather than in `localStorage`.
-
 ### Errors
 
 - `AggregateCryptographyConfigurationError`: Thrown by `CryptographyValidator` when constructing a `CryptographyService` with one or more configuration values that do not meet their security requirement. Its message lists each underlying error (`code` and `detail`).
 - `AggregateTokenConfigurationError`: Thrown by `TokenValidator` when constructing a `TokenService` with one or more configuration values below their minimum security requirement. Its message lists each underlying error (`code` and `detail`).
 - `InvalidCryptographyKeyLengthError`: Thrown when the configured key length differs from the output length of the digest.
 - `TokenExpiryError`: Thrown when verifying a token that has expired.
-- `TokenIssuanceError`: Thrown when an authentication token cannot be issued.
+- `TokenIssuanceError`: Thrown when a token cannot be issued.
 - `TokenValidationError`: Thrown when verifying a token whose signature or format is invalid, or whose `type` differs from the configured one.
 - `WeakCryptographyIterationsError`: Thrown when the configured number of iterations is below its minimum security requirement.
 - `WeakCryptographySaltLengthError`: Thrown when the configured salt length is below its minimum security requirement.

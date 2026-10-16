@@ -8,7 +8,7 @@ import {
   WrongCredentialsError
 } from '@domains/authentication';
 import { type ICreateUser } from '@domains/user';
-import { type AuthenticationToken, type ITokenPayload } from '@libs/security';
+import { type DecodedToken, type EncodedToken } from '@libs/security';
 
 export class AuthenticationApp extends AbstractAuthenticationApp {
   public constructor(options: IAuthenticationAppOptions) {
@@ -50,7 +50,7 @@ export class AuthenticationApp extends AbstractAuthenticationApp {
       throw new InvalidRefreshTokenError();
     }
 
-    const accessToken = this.accessTokenService.generateToken(userModel.id);
+    const accessToken = this.accessTokenService.issueToken(userModel.id);
     return { accessToken, refreshToken };
   }
 
@@ -62,15 +62,15 @@ export class AuthenticationApp extends AbstractAuthenticationApp {
   }
 
   protected generateTokens(userId: string): IAuthenticationTokens {
-    const accessToken = this.accessTokenService.generateToken(userId);
-    const refreshToken = this.refreshTokenService.generateToken(userId);
+    const accessToken = this.accessTokenService.issueToken(userId);
+    const refreshToken = this.refreshTokenService.issueToken(userId);
     return { accessToken, refreshToken };
   }
 
-  protected verifyRefreshToken(refreshToken: AuthenticationToken): ITokenPayload {
+  protected verifyRefreshToken(refreshToken: EncodedToken): DecodedToken {
     try {
-      const tokenPayload = this.refreshTokenService.verifyToken(refreshToken);
-      return tokenPayload;
+      const decodedToken = this.refreshTokenService.verifyToken(refreshToken);
+      return decodedToken;
     } catch (error) {
       throw new InvalidRefreshTokenError({ cause: error });
     }

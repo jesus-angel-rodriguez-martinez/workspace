@@ -1,18 +1,34 @@
 import { type AbstractTokenValidator } from '@domains/token';
 
 /**
- * The string representation of the issued authentication token.
+ * The decoded representation of an issued token.
  */
-export type AuthenticationToken = string;
+export type DecodedToken = IAccessToken | IRefreshToken;
 
 /**
- * The purpose of an issued token.
- * - `access`: short-lived, presented to authorize requests.
- * - `refresh`: long-lived, presented only to obtain new access tokens.
+ * The encoded string representation of an issued token.
  */
-export type TokenType = 'access' | 'refresh';
+export type EncodedToken = string;
 
-export interface ITokenPayload {
+/**
+ * The purpose of the token.
+ */
+export type TokenType = DecodedToken['type'];
+
+/**
+ * A short-lived token, presented to authorize requests.
+ */
+export interface IAccessToken extends IBaseToken {
+  /**
+   * The purpose of the token.
+   */
+  type: 'access';
+}
+
+/**
+ * The claims shared by every issued token.
+ */
+export interface IBaseToken {
   /**
    * The expiration time, in seconds since the Unix epoch.
    */
@@ -25,10 +41,16 @@ export interface ITokenPayload {
    * The unique identifier of the user.
    */
   sub: string;
+}
+
+/**
+ * A long-lived token, presented only to obtain new access tokens.
+ */
+export interface IRefreshToken extends IBaseToken {
   /**
    * The purpose of the token.
    */
-  type: TokenType;
+  type: 'refresh';
 }
 
 export interface ITokenServiceConfiguration {
@@ -45,7 +67,7 @@ export interface ITokenServiceConfiguration {
    */
   readonly secret: string;
   /**
-   * The token type to sign and verify.
+   * The purpose of the token.
    */
   readonly type: TokenType;
 }

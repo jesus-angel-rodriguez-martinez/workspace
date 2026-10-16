@@ -1,8 +1,8 @@
 import jsonwebtoken from 'jsonwebtoken';
 import {
   AbstractTokenService,
-  type AuthenticationToken,
-  type ITokenPayload,
+  type DecodedToken,
+  type EncodedToken,
   type ITokenServiceOptions,
   TokenExpiryError,
   TokenIssuanceError,
@@ -16,52 +16,48 @@ export class TokenService extends AbstractTokenService {
     super(options);
   }
 
-  public generateToken(userId: string): AuthenticationToken {
+  public issueToken(userId: string): EncodedToken {
     try {
       const { algorithm, expiresIn, secret, type } = this.configuration;
 
       const milliseconds = 1_000;
       const nowInSeconds = Math.floor(Date.now() / milliseconds);
 
-      const tokenPayload: ITokenPayload = {
+      const decodedToken: DecodedToken = {
         exp: nowInSeconds + expiresIn,
         iat: nowInSeconds,
         sub: userId,
         type
       };
 
-      const token = sign(tokenPayload, secret, {
+      const encodedToken = sign(decodedToken, secret, {
         algorithm
       });
-      return token;
+      return encodedToken;
     } catch (error) {
       throw new TokenIssuanceError({ cause: error });
     }
   }
 
-  public verifyToken(token: AuthenticationToken): ITokenPayload {
-    const payload = this.verifySignature(token);
-
-    if (payload.type !== this.configuration.type) {
-      throw new TokenValidationError();
-    }
-
-    return payload;
-  }
-
-  protected verifySignature(token: AuthenticationToken): ITokenPayload {
+  public verifyToken(token: EncodedToken): DecodedToken {
     try {
-      const { algorithm, secret } = this.configuration;
+      const { algorithm, secret, type } = this.configuration;
 
-      const payload = verify(token, secret, {
+      const decodedToken = verify(token, secret, {
         algorithms: [algorithm]
-      }) as ITokenPayload;
-      return payload;
+      }) as DecodedToken;
+
+      if (decodedToken.type !== type) {
+        throw new TokenValidationError();
+      }
+      return decodedToken;
     } catch (error) {
+      if (error instanceof TokenValidationError) {
+        throw error;
+      }
       if (error instanceof TokenExpiredError) {
         throw new TokenExpiryError({ cause: error });
       }
-
       throw new TokenValidationError({ cause: error });
     }
   }
