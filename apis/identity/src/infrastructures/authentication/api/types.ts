@@ -1,6 +1,9 @@
-import { type WrongCredentialsApiError } from '@infrastructures/authentication';
+import {
+  type InvalidRefreshTokenApiError,
+  type WrongCredentialsApiError
+} from '@infrastructures/authentication';
 
 /**
  * Represents the complete list of authentication API errors.
  */
-export type AuthenticationApiError = WrongCredentialsApiError;
+export type AuthenticationApiError = InvalidRefreshTokenApiError | WrongCredentialsApiError;

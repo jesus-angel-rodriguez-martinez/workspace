@@ -41,7 +41,9 @@ const areCredentialsValid = await cryptographyService.verifyPassword(password, s
 
 `TokenService` generates and verifies signed JWT authentication tokens from a user id.
 Each instance issues and accepts a single token `type` (`access` or `refresh`).
-Its configuration is validated on construction by the injected `TokenValidator`:
+Its configuration is validated on construction by the injected `TokenValidator`.
+
+#### Access token
 
 ```ts
 import { TokenService, TokenValidator } from '@libs/security';
@@ -58,6 +60,18 @@ const accessTokenService = new TokenService({
   tokenValidator
 });
 
+const userId = '550e8400-e29b-41d4-a716-446655440000';
+const accessToken = accessTokenService.generateToken(userId);
+const { exp, iat, sub, type } = accessTokenService.verifyToken(accessToken);
+```
+
+#### Refresh token
+
+```ts
+import { TokenService, TokenValidator } from '@libs/security';
+
+const tokenValidator = new TokenValidator();
+
 const refreshTokenService = new TokenService({
   configuration: {
     algorithm: 'HS256',
@@ -68,20 +82,12 @@ const refreshTokenService = new TokenService({
   tokenValidator
 });
 
-// On log in: issue the pair.
 const userId = '550e8400-e29b-41d4-a716-446655440000';
-const accessToken = accessTokenService.generateToken(userId);
 const refreshToken = refreshTokenService.generateToken(userId);
-
-// On request: verify the access token.
-const { exp, iat, sub, type } = accessTokenService.verifyToken(accessToken);
-
-// On refresh: verify the refresh token, then issue a new access token only.
-const { sub: refreshedUserId } = refreshTokenService.verifyToken(refreshToken);
-const newAccessToken = accessTokenService.generateToken(refreshedUserId);
+const { exp, iat, sub, type } = refreshTokenService.verifyToken(refreshToken);
 ```
 
-### Refresh token
+### Refresh flow
 
 #### How it works
 

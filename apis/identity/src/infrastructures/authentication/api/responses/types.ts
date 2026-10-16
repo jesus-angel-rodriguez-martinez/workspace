@@ -1,8 +1,12 @@
 import { type AuthenticationToken } from '@libs/security';
 
-export interface IAuthenticationTokenResponse {
+export interface IAuthenticationTokensResponse {
   /**
-   * The authentication token issued for the user.
+   * The short-lived token presented to authorize requests.
    */
-  token: AuthenticationToken;
+  accessToken: AuthenticationToken;
+  /**
+   * The long-lived token presented only to obtain a new access token.
+   */
+  refreshToken: AuthenticationToken;
 }

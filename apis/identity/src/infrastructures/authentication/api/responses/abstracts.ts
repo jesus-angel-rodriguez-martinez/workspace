@@ -1,5 +1,5 @@
-import { type IAuthenticationTokenResponse } from '@infrastructures/authentication';
-import { type AuthenticationToken } from '@libs/security';
+import { type IAuthenticationTokens } from '@domains/authentication';
+import { type IAuthenticationTokensResponse } from '@infrastructures/authentication';
 
 /**
  * Abstract base class for the Authentication response mapper.
@@ -11,11 +11,13 @@ export abstract class AbstractAuthenticationResponseMapper {
   protected constructor() {}
 
   /**
-   * Converts an authentication token into its token response representation.
+   * Converts the authentication tokens into their tokens response representation.
    *
-   * @param token - The authentication token to convert.
+   * @param authenticationTokens - The authentication tokens to convert.
    *
-   * @returns The corresponding authentication token response.
+   * @returns The corresponding authentication tokens response.
    */
-  public abstract toAuthenticationTokenResponse(token: AuthenticationToken): IAuthenticationTokenResponse;
+  public abstract toAuthenticationTokensResponse(
+    authenticationTokens: IAuthenticationTokens
+  ): IAuthenticationTokensResponse;
 }

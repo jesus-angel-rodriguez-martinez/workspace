@@ -10,13 +10,17 @@ export type ComposeAuthentication = (options: IComposeAuthenticationOptions) => 
 
 export interface IComposeAuthenticationOptions {
   /**
+   * Issues and verifies access tokens.
+   */
+  readonly accessTokenService: AbstractTokenService;
+  /**
    * Provides cryptographic utilities.
    */
   readonly cryptographyService: AbstractCryptographyService;
   /**
-   * Provides token utilities.
+   * Issues and verifies refresh tokens.
    */
-  readonly tokenService: AbstractTokenService;
+  readonly refreshTokenService: AbstractTokenService;
   /**
    * Provides user use cases.
    */

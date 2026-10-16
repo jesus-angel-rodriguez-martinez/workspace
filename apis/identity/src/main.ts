@@ -31,7 +31,8 @@ const init = async () => {
       DATABASE_PORT,
       DATABASE_USER,
       ENVIRONMENT,
-      JWT_SECRET
+      JWT_ACCESS_SECRET,
+      JWT_REFRESH_SECRET
     } = composeConfiguration({
       API_PORT: { required: true, type: 'number' },
       DATABASE: { required: true, type: 'string' },
@@ -41,7 +42,8 @@ const init = async () => {
       DATABASE_PORT: { required: true, type: 'number' },
       DATABASE_USER: { required: true, type: 'string' },
       ENVIRONMENT: { required: true, type: 'string' },
-      JWT_SECRET: { required: true, type: 'string' }
+      JWT_ACCESS_SECRET: { required: true, type: 'string' },
+      JWT_REFRESH_SECRET: { required: true, type: 'string' }
     });
     const isDevelopment = ENVIRONMENT === 'development';
 
@@ -58,8 +60,8 @@ const init = async () => {
     const cryptographyService = composeCryptography({
       configuration: {
         digest: 'sha256',
-        iterations: 100_000,
-        keyLength: 64,
+        iterations: 600_000,
+        keyLength: 32,
         saltLength: 16
       },
       cryptographyValidator
@@ -69,15 +71,27 @@ const init = async () => {
     const tokenValidator = new TokenValidator();
     loggerService.debug('🔧 Token validator ready');
 
-    const tokenService = composeToken({
+    const accessTokenService = composeToken({
       configuration: {
         algorithm: 'HS256',
-        expiresIn: 3_600,
-        secret: JWT_SECRET
+        expiresIn: 15 * 60,
+        secret: JWT_ACCESS_SECRET,
+        type: 'access'
       },
       tokenValidator
     });
-    loggerService.debug('🔧 Token service ready');
+    loggerService.debug('🔧 Access token service ready');
+
+    const refreshTokenService = composeToken({
+      configuration: {
+        algorithm: 'HS256',
+        expiresIn: 7 * 24 * 60 * 60,
+        secret: JWT_REFRESH_SECRET,
+        type: 'refresh'
+      },
+      tokenValidator
+    });
+    loggerService.debug('🔧 Refresh token service ready');
 
     const pathService = new PathService();
     loggerService.debug('🔧 Path service ready');
@@ -122,8 +136,9 @@ const init = async () => {
 
     const { authenticationApiMapper, authenticationApp, authenticationResponseMapper } =
       composeAuthentication({
+        accessTokenService,
         cryptographyService,
-        tokenService,
+        refreshTokenService,
         userApp,
         userRepository
       });

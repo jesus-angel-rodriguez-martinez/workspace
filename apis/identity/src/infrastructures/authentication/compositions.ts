@@ -6,16 +6,18 @@ import {
 } from '@infrastructures/authentication';
 
 export const composeAuthentication: ComposeAuthentication = ({
+  accessTokenService,
   cryptographyService,
-  tokenService,
+  refreshTokenService,
   userApp,
   userRepository
 }) => {
   const authenticationApiMapper = new AuthenticationApiMapper();
 
   const authenticationApp = new AuthenticationApp({
+    accessTokenService,
     cryptographyService,
-    tokenService,
+    refreshTokenService,
     userApp,
     userRepository
   });

@@ -1,23 +1,28 @@
-import { type IAuthenticationAppOptions, type IUserCredentials } from '@domains/authentication';
-import { type AbstractUserApp, type ICreateUser, type IUserRepository } from '@domains/user';
 import {
-  type AbstractCryptographyService,
-  type AbstractTokenService,
-  type AuthenticationToken
-} from '@libs/security';
+  type IAuthenticationAppOptions,
+  type IAuthenticationTokens,
+  type IRefreshCredentials,
+  type IUserCredentials
+} from '@domains/authentication';
+import { type AbstractUserApp, type ICreateUser, type IUserRepository } from '@domains/user';
+import { type AbstractCryptographyService, type AbstractTokenService } from '@libs/security';
 
 /**
  * Abstract base class for the Authentication App.
  */
 export abstract class AbstractAuthenticationApp {
   /**
+   * Issues and verifies access tokens.
+   */
+  protected readonly accessTokenService: AbstractTokenService;
+  /**
    * Provides cryptographic utilities.
    */
   protected readonly cryptographyService: AbstractCryptographyService;
   /**
-   * Provides token utilities.
+   * Issues and verifies refresh tokens.
    */
-  protected readonly tokenService: AbstractTokenService;
+  protected readonly refreshTokenService: AbstractTokenService;
   /**
    * Provides user use cases.
    */
@@ -33,13 +38,15 @@ export abstract class AbstractAuthenticationApp {
    * @param options - Authentication App options.
    */
   protected constructor({
+    accessTokenService,
     cryptographyService,
-    tokenService,
+    refreshTokenService,
     userApp,
     userRepository
   }: IAuthenticationAppOptions) {
+    this.accessTokenService = accessTokenService;
     this.cryptographyService = cryptographyService;
-    this.tokenService = tokenService;
+    this.refreshTokenService = refreshTokenService;
     this.userApp = userApp;
     this.userRepository = userRepository;
   }
@@ -49,15 +56,24 @@ export abstract class AbstractAuthenticationApp {
    *
    * @param userCredentials - The credentials provided by the user.
    *
-   * @returns A promise that resolves with the authentication token.
+   * @returns A promise that resolves with the access and refresh tokens.
    */
-  public abstract logIn(userCredentials: IUserCredentials): Promise<AuthenticationToken>;
+  public abstract logIn(userCredentials: IUserCredentials): Promise<IAuthenticationTokens>;
+  /**
+   * Issues a new access token from a valid refresh token.
+   * The refresh token is returned unchanged, so the session ends when it expires.
+   *
+   * @param refreshCredentials - The refresh token provided by the user.
+   *
+   * @returns A promise that resolves with the new access token and the same refresh token.
+   */
+  public abstract refresh(refreshCredentials: IRefreshCredentials): Promise<IAuthenticationTokens>;
   /**
    * Signs a new user up.
    *
    * @param payload - The data required to create the user.
    *
-   * @returns A promise that resolves with the authentication token.
+   * @returns A promise that resolves with the access and refresh tokens.
    */
-  public abstract signUp(payload: ICreateUser): Promise<AuthenticationToken>;
+  public abstract signUp(payload: ICreateUser): Promise<IAuthenticationTokens>;
 }

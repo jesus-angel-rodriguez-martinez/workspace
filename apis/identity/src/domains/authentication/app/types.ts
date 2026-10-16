@@ -3,13 +3,17 @@ import { type AbstractCryptographyService, type AbstractTokenService } from '@li
 
 export interface IAuthenticationAppOptions {
   /**
+   * Issues and verifies access tokens.
+   */
+  readonly accessTokenService: AbstractTokenService;
+  /**
    * Provides cryptographic utilities.
    */
   readonly cryptographyService: AbstractCryptographyService;
   /**
-   * Provides token utilities.
+   * Issues and verifies refresh tokens.
    */
-  readonly tokenService: AbstractTokenService;
+  readonly refreshTokenService: AbstractTokenService;
   /**
    * Provides user use cases.
    */

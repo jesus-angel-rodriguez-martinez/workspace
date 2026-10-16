@@ -1,15 +1,19 @@
+import { type IAuthenticationTokens } from '@domains/authentication';
 import {
   AbstractAuthenticationResponseMapper,
-  type IAuthenticationTokenResponse
+  type IAuthenticationTokensResponse
 } from '@infrastructures/authentication';
-import { type AuthenticationToken } from '@libs/security';
 
 export class AuthenticationResponseMapper extends AbstractAuthenticationResponseMapper {
   public constructor() {
     super();
   }
 
-  public toAuthenticationTokenResponse(token: AuthenticationToken): IAuthenticationTokenResponse {
-    return { token };
+  public toAuthenticationTokensResponse(
+    authenticationTokens: IAuthenticationTokens
+  ): IAuthenticationTokensResponse {
+    const { accessToken, refreshToken } = authenticationTokens;
+
+    return { accessToken, refreshToken };
   }
 }
