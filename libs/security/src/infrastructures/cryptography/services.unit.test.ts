@@ -5,7 +5,7 @@ import {
 } from '@domains/cryptography';
 
 const generatedSalt = Buffer.alloc(16, 1);
-const derivedHash = Buffer.alloc(64, 2);
+const derivedHash = Buffer.alloc(32, 2);
 
 const pbkdf2Mock = jest.fn(
   (_password, _salt, _iterations, _keyLength, _digest, callback: (error: null, result: Buffer) => void) =>
@@ -27,8 +27,8 @@ const { CryptographyService, CryptographyValidator } = await import('@infrastruc
 describe('CryptographyService', () => {
   const configuration = {
     digest: 'sha256',
-    iterations: 100_000,
-    keyLength: 64,
+    iterations: 600_000,
+    keyLength: 32,
     saltLength: 16
   } satisfies ICryptographyServiceConfiguration;
 
@@ -55,11 +55,18 @@ describe('CryptographyService', () => {
       expect(() => new CryptographyService(options)).toThrow('CRYPTOGRAPHY.WEAK_ITERATIONS');
     });
 
-    it('throws an AggregateCryptographyConfigurationError when the key length is below the minimum', () => {
+    it('throws an AggregateCryptographyConfigurationError when the key length is shorter than required', () => {
       const options = { configuration: { ...configuration, keyLength: 0 }, cryptographyValidator };
 
       expect(() => new CryptographyService(options)).toThrow(AggregateCryptographyConfigurationError);
-      expect(() => new CryptographyService(options)).toThrow('CRYPTOGRAPHY.WEAK_KEY_LENGTH');
+      expect(() => new CryptographyService(options)).toThrow('CRYPTOGRAPHY.INVALID_KEY_LENGTH');
+    });
+
+    it('throws an AggregateCryptographyConfigurationError when the key length is longer than required', () => {
+      const options = { configuration: { ...configuration, keyLength: 64 }, cryptographyValidator };
+
+      expect(() => new CryptographyService(options)).toThrow(AggregateCryptographyConfigurationError);
+      expect(() => new CryptographyService(options)).toThrow('CRYPTOGRAPHY.INVALID_KEY_LENGTH');
     });
 
     it('throws an AggregateCryptographyConfigurationError when the salt length is below the minimum', () => {
@@ -69,7 +76,7 @@ describe('CryptographyService', () => {
       expect(() => new CryptographyService(options)).toThrow('CRYPTOGRAPHY.WEAK_SALT_LENGTH');
     });
 
-    it('aggregates every configuration error when multiple values are below the minimum', () => {
+    it('aggregates every configuration error when multiple values are invalid', () => {
       const options = {
         configuration: { ...configuration, iterations: 0, keyLength: 0, saltLength: 0 },
         cryptographyValidator
@@ -88,7 +95,7 @@ describe('CryptographyService', () => {
         'CRYPTOGRAPHY.WEAK_ITERATIONS'
       );
       expect((caught as AggregateCryptographyConfigurationError).message).toContain(
-        'CRYPTOGRAPHY.WEAK_KEY_LENGTH'
+        'CRYPTOGRAPHY.INVALID_KEY_LENGTH'
       );
       expect((caught as AggregateCryptographyConfigurationError).message).toContain(
         'CRYPTOGRAPHY.WEAK_SALT_LENGTH'
@@ -146,7 +153,7 @@ describe('CryptographyService', () => {
     });
 
     it('returns false without comparing when the stored hash length differs from the derived hash', async () => {
-      const shorterStoredHash = Buffer.alloc(32, 3);
+      const shorterStoredHash = Buffer.alloc(16, 3);
 
       const isValid = await cryptographyService.verifyPassword(password, generatedSalt, shorterStoredHash);
 

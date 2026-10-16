@@ -19,6 +19,23 @@ export class AggregateCryptographyConfigurationError extends AggregateKernelErro
 }
 
 /**
+ * Error thrown when the configured key length differs from the output length of the digest.
+ */
+export class InvalidCryptographyKeyLengthError extends KernelError {
+  /**
+   * @param options - Optional error configuration options.
+   */
+  constructor(options: IKernelErrorOptions = {}) {
+    super({
+      cause: options.cause,
+      code: 'CRYPTOGRAPHY.INVALID_KEY_LENGTH',
+      detail: `The cryptography key length must be '${CRYPTOGRAPHY_RULES.key.LENGTH}' bytes.`,
+      title: 'Invalid cryptography key length'
+    });
+  }
+}
+
+/**
  * Error thrown when the configured number of iterations is below its minimum security requirement.
  */
 export class WeakCryptographyIterationsError extends KernelError {
@@ -31,23 +48,6 @@ export class WeakCryptographyIterationsError extends KernelError {
       code: 'CRYPTOGRAPHY.WEAK_ITERATIONS',
       detail: `The cryptography iterations must be at least '${CRYPTOGRAPHY_RULES.iterations.MIN}'.`,
       title: 'Weak cryptography iterations'
-    });
-  }
-}
-
-/**
- * Error thrown when the configured key length is below its minimum security requirement.
- */
-export class WeakCryptographyKeyLengthError extends KernelError {
-  /**
-   * @param options - Optional error configuration options.
-   */
-  constructor(options: IKernelErrorOptions = {}) {
-    super({
-      cause: options.cause,
-      code: 'CRYPTOGRAPHY.WEAK_KEY_LENGTH',
-      detail: `The cryptography key length must be at least '${CRYPTOGRAPHY_RULES.key.MIN_LENGTH}' bytes.`,
-      title: 'Weak cryptography key length'
     });
   }
 }

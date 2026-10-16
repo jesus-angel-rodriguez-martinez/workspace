@@ -31,7 +31,7 @@ export abstract class AbstractTokenService {
    */
   public abstract generateToken(userId: string): AuthenticationToken;
   /**
-   * Verifies the signature and expiration of an authentication token.
+   * Verifies the signature, expiration and type of an authentication token.
    *
    * @param token - The authentication token to verify.
    *

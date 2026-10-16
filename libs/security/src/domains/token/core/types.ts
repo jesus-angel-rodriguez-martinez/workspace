@@ -5,6 +5,13 @@ import { type AbstractTokenValidator } from '@domains/token';
  */
 export type AuthenticationToken = string;
 
+/**
+ * The purpose of an issued token.
+ * - `access`: short-lived, presented to authorize requests.
+ * - `refresh`: long-lived, presented only to obtain new access tokens.
+ */
+export type TokenType = 'access' | 'refresh';
+
 export interface ITokenPayload {
   /**
    * The expiration time, in seconds since the Unix epoch.
@@ -18,6 +25,10 @@ export interface ITokenPayload {
    * The unique identifier of the user.
    */
   sub: string;
+  /**
+   * The purpose of the token.
+   */
+  type: TokenType;
 }
 
 export interface ITokenServiceConfiguration {
@@ -33,6 +44,10 @@ export interface ITokenServiceConfiguration {
    * The secret key used to sign tokens.
    */
   readonly secret: string;
+  /**
+   * The token type to sign and verify.
+   */
+  readonly type: TokenType;
 }
 
 export interface ITokenServiceOptions {

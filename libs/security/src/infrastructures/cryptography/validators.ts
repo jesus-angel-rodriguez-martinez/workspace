@@ -3,8 +3,8 @@ import {
   AggregateCryptographyConfigurationError,
   CRYPTOGRAPHY_RULES,
   type ICryptographyServiceConfiguration,
+  InvalidCryptographyKeyLengthError,
   WeakCryptographyIterationsError,
-  WeakCryptographyKeyLengthError,
   WeakCryptographySaltLengthError
 } from '@domains/cryptography';
 import { type IKernelError } from '@libs/kernel';
@@ -22,8 +22,8 @@ export class CryptographyValidator extends AbstractCryptographyValidator {
     if (iterations < CRYPTOGRAPHY_RULES.iterations.MIN) {
       errors.push(new WeakCryptographyIterationsError());
     }
-    if (keyLength < CRYPTOGRAPHY_RULES.key.MIN_LENGTH) {
-      errors.push(new WeakCryptographyKeyLengthError());
+    if (keyLength !== CRYPTOGRAPHY_RULES.key.LENGTH) {
+      errors.push(new InvalidCryptographyKeyLengthError());
     }
     if (saltLength < CRYPTOGRAPHY_RULES.salt.MIN_LENGTH) {
       errors.push(new WeakCryptographySaltLengthError());

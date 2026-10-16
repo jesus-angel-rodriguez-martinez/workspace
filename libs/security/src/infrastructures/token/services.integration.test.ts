@@ -6,7 +6,8 @@ describe('TokenService', () => {
   const configuration = {
     algorithm: 'HS256',
     expiresIn: 3_600,
-    secret: 'fake-secret-value-used-for-integration-testing'
+    secret: 'fake-secret-value-used-for-integration-testing',
+    type: 'access'
   } satisfies ITokenServiceConfiguration;
 
   const tokenValidator = new TokenValidator();
@@ -34,7 +35,19 @@ describe('TokenService', () => {
       const payload = tokenService.verifyToken(token);
 
       expect(payload.sub).toBe(userId);
+      expect(payload.type).toBe(configuration.type);
       expect(payload.exp - payload.iat).toBe(configuration.expiresIn);
+    });
+
+    it('throws a TokenValidationError when the token type differs, even when signed with the same secret', () => {
+      const refreshTokenService = new TokenService({
+        configuration: { ...configuration, type: 'refresh' },
+        tokenValidator
+      });
+
+      const refreshToken = refreshTokenService.generateToken(userId);
+
+      expect(() => tokenService.verifyToken(refreshToken)).toThrow(TokenValidationError);
     });
 
     it('throws a TokenValidationError when the token was signed with a different secret', () => {

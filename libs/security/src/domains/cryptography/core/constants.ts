@@ -1,18 +1,18 @@
 /**
- * Minimum security rules for the cryptography configuration.
+ * Security rules for the cryptography configuration.
  */
 export const CRYPTOGRAPHY_RULES = {
   iterations: {
     /**
      * Minimum number of iterations considered secure.
      */
-    MIN: 100_000
+    MIN: 600_000
   },
   key: {
     /**
-     * Minimum length in bytes of a derived key.
+     * Length in bytes of a derived key.
      */
-    MIN_LENGTH: 32
+    LENGTH: 32
   },
   salt: {
     /**

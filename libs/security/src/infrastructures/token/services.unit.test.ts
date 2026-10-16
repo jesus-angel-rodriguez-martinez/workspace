@@ -26,7 +26,8 @@ describe('TokenService', () => {
   const configuration = {
     algorithm: 'HS256',
     expiresIn: 3_600,
-    secret: 'fake-secret-value-used-for-unit-testing'
+    secret: 'fake-secret-value-used-for-unit-testing',
+    type: 'access'
   } satisfies ITokenServiceConfiguration;
 
   const tokenValidator = new TokenValidator();
@@ -54,7 +55,7 @@ describe('TokenService', () => {
   });
 
   describe('generateToken', () => {
-    it('signs a payload derived from the user id with the configured secret and algorithm', () => {
+    it('signs a payload derived from the user id and type with the configured secret and algorithm', () => {
       const milliseconds = 1_000;
       const nowInSeconds = 1_700_000_000;
 
@@ -68,7 +69,8 @@ describe('TokenService', () => {
         {
           exp: nowInSeconds + configuration.expiresIn,
           iat: nowInSeconds,
-          sub: userId
+          sub: userId,
+          type: configuration.type
         },
         configuration.secret,
         { algorithm: configuration.algorithm }
@@ -90,7 +92,8 @@ describe('TokenService', () => {
       const expectedPayload = {
         exp: 1_700_003_600,
         iat: 1_700_000_000,
-        sub: userId
+        sub: userId,
+        type: configuration.type
       };
       verifyMock.mockImplementationOnce(() => expectedPayload);
 
@@ -114,6 +117,27 @@ describe('TokenService', () => {
       verifyMock.mockImplementationOnce(() => {
         throw new Error();
       });
+
+      expect(() => tokenService.verifyToken(token)).toThrow(TokenValidationError);
+    });
+
+    it('throws a TokenValidationError when the token type differs from the configured type', () => {
+      verifyMock.mockImplementationOnce(() => ({
+        exp: 1_700_003_600,
+        iat: 1_700_000_000,
+        sub: userId,
+        type: 'refresh'
+      }));
+
+      expect(() => tokenService.verifyToken(token)).toThrow(TokenValidationError);
+    });
+
+    it('throws a TokenValidationError when the token has no type', () => {
+      verifyMock.mockImplementationOnce(() => ({
+        exp: 1_700_003_600,
+        iat: 1_700_000_000,
+        sub: userId
+      }));
 
       expect(() => tokenService.verifyToken(token)).toThrow(TokenValidationError);
     });

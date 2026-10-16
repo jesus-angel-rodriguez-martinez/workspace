@@ -18,7 +18,7 @@ export class TokenService extends AbstractTokenService {
 
   public generateToken(userId: string): AuthenticationToken {
     try {
-      const { algorithm, expiresIn, secret } = this.configuration;
+      const { algorithm, expiresIn, secret, type } = this.configuration;
 
       const milliseconds = 1_000;
       const nowInSeconds = Math.floor(Date.now() / milliseconds);
@@ -26,7 +26,8 @@ export class TokenService extends AbstractTokenService {
       const tokenPayload: ITokenPayload = {
         exp: nowInSeconds + expiresIn,
         iat: nowInSeconds,
-        sub: userId
+        sub: userId,
+        type
       };
 
       const token = sign(tokenPayload, secret, {
@@ -39,6 +40,16 @@ export class TokenService extends AbstractTokenService {
   }
 
   public verifyToken(token: AuthenticationToken): ITokenPayload {
+    const payload = this.verifySignature(token);
+
+    if (payload.type !== this.configuration.type) {
+      throw new TokenValidationError();
+    }
+
+    return payload;
+  }
+
+  protected verifySignature(token: AuthenticationToken): ITokenPayload {
     try {
       const { algorithm, secret } = this.configuration;
 

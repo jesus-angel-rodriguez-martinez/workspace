@@ -7,8 +7,8 @@ describe('CryptographyService', () => {
 
   const configuration = {
     digest: 'sha256',
-    iterations: 100_000,
-    keyLength: 64,
+    iterations: 600_000,
+    keyLength: 32,
     saltLength: 16
   } satisfies ICryptographyServiceConfiguration;
 
