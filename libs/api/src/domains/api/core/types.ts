@@ -2,6 +2,11 @@ import { type ApiError } from '@domains/api';
 import { type StatusCode } from '@domains/status-code';
 import { type KernelError } from '@libs/kernel';
 
+/**
+ * Represents any error type that can be intercepted and processed by the API.
+ */
+export type UnknownError = ApiError | KernelError;
+
 export interface IApiError {
   /**
    * The underlying error or value that caused this error, if any.
@@ -31,8 +36,3 @@ export interface IApiError {
  * The `status` field is omitted to keep the HTTP code fixed.
  */
 export interface IApiErrorOptions extends Partial<Omit<IApiError, keyof Pick<IApiError, 'status'>>> {}
-
-/**
- * Represents any error type that can be intercepted and processed by the API.
- */
-export type UnknownError = ApiError | KernelError;
