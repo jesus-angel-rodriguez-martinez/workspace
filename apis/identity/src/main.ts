@@ -1,12 +1,12 @@
-import { composeApi } from '@infrastructures/api';
-import { composeAuthentication } from '@infrastructures/authentication';
-import { composeConfiguration } from '@infrastructures/configuration';
-import { composeCryptography } from '@infrastructures/cryptography';
+import { AuthenticationApp } from '@domains/authentication';
+import { CreateUserValidator, UserApp } from '@domains/user';
+import { ApiModule } from '@infrastructures/api';
+import { AuthenticationApiMapper, AuthenticationResponseMapper } from '@infrastructures/authentication';
 import { type IDatabase, type IDatabaseSchema } from '@infrastructures/database';
 import { shutdown } from '@infrastructures/lifecycle';
-import { composeLogger } from '@infrastructures/logger';
-import { composeToken } from '@infrastructures/token';
-import { composeUser } from '@infrastructures/user';
+import { PostgresUserRepository, UserApiMapper, UserModelMapper } from '@infrastructures/user';
+import { ApiExceptionFilter, ApiInterceptor, ApiMapper, LoggerAdapter } from '@libs/api';
+import { ConfigurationService } from '@libs/configuration';
 import {
   CertificateService,
   CertificateValidator,
@@ -14,8 +14,9 @@ import {
   ClientValidator,
   PathService
 } from '@libs/database';
-import { type AbstractLoggerService } from '@libs/logger';
-import { CryptographyValidator, TokenValidator } from '@libs/security';
+import { type AbstractLoggerService, LoggerService } from '@libs/logger';
+import { CryptographyService, CryptographyValidator, TokenService, TokenValidator } from '@libs/security';
+import { NestFactory } from '@nestjs/core';
 
 let database: IDatabase | undefined;
 let loggerService: AbstractLoggerService | undefined;
@@ -33,10 +34,10 @@ const init = async () => {
       ENVIRONMENT,
       JWT_ACCESS_SECRET,
       JWT_REFRESH_SECRET
-    } = composeConfiguration({
+    } = new ConfigurationService({
       API_PORT: { required: true, type: 'number' },
       DATABASE: { required: true, type: 'string' },
-      DATABASE_CERTIFICATE_FILE_NAME: { required: true, type: 'string' },
+      DATABASE_CERTIFICATE_FILE_NAME: { required: false, type: 'string' },
       DATABASE_HOST: { required: true, type: 'string' },
       DATABASE_PASSWORD: { required: true, type: 'string' },
       DATABASE_PORT: { required: true, type: 'number' },
@@ -44,20 +45,22 @@ const init = async () => {
       ENVIRONMENT: { required: true, type: 'string' },
       JWT_ACCESS_SECRET: { required: true, type: 'string' },
       JWT_REFRESH_SECRET: { required: true, type: 'string' }
-    });
-    const isDevelopment = ENVIRONMENT === 'development';
+    }).getAll();
 
-    loggerService = composeLogger({
+    const isDevelopment = ENVIRONMENT === 'development';
+    LoggerService.init({
       level: isDevelopment ? 'trace' : 'info',
       name: '@apis/identity',
       prettify: isDevelopment
     });
+
+    loggerService = new LoggerService();
     loggerService.debug('🔧 Logger service ready');
 
     const cryptographyValidator = new CryptographyValidator();
     loggerService.debug('🔧 Cryptography validator ready');
 
-    const cryptographyService = composeCryptography({
+    const cryptographyService = new CryptographyService({
       configuration: {
         digest: 'sha256',
         iterations: 600_000,
@@ -71,7 +74,7 @@ const init = async () => {
     const tokenValidator = new TokenValidator();
     loggerService.debug('🔧 Token validator ready');
 
-    const accessTokenService = composeToken({
+    const accessTokenService = new TokenService({
       configuration: {
         algorithm: 'HS256',
         expiresIn: 15 * 60,
@@ -82,7 +85,7 @@ const init = async () => {
     });
     loggerService.debug('🔧 Access token service ready');
 
-    const refreshTokenService = composeToken({
+    const refreshTokenService = new TokenService({
       configuration: {
         algorithm: 'HS256',
         expiresIn: 7 * 24 * 60 * 60,
@@ -99,14 +102,18 @@ const init = async () => {
     const certificateValidator = new CertificateValidator({ pathService });
     loggerService.debug('🔧 Certificate validator ready');
 
-    const certificateService = new CertificateService({
-      certificateValidator,
-      configuration: {
-        fileName: DATABASE_CERTIFICATE_FILE_NAME
-      },
-      pathService
-    });
-    loggerService.debug('🔧 Certificate service ready');
+    const certificateService = DATABASE_CERTIFICATE_FILE_NAME
+      ? new CertificateService({
+          certificateValidator,
+          configuration: {
+            fileName: DATABASE_CERTIFICATE_FILE_NAME
+          },
+          pathService
+        })
+      : undefined;
+    loggerService.debug(
+      certificateService ? '🔧 Certificate service ready' : '🔧 Certificate service skipped'
+    );
 
     const clientValidator = new ClientValidator();
     loggerService.debug('🔧 Client validator ready');
@@ -127,30 +134,50 @@ const init = async () => {
     database = clientService.createClient();
     loggerService.debug('🔧 Database client ready');
 
-    const { userApiMapper, userApp, userRepository } = composeUser({
-      cryptographyService,
-      database
-    });
+    const createUserValidator = new CreateUserValidator();
+
+    const userApiMapper = new UserApiMapper();
+
+    const userModelMapper = new UserModelMapper();
+
+    const userRepository = new PostgresUserRepository(database);
     loggerService.debug('📦 User repository ready');
+
+    const userApp = new UserApp({
+      createUserValidator,
+      cryptographyService,
+      userModelMapper,
+      userRepository
+    });
     loggerService.debug('🧩 User application ready');
 
-    const { authenticationApiMapper, authenticationApp, authenticationResponseMapper } =
-      composeAuthentication({
-        accessTokenService,
-        cryptographyService,
-        refreshTokenService,
-        userApp,
-        userRepository
-      });
+    const authenticationApiMapper = new AuthenticationApiMapper();
+
+    const authenticationApp = new AuthenticationApp({
+      accessTokenService,
+      cryptographyService,
+      refreshTokenService,
+      userApp,
+      userRepository
+    });
     loggerService.debug('🧩 Authentication application ready');
 
-    const api = await composeApi({
-      authenticationApiMapper,
-      authenticationApp,
-      authenticationResponseMapper,
-      loggerService,
-      userApiMapper
+    const authenticationResponseMapper = new AuthenticationResponseMapper();
+
+    const logger = new LoggerAdapter(loggerService);
+
+    const apiMapper = new ApiMapper({ mappers: [userApiMapper, authenticationApiMapper] });
+    const apiExceptionFilter = new ApiExceptionFilter({ apiMapper, loggerService });
+    const apiInterceptor = new ApiInterceptor();
+
+    const entryModule = ApiModule.forRoot(authenticationApp, authenticationResponseMapper);
+    const api = await NestFactory.create(entryModule, {
+      bufferLogs: true,
+      logger
     });
+
+    api.useGlobalFilters(apiExceptionFilter);
+    api.useGlobalInterceptors(apiInterceptor);
     loggerService.debug('🌐 API ready');
 
     await api.listen(API_PORT);
