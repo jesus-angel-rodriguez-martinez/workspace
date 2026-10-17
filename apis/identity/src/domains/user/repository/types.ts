@@ -1,9 +1,4 @@
 /**
- * Filters for querying user models, requiring at least one criterion.
- */
-export type UserModelFilters = Pick<IUserModel, 'id'> | Pick<IUserModel, 'username'>;
-
-/**
  * Represents the data required to create a new user.
  */
 export interface ICreateUserModel extends Omit<IUserModel, 'id'> {}
@@ -35,15 +30,26 @@ export interface IUserModel {
   username: string;
 }
 
+/**
+ * Filters for querying user models.
+ */
+export interface IUserModelFilters extends Partial<Pick<IUserModel, 'id' | 'username'>> {
+  /**
+   * Restricts the search to users that have not been soft-deleted. Defaults to `true`.
+   */
+  readonly isActive?: boolean;
+}
+
 export interface IUserRepository {
   /**
-   * Finds an active user by the given filter criteria.
+   * Finds a user by the given filter criteria.
+   * Only active users are searched unless `isActive` is `false`.
    *
-   * @param filters - An object with at least one property to filter users by.
+   * @param filters - An object with the properties to filter users by.
    *
    * @returns A promise that resolves to the user if found, or null otherwise.
    */
-  findOne(filters: UserModelFilters): Promise<IUserModel | null>;
+  findOne(filters: IUserModelFilters): Promise<IUserModel | null>;
   /**
    * Inserts a new user into the data store.
    *

@@ -14,16 +14,20 @@ export class PostgresUserRepository implements IUserRepository {
   }
 
   async findOne(filters: IUserModelFilters): Promise<IUserModel | null> {
+    const { id, isActive = true, username } = filters;
+
     let query = this.db.selectFrom('users').selectAll();
-
-    if (filters.id !== undefined) {
-      query = query.where('id', '=', filters.id);
+    if (id !== undefined) {
+      query = query.where('id', '=', id);
     }
-    if (filters.username !== undefined) {
-      query = query.where('username', '=', filters.username);
+    if (isActive) {
+      query = query.where('deletedAt', 'is', null);
+    }
+    if (username !== undefined) {
+      query = query.where('username', '=', username);
     }
 
-    const userModel = await query.executeTakeFirst();
+    const userModel = await query.limit(1).executeTakeFirst();
     return userModel ?? null;
   }
 

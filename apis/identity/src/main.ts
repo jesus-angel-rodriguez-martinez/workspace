@@ -1,10 +1,19 @@
 import { AuthenticationApp } from '@domains/authentication';
-import { CreateUserValidator, UserApp } from '@domains/user';
+import { UserApp } from '@domains/user';
 import { ApiModule } from '@infrastructures/api';
-import { AuthenticationApiMapper, AuthenticationResponseMapper } from '@infrastructures/authentication';
+import {
+  AuthenticationApiMapper,
+  AuthenticationResponseMapper,
+  UserCredentialsValidator
+} from '@infrastructures/authentication';
 import { type IDatabase, type IDatabaseSchema } from '@infrastructures/database';
 import { shutdown } from '@infrastructures/lifecycle';
-import { PostgresUserRepository, UserApiMapper, UserModelMapper } from '@infrastructures/user';
+import {
+  CreateUserValidator,
+  PostgresUserRepository,
+  UserApiMapper,
+  UserModelMapper
+} from '@infrastructures/user';
 import { ApiExceptionFilter, ApiInterceptor, ApiMapper, LoggerAdapter } from '@libs/api';
 import { ConfigurationService } from '@libs/configuration';
 import {
@@ -153,11 +162,14 @@ const init = async () => {
 
     const authenticationApiMapper = new AuthenticationApiMapper();
 
+    const userCredentialsValidator = new UserCredentialsValidator();
+
     const authenticationApp = new AuthenticationApp({
       accessTokenService,
       cryptographyService,
       refreshTokenService,
       userApp,
+      userCredentialsValidator,
       userRepository
     });
     loggerService.debug('🧩 Authentication application ready');
