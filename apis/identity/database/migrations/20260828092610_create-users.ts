@@ -5,14 +5,20 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .createTable('users')
     .addColumn('about', 'text')
     .addColumn('created_at', 'timestamptz', (column) => column.notNull().defaultTo(sql`now()`))
-    .addColumn('deleted_at', 'timestamptz', (column) => column.notNull().defaultTo(sql`now()`))
+    .addColumn('deleted_at', 'timestamptz')
     .addColumn('id', 'uuid', (column) => column.primaryKey().defaultTo(sql`gen_random_uuid()`))
     .addColumn('name', 'text', (column) => column.notNull())
     .addColumn('password', 'bytea', (column) => column.notNull())
     .addColumn('salt', 'bytea', (column) => column.notNull())
     .addColumn('updated_at', 'timestamptz', (column) => column.notNull().defaultTo(sql`now()`))
-    .addColumn('username', 'text', (column) => column.notNull().unique())
+    .addColumn('username', 'text', (column) => column.notNull())
     .execute();
+
+  await sql`
+    create unique index users_username_active_idx
+    on users (username)
+    where deleted_at is null
+  `.execute(db);
 }
 
 export async function down(db: Kysely<unknown>): Promise<void> {
