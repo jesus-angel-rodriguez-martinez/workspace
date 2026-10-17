@@ -5,16 +5,15 @@ import { AggregateKernelError, type IKernelError, type IKernelErrorOptions, Kern
  * Error thrown when one or more token configuration validation errors are found.
  */
 export class AggregateTokenConfigurationError extends AggregateKernelError {
+  public readonly code = 'TOKEN.INVALID_CONFIGURATION';
+  public readonly title = 'Invalid token configuration';
+
   /**
    * @param errors - The collection of configuration errors.
    * @param options - Optional error configuration options.
    */
   constructor(errors: IKernelError[], options: IKernelErrorOptions = {}) {
-    super(errors, {
-      cause: options.cause,
-      code: 'TOKEN.INVALID_CONFIGURATION',
-      title: 'Invalid token configuration'
-    });
+    super(errors, options);
   }
 }
 
@@ -22,16 +21,14 @@ export class AggregateTokenConfigurationError extends AggregateKernelError {
  * Error thrown when an authentication token has expired.
  */
 export class TokenExpiryError extends KernelError {
+  public readonly code = 'TOKEN.EXPIRY';
+  public readonly title = 'Token expiry';
+
   /**
    * @param options - Optional error configuration options.
    */
   constructor(options: IKernelErrorOptions = {}) {
-    super({
-      cause: options.cause,
-      code: 'TOKEN.EXPIRY',
-      detail: 'The authentication token has expired.',
-      title: 'Token expiry'
-    });
+    super('The authentication token has expired.', options);
   }
 }
 
@@ -39,16 +36,14 @@ export class TokenExpiryError extends KernelError {
  * Error thrown when an authentication token cannot be issued.
  */
 export class TokenIssuanceError extends KernelError {
+  public readonly code = 'TOKEN.ISSUANCE';
+  public readonly title = 'Token issuance failed';
+
   /**
    * @param options - Optional error configuration options.
    */
   constructor(options: IKernelErrorOptions = {}) {
-    super({
-      cause: options.cause,
-      code: 'TOKEN.ISSUANCE',
-      detail: 'The authentication token could not be issued.',
-      title: 'Token issuance failed'
-    });
+    super('The authentication token could not be issued.', options);
   }
 }
 
@@ -56,16 +51,14 @@ export class TokenIssuanceError extends KernelError {
  * Error thrown when an authentication token is invalid.
  */
 export class TokenValidationError extends KernelError {
+  public readonly code = 'TOKEN.VALIDATION';
+  public readonly title = 'Token validation failed';
+
   /**
    * @param options - Optional error configuration options.
    */
   constructor(options: IKernelErrorOptions = {}) {
-    super({
-      cause: options.cause,
-      code: 'TOKEN.VALIDATION',
-      detail: 'The authentication token is invalid.',
-      title: 'Token validation failed'
-    });
+    super('The authentication token is invalid.', options);
   }
 }
 
@@ -73,15 +66,13 @@ export class TokenValidationError extends KernelError {
  * Error thrown when the configured secret is below its minimum security requirement.
  */
 export class WeakTokenSecretError extends KernelError {
+  public readonly code = 'TOKEN.WEAK_SECRET';
+  public readonly title = 'Weak token secret';
+
   /**
    * @param options - Optional error configuration options.
    */
   constructor(options: IKernelErrorOptions = {}) {
-    super({
-      cause: options.cause,
-      code: 'TOKEN.WEAK_SECRET',
-      detail: `The token secret must be at least '${TOKEN_RULES.secret.MIN_LENGTH}' characters.`,
-      title: 'Weak token secret'
-    });
+    super(`The token secret must be at least '${TOKEN_RULES.secret.MIN_LENGTH}' characters.`, options);
   }
 }

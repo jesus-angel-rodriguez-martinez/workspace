@@ -5,13 +5,11 @@ import { type IKernelErrorOptions, KernelError } from '@libs/kernel';
  * Error thrown when a requested user already exists in the system.
  */
 export class UserAlreadyExistsError extends KernelError {
+  public readonly code = 'USER.ALREADY_EXISTS';
+  public readonly title = 'User already exists';
+
   constructor(username: string, options: IKernelErrorOptions = {}) {
-    super({
-      cause: options.cause,
-      code: 'USER.ALREADY_EXISTS',
-      detail: `The requested username '${username}' is already in use.`,
-      title: 'User already exists'
-    });
+    super(`The requested username '${username}' is already in use.`, options);
   }
 }
 
@@ -19,13 +17,11 @@ export class UserAlreadyExistsError extends KernelError {
  * Error thrown when a name contains two or more consecutive whitespace characters.
  */
 export class UserNameConsecutiveWhitespaceError extends KernelError {
+  public readonly code = 'USER.NAME_CONSECUTIVE_WHITESPACE';
+  public readonly title = 'Consecutive whitespace in name';
+
   constructor(options: IKernelErrorOptions = {}) {
-    super({
-      cause: options.cause,
-      code: 'USER.NAME_CONSECUTIVE_WHITESPACE',
-      detail: 'The name must not contain consecutive whitespace characters.',
-      title: 'Consecutive whitespace in name'
-    });
+    super('The name must not contain consecutive whitespace characters.', options);
   }
 }
 
@@ -33,13 +29,11 @@ export class UserNameConsecutiveWhitespaceError extends KernelError {
  * Error thrown when a name ends with a whitespace character.
  */
 export class UserNameEndsWithWhitespaceError extends KernelError {
+  public readonly code = 'USER.NAME_ENDS_WITH_WHITESPACE';
+  public readonly title = 'Name ends with whitespace';
+
   constructor(options: IKernelErrorOptions = {}) {
-    super({
-      cause: options.cause,
-      code: 'USER.NAME_ENDS_WITH_WHITESPACE',
-      detail: 'The name must not end with a whitespace character.',
-      title: 'Name ends with whitespace'
-    });
+    super('The name must not end with a whitespace character.', options);
   }
 }
 
@@ -47,13 +41,11 @@ export class UserNameEndsWithWhitespaceError extends KernelError {
  * Error thrown when a name contains characters that are not allowed.
  */
 export class UserNameInvalidCharactersError extends KernelError {
+  public readonly code = 'USER.NAME_INVALID_CHARACTERS';
+  public readonly title = 'Invalid name characters';
+
   constructor(options: IKernelErrorOptions = {}) {
-    super({
-      cause: options.cause,
-      code: 'USER.NAME_INVALID_CHARACTERS',
-      detail: 'The name may only contain letters, spaces, and apostrophes.',
-      title: 'Invalid name characters'
-    });
+    super('The name may only contain letters, spaces, and apostrophes.', options);
   }
 }
 
@@ -61,13 +53,11 @@ export class UserNameInvalidCharactersError extends KernelError {
  * Error thrown when a name is not a string.
  */
 export class UserNameInvalidTypeError extends KernelError {
+  public readonly code = 'USER.NAME_INVALID_TYPE';
+  public readonly title = 'Invalid name type';
+
   constructor(options: IKernelErrorOptions = {}) {
-    super({
-      cause: options.cause,
-      code: 'USER.NAME_INVALID_TYPE',
-      detail: 'The name must be a string.',
-      title: 'Invalid name type'
-    });
+    super('The name must be a string.', options);
   }
 }
 
@@ -75,14 +65,15 @@ export class UserNameInvalidTypeError extends KernelError {
  * Error thrown when a provided name's length is outside the allowed range.
  */
 export class UserNameLengthOutOfRangeError extends KernelError {
+  public readonly code = 'USER.NAME_LENGTH_OUT_OF_RANGE';
+  public readonly title = 'Invalid name length';
+
   constructor(length: number, options: IKernelErrorOptions = {}) {
     const isSingular = length === 1;
-    super({
-      cause: options.cause,
-      code: 'USER.NAME_LENGTH_OUT_OF_RANGE',
-      detail: `The provided name has '${length}' ${isSingular ? 'character' : 'characters'}, but it must be between '${USER_RULES.name.MIN_LENGTH}' and '${USER_RULES.name.MAX_LENGTH}' characters long.`,
-      title: 'Invalid name length'
-    });
+    super(
+      `The provided name has '${length}' ${isSingular ? 'character' : 'characters'}, but it must be between '${USER_RULES.name.MIN_LENGTH}' and '${USER_RULES.name.MAX_LENGTH}' characters long.`,
+      options
+    );
   }
 }
 
@@ -90,13 +81,11 @@ export class UserNameLengthOutOfRangeError extends KernelError {
  * Error thrown when a name starts with a whitespace character.
  */
 export class UserNameStartsWithWhitespaceError extends KernelError {
+  public readonly code = 'USER.NAME_STARTS_WITH_WHITESPACE';
+  public readonly title = 'Name starts with whitespace';
+
   constructor(options: IKernelErrorOptions = {}) {
-    super({
-      cause: options.cause,
-      code: 'USER.NAME_STARTS_WITH_WHITESPACE',
-      detail: 'The name must not start with a whitespace character.',
-      title: 'Name starts with whitespace'
-    });
+    super('The name must not start with a whitespace character.', options);
   }
 }
 
@@ -104,13 +93,11 @@ export class UserNameStartsWithWhitespaceError extends KernelError {
  * Error thrown when a requested user is not found in the system.
  */
 export class UserNotFoundError extends KernelError {
+  public readonly code = 'USER.NOT_FOUND';
+  public readonly title = 'User not found';
+
   constructor(username: string, options: IKernelErrorOptions = {}) {
-    super({
-      cause: options.cause,
-      code: 'USER.NOT_FOUND',
-      detail: `The requested user '${username}' could not be found.`,
-      title: 'User not found'
-    });
+    super(`The requested user '${username}' could not be found.`, options);
   }
 }
 
@@ -118,13 +105,11 @@ export class UserNotFoundError extends KernelError {
  * Error thrown when a password is not a string.
  */
 export class UserPasswordInvalidTypeError extends KernelError {
+  public readonly code = 'USER.PASSWORD_INVALID_TYPE';
+  public readonly title = 'Invalid password type';
+
   constructor(options: IKernelErrorOptions = {}) {
-    super({
-      cause: options.cause,
-      code: 'USER.PASSWORD_INVALID_TYPE',
-      detail: 'The password must be a string.',
-      title: 'Invalid password type'
-    });
+    super('The password must be a string.', options);
   }
 }
 
@@ -132,14 +117,15 @@ export class UserPasswordInvalidTypeError extends KernelError {
  * Error thrown when a provided password's length is outside the allowed range.
  */
 export class UserPasswordLengthOutOfRangeError extends KernelError {
+  public readonly code = 'USER.PASSWORD_LENGTH_OUT_OF_RANGE';
+  public readonly title = 'Invalid password length';
+
   constructor(length: number, options: IKernelErrorOptions = {}) {
     const isSingular = length === 1;
-    super({
-      cause: options.cause,
-      code: 'USER.PASSWORD_LENGTH_OUT_OF_RANGE',
-      detail: `The provided password has '${length}' ${isSingular ? 'character' : 'characters'}, but it must be between '${USER_RULES.password.MIN_LENGTH}' and '${USER_RULES.password.MAX_LENGTH}' characters long.`,
-      title: 'Invalid password length'
-    });
+    super(
+      `The provided password has '${length}' ${isSingular ? 'character' : 'characters'}, but it must be between '${USER_RULES.password.MIN_LENGTH}' and '${USER_RULES.password.MAX_LENGTH}' characters long.`,
+      options
+    );
   }
 }
 
@@ -147,13 +133,11 @@ export class UserPasswordLengthOutOfRangeError extends KernelError {
  * Error thrown when a password does not contain at least one lowercase character.
  */
 export class UserPasswordMissingLowercaseCharacterError extends KernelError {
+  public readonly code = 'USER.PASSWORD_MISSING_LOWERCASE_CHARACTER';
+  public readonly title = 'Password missing lowercase character';
+
   constructor(options: IKernelErrorOptions = {}) {
-    super({
-      cause: options.cause,
-      code: 'USER.PASSWORD_MISSING_LOWERCASE_CHARACTER',
-      detail: 'The password must contain at least one lowercase character.',
-      title: 'Password missing lowercase character'
-    });
+    super('The password must contain at least one lowercase character.', options);
   }
 }
 
@@ -161,13 +145,11 @@ export class UserPasswordMissingLowercaseCharacterError extends KernelError {
  * Error thrown when a password does not contain at least one numeric digit.
  */
 export class UserPasswordMissingNumericDigitError extends KernelError {
+  public readonly code = 'USER.PASSWORD_MISSING_NUMERIC_DIGIT';
+  public readonly title = 'Password missing numeric digit';
+
   constructor(options: IKernelErrorOptions = {}) {
-    super({
-      cause: options.cause,
-      code: 'USER.PASSWORD_MISSING_NUMERIC_DIGIT',
-      detail: 'The password must contain at least one numeric digit.',
-      title: 'Password missing numeric digit'
-    });
+    super('The password must contain at least one numeric digit.', options);
   }
 }
 
@@ -175,13 +157,11 @@ export class UserPasswordMissingNumericDigitError extends KernelError {
  * Error thrown when a password does not contain at least one uppercase character.
  */
 export class UserPasswordMissingUppercaseCharacterError extends KernelError {
+  public readonly code = 'USER.PASSWORD_MISSING_UPPERCASE_CHARACTER';
+  public readonly title = 'Password missing uppercase character';
+
   constructor(options: IKernelErrorOptions = {}) {
-    super({
-      cause: options.cause,
-      code: 'USER.PASSWORD_MISSING_UPPERCASE_CHARACTER',
-      detail: 'The password must contain at least one uppercase character.',
-      title: 'Password missing uppercase character'
-    });
+    super('The password must contain at least one uppercase character.', options);
   }
 }
 
@@ -189,13 +169,11 @@ export class UserPasswordMissingUppercaseCharacterError extends KernelError {
  * Error thrown when a user is not authorized to perform a certain action.
  */
 export class UserUnauthorizedError extends KernelError {
+  public readonly code = 'USER.UNAUTHORIZED';
+  public readonly title = 'Unauthorized';
+
   constructor(options: IKernelErrorOptions = {}) {
-    super({
-      cause: options.cause,
-      code: 'USER.UNAUTHORIZED',
-      detail: 'You do not have permission to perform this action.',
-      title: 'Unauthorized'
-    });
+    super('You do not have permission to perform this action.', options);
   }
 }
 
@@ -203,13 +181,11 @@ export class UserUnauthorizedError extends KernelError {
  * Error thrown when a username contains two or more consecutive hyphens.
  */
 export class UserUsernameConsecutiveHyphensError extends KernelError {
+  public readonly code = 'USER.USERNAME_CONSECUTIVE_HYPHENS';
+  public readonly title = 'Consecutive hyphens in username';
+
   constructor(options: IKernelErrorOptions = {}) {
-    super({
-      cause: options.cause,
-      code: 'USER.USERNAME_CONSECUTIVE_HYPHENS',
-      detail: 'The username must not contain consecutive hyphens.',
-      title: 'Consecutive hyphens in username'
-    });
+    super('The username must not contain consecutive hyphens.', options);
   }
 }
 
@@ -217,13 +193,11 @@ export class UserUsernameConsecutiveHyphensError extends KernelError {
  * Error thrown when a username ends with a hyphen.
  */
 export class UserUsernameEndsWithHyphenError extends KernelError {
+  public readonly code = 'USER.USERNAME_ENDS_WITH_HYPHEN';
+  public readonly title = 'Username ends with hyphen';
+
   constructor(options: IKernelErrorOptions = {}) {
-    super({
-      cause: options.cause,
-      code: 'USER.USERNAME_ENDS_WITH_HYPHEN',
-      detail: 'The username must not end with a hyphen.',
-      title: 'Username ends with hyphen'
-    });
+    super('The username must not end with a hyphen.', options);
   }
 }
 
@@ -231,13 +205,11 @@ export class UserUsernameEndsWithHyphenError extends KernelError {
  * Error thrown when a username contains characters that are not allowed.
  */
 export class UserUsernameInvalidCharactersError extends KernelError {
+  public readonly code = 'USER.USERNAME_INVALID_CHARACTERS';
+  public readonly title = 'Invalid username characters';
+
   constructor(options: IKernelErrorOptions = {}) {
-    super({
-      cause: options.cause,
-      code: 'USER.USERNAME_INVALID_CHARACTERS',
-      detail: 'The username may only contain letters, numbers, and hyphens.',
-      title: 'Invalid username characters'
-    });
+    super('The username may only contain letters, numbers, and hyphens.', options);
   }
 }
 
@@ -245,13 +217,11 @@ export class UserUsernameInvalidCharactersError extends KernelError {
  * Error thrown when a username is not a string.
  */
 export class UserUsernameInvalidTypeError extends KernelError {
+  public readonly code = 'USER.USERNAME_INVALID_TYPE';
+  public readonly title = 'Invalid username type';
+
   constructor(options: IKernelErrorOptions = {}) {
-    super({
-      cause: options.cause,
-      code: 'USER.USERNAME_INVALID_TYPE',
-      detail: 'The username must be a string.',
-      title: 'Invalid username type'
-    });
+    super('The username must be a string.', options);
   }
 }
 
@@ -259,14 +229,15 @@ export class UserUsernameInvalidTypeError extends KernelError {
  * Error thrown when a provided username's length is outside the allowed range.
  */
 export class UserUsernameLengthOutOfRangeError extends KernelError {
+  public readonly code = 'USER.USERNAME_LENGTH_OUT_OF_RANGE';
+  public readonly title = 'Invalid username length';
+
   constructor(length: number, options: IKernelErrorOptions = {}) {
     const isSingular = length === 1;
-    super({
-      cause: options.cause,
-      code: 'USER.USERNAME_LENGTH_OUT_OF_RANGE',
-      detail: `The provided username has '${length}' ${isSingular ? 'character' : 'characters'}, but it must be between '${USER_RULES.username.MIN_LENGTH}' and '${USER_RULES.username.MAX_LENGTH}' characters long.`,
-      title: 'Invalid username length'
-    });
+    super(
+      `The provided username has '${length}' ${isSingular ? 'character' : 'characters'}, but it must be between '${USER_RULES.username.MIN_LENGTH}' and '${USER_RULES.username.MAX_LENGTH}' characters long.`,
+      options
+    );
   }
 }
 
@@ -274,12 +245,10 @@ export class UserUsernameLengthOutOfRangeError extends KernelError {
  * Error thrown when a username starts with a hyphen.
  */
 export class UserUsernameStartsWithHyphenError extends KernelError {
+  public readonly code = 'USER.USERNAME_STARTS_WITH_HYPHEN';
+  public readonly title = 'Username starts with hyphen';
+
   constructor(options: IKernelErrorOptions = {}) {
-    super({
-      cause: options.cause,
-      code: 'USER.USERNAME_STARTS_WITH_HYPHEN',
-      detail: 'The username must not start with a hyphen.',
-      title: 'Username starts with hyphen'
-    });
+    super('The username must not start with a hyphen.', options);
   }
 }

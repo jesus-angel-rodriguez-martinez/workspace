@@ -14,35 +14,32 @@ rush add -p @libs/kernel
 
 ### Errors
 
-Extend `KernelError` to create consistent, domain-specific error types:
+Extend `KernelError` to create consistent, domain-specific error types. Declare `code` and `title` as readonly fields so they keep their literal types, and pass only the `detail` to `super`:
 
 ```ts
 import { type IKernelErrorOptions, KernelError } from '@libs/kernel';
 
 export class UserNotFoundError extends KernelError {
+  public readonly code = 'USER.NOT_FOUND';
+  public readonly title = 'User not found';
+
   constructor(username: string, options: IKernelErrorOptions = {}) {
-    super({
-      cause: options.cause,
-      code: 'USER.NOT_FOUND',
-      detail: `The requested user '${username}' could not be found.`,
-      title: 'User not found'
-    });
+    super(`The requested user '${username}' could not be found.`, options);
   }
 }
 ```
 
-For errors that gather several related failures into one, extend `AggregateKernelError`. It formats the collected errors into a bulleted detail message, so each domain only supplies its own `code` and `title`:
+For errors that gather several related failures into one, extend `AggregateKernelError`. It formats the collected errors into a bulleted detail message, so each domain only declares its own `code` and `title`:
 
 ```ts
 import { AggregateKernelError, type IKernelError, type IKernelErrorOptions } from '@libs/kernel';
 
 export class AggregateConfigurationError extends AggregateKernelError {
+  public readonly code = 'CONFIGURATION.INVALID_CONFIGURATION';
+  public readonly title = 'Invalid configuration';
+
   constructor(errors: IKernelError[], options: IKernelErrorOptions = {}) {
-    super(errors, {
-      cause: options.cause,
-      code: 'CONFIGURATION.INVALID_CONFIGURATION',
-      title: 'Invalid configuration'
-    });
+    super(errors, options);
   }
 }
 ```
