@@ -29,9 +29,7 @@ LoggerService.init({
   prettify: true
 });
 const loggerService = new LoggerService();
-
 const pathService = new PathService();
-
 const certificateValidator = new CertificateValidator({ pathService });
 
 const certificateService = DATABASE_CERTIFICATE_FILE_NAME
@@ -43,7 +41,6 @@ const certificateService = DATABASE_CERTIFICATE_FILE_NAME
   : undefined;
 
 const clientValidator = new ClientValidator();
-
 const clientService = new ClientService({
   certificateService,
   clientValidator,

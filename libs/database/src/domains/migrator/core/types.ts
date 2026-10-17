@@ -2,6 +2,11 @@ import { type AbstractClientService } from '@domains/client';
 import { type AbstractPathService } from '@domains/path';
 import { type AbstractLoggerService } from '@libs/logger';
 
+/**
+ * The direction a migration run should take.
+ */
+export type MigrationCommand = 'down' | 'reset' | 'up';
+
 export interface IMigratorServiceOptions<Client> {
   /**
    * Provides the database client migrations run against.
@@ -16,8 +21,3 @@ export interface IMigratorServiceOptions<Client> {
    */
   readonly pathService: AbstractPathService;
 }
-
-/**
- * The direction a migration run should take.
- */
-export type MigrationCommand = 'down' | 'reset' | 'up';
