@@ -68,7 +68,7 @@ LoggerService.close();
 ### Errors
 
 - `LoggerAlreadyInitializedError`: Thrown when `LoggerService.init()` is called more than once.
-- `LoggerNotInitializedError`: Thrown when a `LoggerService` instance is created before `LoggerService.init()` is called.
+- `LoggerNotInitializedError`: Thrown when a `LoggerService` instance is created before `LoggerService.init()` is called, or when logging after `LoggerService.close()`.
 
 ## 🧪 Testing
 

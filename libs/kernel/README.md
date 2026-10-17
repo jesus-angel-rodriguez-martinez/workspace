@@ -1,6 +1,6 @@
 # Kernel
 
-`@libs/kernel` is a foundational library that provides shared contracts for error handling and service lifecycle management.
+`@libs/kernel` is a foundational library that provides shared contracts for error handling.
 
 ## 📦 Installation
 
