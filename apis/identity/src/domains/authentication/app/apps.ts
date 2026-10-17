@@ -16,6 +16,8 @@ export class AuthenticationApp extends AbstractAuthenticationApp {
   }
 
   public async logIn(userCredentials: IUserCredentials): Promise<IAuthenticationTokens> {
+    this.userCredentialsValidator.validate(userCredentials);
+
     const { password, username } = userCredentials;
 
     const userModel = await this.userRepository.findOne({

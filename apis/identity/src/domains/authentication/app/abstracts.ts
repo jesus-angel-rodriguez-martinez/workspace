@@ -1,4 +1,5 @@
 import {
+  type AbstractUserCredentialsValidator,
   type IAuthenticationAppOptions,
   type IAuthenticationTokens,
   type IRefreshCredentials,
@@ -28,6 +29,10 @@ export abstract class AbstractAuthenticationApp {
    */
   protected readonly userApp: AbstractUserApp;
   /**
+   * Validates the credentials provided to log in.
+   */
+  protected readonly userCredentialsValidator: AbstractUserCredentialsValidator;
+  /**
    * Provides access to user data.
    */
   protected readonly userRepository: IUserRepository;
@@ -42,12 +47,14 @@ export abstract class AbstractAuthenticationApp {
     cryptographyService,
     refreshTokenService,
     userApp,
+    userCredentialsValidator,
     userRepository
   }: IAuthenticationAppOptions) {
     this.accessTokenService = accessTokenService;
     this.cryptographyService = cryptographyService;
     this.refreshTokenService = refreshTokenService;
     this.userApp = userApp;
+    this.userCredentialsValidator = userCredentialsValidator;
     this.userRepository = userRepository;
   }
 

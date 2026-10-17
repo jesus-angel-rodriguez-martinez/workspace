@@ -1,3 +1,4 @@
+import { type AbstractUserCredentialsValidator } from '@domains/authentication';
 import { type AbstractUserApp, type IUserRepository } from '@domains/user';
 import { type AbstractCryptographyService, type AbstractTokenService } from '@libs/security';
 
@@ -18,6 +19,10 @@ export interface IAuthenticationAppOptions {
    * Provides user use cases.
    */
   readonly userApp: AbstractUserApp;
+  /**
+   * Validates the credentials provided to log in.
+   */
+  readonly userCredentialsValidator: AbstractUserCredentialsValidator;
   /**
    * Provides access to user data.
    */
