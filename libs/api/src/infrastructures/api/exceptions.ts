@@ -1,11 +1,6 @@
-import {
-  type AbstractApiMapper,
-  ApiError,
-  type IApiErrorsResponse,
-  type IApiSafeErrorResponse,
-  InternalServerError,
-  type UnknownError
-} from '@domains/api';
+import { ApiError, InternalServerError, type UnknownError } from '@domains/api';
+import { type AbstractApiMapper } from '@domains/mapper';
+import { type IApiErrorsResponse, type IApiSafeErrorResponse } from '@domains/response';
 import { STATUS_CODE } from '@domains/status-code';
 import { type IApiExceptionFilterOptions } from '@infrastructures/api';
 import { KernelError } from '@libs/kernel';

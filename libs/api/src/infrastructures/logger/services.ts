@@ -1,7 +1,7 @@
-import { type AbstractLoggerService } from '@libs/logger';
+import { AbstractApiLoggerService, type IApiLoggerServiceOptions } from '@domains/logger';
 import { type LoggerService } from '@nestjs/common';
 
-export class LoggerAdapter implements LoggerService {
+export class ApiLoggerService extends AbstractApiLoggerService implements LoggerService {
   private readonly ignoredContexts = [
     'InstanceLoader',
     'NestApplication',
@@ -9,37 +9,35 @@ export class LoggerAdapter implements LoggerService {
     'RouterExplorer',
     'RoutesResolver'
   ];
-  private readonly loggerService: AbstractLoggerService;
 
-  constructor(loggerService: AbstractLoggerService) {
-    this.loggerService = loggerService;
+  public constructor(options: IApiLoggerServiceOptions) {
+    super(options);
   }
 
-  debug(message: string): void {
+  public debug(message: string): void {
     this.loggerService.debug(message);
   }
 
-  error(message: string): void {
+  public error(message: string): void {
     this.loggerService.error(message);
   }
 
-  fatal(message: string): void {
+  public fatal(message: string): void {
     this.loggerService.fatal(message);
   }
 
-  log(message: string, context?: string): void {
+  public log(message: string, context?: string): void {
     if (context && this.ignoredContexts.includes(context)) {
       return;
     }
-
     this.loggerService.info(message);
   }
 
-  verbose(message: string): void {
+  public verbose(message: string): void {
     this.loggerService.trace(message);
   }
 
-  warn(message: string): void {
+  public warn(message: string): void {
     this.loggerService.warn(message);
   }
 }

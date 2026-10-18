@@ -1,4 +1,4 @@
-import { type ApiErrorMappings } from '@domains/api';
+import { type ApiErrorMappings } from '@domains/mapper';
 
 export interface IApiMapperOptions {
   /**

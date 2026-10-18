@@ -1,4 +1,4 @@
-import { type AbstractApiMapper } from '@domains/api';
+import { type AbstractApiMapper } from '@domains/mapper';
 import { type AbstractLoggerService } from '@libs/logger';
 
 export interface IApiExceptionFilterOptions {

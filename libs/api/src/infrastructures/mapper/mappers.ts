@@ -1,5 +1,6 @@
-import { AbstractApiMapper, ApiError, type ApiErrorMappings } from '@domains/api';
-import { type IApiMapperOptions } from '@infrastructures/api';
+import { ApiError } from '@domains/api';
+import { AbstractApiMapper, type ApiErrorMappings } from '@domains/mapper';
+import { type IApiMapperOptions } from '@infrastructures/mapper';
 import { type KernelError } from '@libs/kernel';
 
 export class ApiMapper extends AbstractApiMapper {

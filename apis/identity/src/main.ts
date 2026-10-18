@@ -14,7 +14,7 @@ import {
   USER_API_ERROR_MAPPINGS,
   UserModelMapper
 } from '@infrastructures/user';
-import { ApiExceptionFilter, ApiInterceptor, ApiMapper, LoggerAdapter } from '@libs/api';
+import { ApiExceptionFilter, ApiInterceptor, ApiLoggerService, ApiMapper } from '@libs/api';
 import { ConfigurationService } from '@libs/configuration';
 import {
   CertificateService,
@@ -172,7 +172,7 @@ const init = async () => {
 
     const authenticationResponseMapper = new AuthenticationResponseMapper();
 
-    const logger = new LoggerAdapter(loggerService);
+    const apiLoggerService = new ApiLoggerService({ loggerService });
 
     const apiMapper = new ApiMapper({
       errorMappings: {
@@ -186,7 +186,7 @@ const init = async () => {
     const entryModule = ApiModule.forRoot(authenticationApp, authenticationResponseMapper);
     const api = await NestFactory.create(entryModule, {
       bufferLogs: true,
-      logger
+      logger: apiLoggerService
     });
 
     api.useGlobalFilters(apiExceptionFilter);

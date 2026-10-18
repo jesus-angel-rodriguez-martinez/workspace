@@ -1,4 +1,4 @@
-import { type IApiResponse } from '@domains/api';
+import { type IApiResponse } from '@domains/response';
 import { type CallHandler, type ExecutionContext, type NestInterceptor } from '@nestjs/common';
 import { map, type Observable } from 'rxjs';
 

@@ -1,6 +1,6 @@
 # Api
 
-`@libs/api` contains the shared HTTP error classes and NestJS utilities used across the API, including an exception filter (`{ errors }`), response interceptor (`{ data }`), and logger adapter. Together, they help keep API responses consistent.
+`@libs/api` contains the shared HTTP error classes and NestJS utilities used across the API, including an exception filter (`{ errors }`), response interceptor (`{ data }`), and logger service. Together, they help keep API responses consistent.
 
 ## 📦 Installation
 
@@ -17,7 +17,7 @@ rush add -p @libs/api
 Describe how each domain error is exposed with an `ApiErrorMappings` table. It is keyed by the error codes, so forgetting a code or adding an unknown one is a compile-time error. Map a code to `null` to keep that error internal, and override `detail` or `title` when the domain text must not reach the client:
 
 ```ts
-import { type UserError } from '@domains/users';
+import { type UserError } from '@domains/user';
 import { type ApiErrorMappings, STATUS_CODE } from '@libs/api';
 
 export const USER_API_ERROR_MAPPINGS: ApiErrorMappings<UserError> = {
@@ -30,7 +30,7 @@ export const USER_API_ERROR_MAPPINGS: ApiErrorMappings<UserError> = {
 Merge the domain tables into a single `ApiMapper`, then register the `ApiExceptionFilter` (errors) and the `ApiInterceptor` (successful responses):
 
 ```ts
-import { USER_API_ERROR_MAPPINGS } from '@infrastructures/users';
+import { USER_API_ERROR_MAPPINGS } from '@infrastructures/user';
 import { ApiExceptionFilter, ApiInterceptor, ApiMapper } from '@libs/api';
 
 const apiMapper = new ApiMapper({ errorMappings: { ...USER_API_ERROR_MAPPINGS } });
@@ -44,16 +44,16 @@ app.useGlobalInterceptors(apiInterceptor);
 
 The filter catches both domain errors (`KernelError`, mapped via the `ApiMapper`) and API errors (`ApiError`, used as-is); unmapped and `null` mapped errors fall back to a generic `InternalServerError`, serialized as `{ errors: [...] }`. Successful responses are wrapped by the `ApiInterceptor` as `{ data: ... }`.
 
-Route Nest's own logs through your application logger (and silence its bootstrap noise) with the `LoggerAdapter` when creating the app:
+Route Nest's own logs through your application logger (and silence its bootstrap noise) with the `ApiLoggerService` when creating the app:
 
 ```ts
-import { LoggerAdapter } from '@libs/api';
+import { ApiLoggerService } from '@libs/api';
 
-const logger = new LoggerAdapter(loggerService);
+const apiLoggerService = new ApiLoggerService({ loggerService });
 
 const app = await NestFactory.create(AppModule, {
   bufferLogs: true,
-  logger
+  logger: apiLoggerService
 });
 ```
 
