@@ -6,7 +6,7 @@ export const CRYPTOGRAPHY_RULES = {
     /**
      * Minimum number of iterations considered secure.
      */
-    MIN: 600_000
+    MIN_COUNT: 600_000
   },
   key: {
     /**

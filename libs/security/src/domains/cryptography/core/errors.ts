@@ -43,7 +43,10 @@ export class WeakCryptographyIterationsError extends KernelError {
    * @param options - Optional error configuration options.
    */
   constructor(options: IKernelErrorOptions = {}) {
-    super(`The cryptography iterations must be at least '${CRYPTOGRAPHY_RULES.iterations.MIN}'.`, options);
+    super(
+      `The cryptography iterations must be at least '${CRYPTOGRAPHY_RULES.iterations.MIN_COUNT}'.`,
+      options
+    );
   }
 }
 

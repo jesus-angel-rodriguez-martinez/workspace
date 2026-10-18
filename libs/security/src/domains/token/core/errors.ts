@@ -18,6 +18,21 @@ export class AggregateTokenConfigurationError extends AggregateKernelError {
 }
 
 /**
+ * Error thrown when the configured token lifetime is below its minimum seconds.
+ */
+export class InvalidTokenExpiresInError extends KernelError {
+  public readonly code = 'TOKEN.INVALID_EXPIRES_IN';
+  public readonly title = 'Invalid token expiration';
+
+  /**
+   * @param options - Optional error configuration options.
+   */
+  constructor(options: IKernelErrorOptions = {}) {
+    super(`The token expiration must be at least '${TOKEN_RULES.expiresIn.MIN_SECONDS}' seconds.`, options);
+  }
+}
+
+/**
  * Error thrown when an authentication token has expired.
  */
 export class TokenExpiryError extends KernelError {

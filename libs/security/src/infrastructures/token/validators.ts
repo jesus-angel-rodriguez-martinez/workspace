@@ -1,6 +1,7 @@
 import {
   AbstractTokenValidator,
   AggregateTokenConfigurationError,
+  InvalidTokenExpiresInError,
   type ITokenServiceConfiguration,
   TOKEN_RULES,
   WeakTokenSecretError
@@ -13,10 +14,13 @@ export class TokenValidator extends AbstractTokenValidator {
   }
 
   public validate(configuration: ITokenServiceConfiguration): void {
-    const { secret } = configuration;
+    const { expiresIn, secret } = configuration;
 
     const errors: IKernelError[] = [];
 
+    if (expiresIn < TOKEN_RULES.expiresIn.MIN_SECONDS) {
+      errors.push(new InvalidTokenExpiresInError());
+    }
     if (secret.length < TOKEN_RULES.secret.MIN_LENGTH) {
       errors.push(new WeakTokenSecretError());
     }

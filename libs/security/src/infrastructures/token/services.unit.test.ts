@@ -47,6 +47,12 @@ describe('TokenService', () => {
   });
 
   describe('constructor', () => {
+    it('throws when the expiration is below the minimum seconds', () => {
+      const options = { configuration: { ...configuration, expiresIn: 0 }, tokenValidator };
+
+      expect(() => new TokenService(options)).toThrow(AggregateTokenConfigurationError);
+    });
+
     it('throws when the secret is shorter than the minimum length', () => {
       const options = { configuration: { ...configuration, secret: 'fake-short-secret' }, tokenValidator };
 

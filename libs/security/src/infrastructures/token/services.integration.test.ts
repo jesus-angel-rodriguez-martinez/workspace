@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from '@jest/globals';
+import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { type ITokenServiceConfiguration, TokenExpiryError, TokenValidationError } from '@domains/token';
 import { TokenService, TokenValidator } from '@infrastructures/token';
 
@@ -18,6 +18,10 @@ describe('TokenService', () => {
 
   beforeEach(() => {
     tokenService = new TokenService({ configuration, tokenValidator });
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
   });
 
   describe('issueToken', () => {
@@ -62,12 +66,11 @@ describe('TokenService', () => {
     });
 
     it('throws a TokenExpiryError when the token has expired', () => {
-      const expiredTokenService = new TokenService({
-        configuration: { ...configuration, expiresIn: -10 },
-        tokenValidator
-      });
+      jest.useFakeTimers({ now: Date.now() });
 
-      const token = expiredTokenService.issueToken(userId);
+      const token = tokenService.issueToken(userId);
+
+      jest.setSystemTime(Date.now() + (configuration.expiresIn + 1) * 1_000);
 
       expect(() => tokenService.verifyToken(token)).toThrow(TokenExpiryError);
     });

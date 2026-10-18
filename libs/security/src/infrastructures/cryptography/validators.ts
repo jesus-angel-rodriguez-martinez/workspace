@@ -19,7 +19,7 @@ export class CryptographyValidator extends AbstractCryptographyValidator {
 
     const errors: IKernelError[] = [];
 
-    if (iterations < CRYPTOGRAPHY_RULES.iterations.MIN) {
+    if (iterations < CRYPTOGRAPHY_RULES.iterations.MIN_COUNT) {
       errors.push(new WeakCryptographyIterationsError());
     }
     if (keyLength !== CRYPTOGRAPHY_RULES.key.LENGTH) {
