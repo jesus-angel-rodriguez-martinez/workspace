@@ -2,7 +2,7 @@ import { AuthenticationApp } from '@domains/authentication';
 import { UserApp } from '@domains/user';
 import { ApiModule } from '@infrastructures/api';
 import {
-  AuthenticationApiMapper,
+  AUTHENTICATION_API_ERROR_MAPPINGS,
   AuthenticationResponseMapper,
   UserCredentialsValidator
 } from '@infrastructures/authentication';
@@ -11,7 +11,7 @@ import { shutdown } from '@infrastructures/lifecycle';
 import {
   CreateUserValidator,
   PostgresUserRepository,
-  UserApiMapper,
+  USER_API_ERROR_MAPPINGS,
   UserModelMapper
 } from '@infrastructures/user';
 import { ApiExceptionFilter, ApiInterceptor, ApiMapper, LoggerAdapter } from '@libs/api';
@@ -145,8 +145,6 @@ const init = async () => {
 
     const createUserValidator = new CreateUserValidator();
 
-    const userApiMapper = new UserApiMapper();
-
     const userModelMapper = new UserModelMapper();
 
     const userRepository = new PostgresUserRepository(database);
@@ -159,8 +157,6 @@ const init = async () => {
       userRepository
     });
     loggerService.debug('🧩 User application ready');
-
-    const authenticationApiMapper = new AuthenticationApiMapper();
 
     const userCredentialsValidator = new UserCredentialsValidator();
 
@@ -178,7 +174,12 @@ const init = async () => {
 
     const logger = new LoggerAdapter(loggerService);
 
-    const apiMapper = new ApiMapper({ mappers: [userApiMapper, authenticationApiMapper] });
+    const apiMapper = new ApiMapper({
+      errorMappings: {
+        ...AUTHENTICATION_API_ERROR_MAPPINGS,
+        ...USER_API_ERROR_MAPPINGS
+      }
+    });
     const apiExceptionFilter = new ApiExceptionFilter({ apiMapper, loggerService });
     const apiInterceptor = new ApiInterceptor();
 
