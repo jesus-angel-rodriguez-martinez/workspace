@@ -2,6 +2,8 @@ import { type IOutboxEventTable } from '@infrastructures/outbox-event';
 import { type IUserTable } from '@infrastructures/user';
 import { type Kysely } from 'kysely';
 
+export interface IDatabase extends Kysely<IDatabaseSchema> {}
+
 export interface IDatabaseSchema {
   /**
    * The `outbox_events` table.
@@ -12,5 +14,3 @@ export interface IDatabaseSchema {
    */
   users: IUserTable;
 }
-
-export interface IDatabase extends Kysely<IDatabaseSchema> {}

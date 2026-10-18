@@ -44,6 +44,14 @@ export class AggregateConfigurationError extends AggregateKernelError {
 }
 ```
 
+Derive the union of a domain's errors with `InferKernelError` instead of listing them by hand. The errors module must only export kernel errors:
+
+```ts
+import { type InferKernelError } from '@libs/kernel';
+
+export type UserError = InferKernelError<typeof import('@domains/user/core/errors')>;
+```
+
 ## 🧪 Testing
 
 Uses Jest with ESM support.

@@ -1,6 +1,10 @@
 import { type IDatabase } from '@infrastructures/database';
 import { type AbstractLoggerService } from '@libs/logger';
 
+export type Shutdown = (options: IShutdownOptions) => Promise<never>;
+
+export type ShutdownReason = { error: Error } | { signal: 'SIGINT' | 'SIGTERM' };
+
 export interface IShutdownOptions {
   /**
    * The database client to close before shutting down.
@@ -15,7 +19,3 @@ export interface IShutdownOptions {
    */
   readonly reason: ShutdownReason;
 }
-
-export type Shutdown = (options: IShutdownOptions) => Promise<never>;
-
-export type ShutdownReason = { error: Error } | { signal: 'SIGINT' | 'SIGTERM' };

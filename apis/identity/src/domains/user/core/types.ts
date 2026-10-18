@@ -1,25 +1,9 @@
-import {
-  type UserAlreadyExistsError,
-  type UserNameConsecutiveWhitespaceError,
-  type UserNameEndsWithWhitespaceError,
-  type UserNameInvalidCharactersError,
-  type UserNameInvalidTypeError,
-  type UserNameLengthOutOfRangeError,
-  type UserNameStartsWithWhitespaceError,
-  type UserNotFoundError,
-  type UserPasswordInvalidTypeError,
-  type UserPasswordLengthOutOfRangeError,
-  type UserPasswordMissingLowercaseCharacterError,
-  type UserPasswordMissingNumericDigitError,
-  type UserPasswordMissingUppercaseCharacterError,
-  type UserUnauthorizedError,
-  type UserUsernameConsecutiveHyphensError,
-  type UserUsernameEndsWithHyphenError,
-  type UserUsernameInvalidCharactersError,
-  type UserUsernameInvalidTypeError,
-  type UserUsernameLengthOutOfRangeError,
-  type UserUsernameStartsWithHyphenError
-} from '@domains/user';
+import { type InferKernelError } from '@libs/kernel';
+
+/**
+ * Represents the complete list of user domain errors.
+ */
+export type UserError = InferKernelError<typeof import('@domains/user/core/errors')>;
 
 /**
  * Represents the data required to create a new user.
@@ -56,28 +40,3 @@ export interface IUser {
    */
   username: string;
 }
-
-/**
- * Represents the complete list of user domain errors.
- */
-export type UserError =
-  | UserAlreadyExistsError
-  | UserNameConsecutiveWhitespaceError
-  | UserNameEndsWithWhitespaceError
-  | UserNameInvalidCharactersError
-  | UserNameInvalidTypeError
-  | UserNameLengthOutOfRangeError
-  | UserNameStartsWithWhitespaceError
-  | UserNotFoundError
-  | UserPasswordInvalidTypeError
-  | UserPasswordLengthOutOfRangeError
-  | UserPasswordMissingLowercaseCharacterError
-  | UserPasswordMissingNumericDigitError
-  | UserPasswordMissingUppercaseCharacterError
-  | UserUnauthorizedError
-  | UserUsernameConsecutiveHyphensError
-  | UserUsernameEndsWithHyphenError
-  | UserUsernameInvalidCharactersError
-  | UserUsernameInvalidTypeError
-  | UserUsernameLengthOutOfRangeError
-  | UserUsernameStartsWithHyphenError;

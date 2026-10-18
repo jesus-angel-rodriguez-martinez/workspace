@@ -1,3 +1,17 @@
+import { type KernelError } from '@domains/kernel';
+
+/**
+ * Infers the union of the errors exported by an errors module that only exports kernel errors.
+ */
+export type InferKernelError<Errors extends Record<string, KernelErrorConstructor>> = InstanceType<
+  Errors[keyof Errors]
+>;
+
+/**
+ * Any constructor of a kernel error.
+ */
+export type KernelErrorConstructor = new (...args: never[]) => KernelError;
+
 /**
  * Standardized interface for managing kernel application errors.
  */

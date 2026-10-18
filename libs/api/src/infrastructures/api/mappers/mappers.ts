@@ -1,22 +1,26 @@
-import { AbstractApiMapper, type ApiError } from '@domains/api';
+import { AbstractApiMapper, ApiError, type ApiErrorMappings } from '@domains/api';
 import { type IApiMapperOptions } from '@infrastructures/api';
 import { type KernelError } from '@libs/kernel';
 
 export class ApiMapper extends AbstractApiMapper {
-  private readonly mappers: AbstractApiMapper[];
+  private readonly errorMappings: ApiErrorMappings;
 
-  public constructor({ mappers }: IApiMapperOptions) {
+  public constructor({ errorMappings }: IApiMapperOptions) {
     super();
-    this.mappers = mappers;
+    this.errorMappings = Object.freeze({ ...errorMappings });
   }
 
   public toApiError(error: KernelError): ApiError | undefined {
-    for (const mapper of this.mappers) {
-      const apiError = mapper.toApiError(error);
-      if (apiError) {
-        return apiError;
-      }
+    if (!Object.hasOwn(this.errorMappings, error.code)) {
+      return undefined;
     }
-    return undefined;
+
+    const errorMapping = this.errorMappings[error.code];
+    if (!errorMapping) {
+      return undefined;
+    }
+
+    const { detail = error.detail, status, title = error.title } = errorMapping;
+    return new ApiError({ cause: error, code: error.code, detail, status, title });
   }
 }

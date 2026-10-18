@@ -11,9 +11,11 @@ export abstract class AbstractApiMapper {
   protected constructor() {}
 
   /**
-   * Converts a persistent kernel error into an API error.
+   * Converts a kernel error into an API error.
    *
-   * @returns The corresponding API error.
+   * @param error - The kernel error to convert.
+   *
+   * @returns The corresponding API error or `undefined` when the API does not expose the error.
    */
   public abstract toApiError(error: KernelError): ApiError | undefined;
 }

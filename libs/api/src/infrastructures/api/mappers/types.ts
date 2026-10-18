@@ -1,8 +1,8 @@
-import { type AbstractApiMapper } from '@domains/api';
+import { type ApiErrorMappings } from '@domains/api';
 
 export interface IApiMapperOptions {
   /**
-   * Responsible for mapping domain errors to their API errors.
+   * Describes how each domain error code is exposed by the API.
    */
-  readonly mappers: AbstractApiMapper[];
+  readonly errorMappings: ApiErrorMappings;
 }

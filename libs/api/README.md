@@ -14,65 +14,26 @@ rush add -p @libs/api
 
 ### Initialization
 
-Declare a domain-specific abstract mapper by extending `AbstractApiMapper`:
+Describe how each domain error is exposed with an `ApiErrorMappings` table. It is keyed by the error codes, so forgetting a code or adding an unknown one is a compile-time error. Map a code to `null` to keep that error internal, and override `detail` or `title` when the domain text must not reach the client:
 
 ```ts
-import { type UserApiError } from '@infrastructures/users';
-import { AbstractApiMapper } from '@libs/api';
-import { type KernelError } from '@libs/kernel';
+import { type UserError } from '@domains/users';
+import { type ApiErrorMappings, STATUS_CODE } from '@libs/api';
 
-export abstract class AbstractUsersApiMapper extends AbstractApiMapper {
-  protected constructor() {
-    super();
-  }
-
-  public abstract override toApiError(error: KernelError): UserApiError | undefined;
-}
+export const USER_API_ERROR_MAPPINGS: ApiErrorMappings<UserError> = {
+  'USER.ALREADY_EXISTS': { status: `${STATUS_CODE.CONFLICT}` },
+  'USER.NOT_FOUND': null,
+  'USER.UNAUTHORIZED': { detail: 'You cannot perform this action.', status: `${STATUS_CODE.FORBIDDEN}` }
+};
 ```
 
-Implement it, converting each domain error into its API error. The trailing `exhaustiveCheck` turns forgetting to map any `UserError` member into a compile-time error:
+Merge the domain tables into a single `ApiMapper`, then register the `ApiExceptionFilter` (errors) and the `ApiInterceptor` (successful responses):
 
 ```ts
-import { UserAlreadyExistsError, type UserError, UserNotFoundError } from '@domains/users';
-import {
-  AbstractUsersApiMapper,
-  UserAlreadyExistsApiError,
-  type UserApiError,
-  UserNotFoundApiError
-} from '@infrastructures/users';
-
-export class UsersApiMapper extends AbstractUsersApiMapper {
-  public constructor() {
-    super();
-  }
-
-  public toApiError(error: UserError): UserApiError | undefined {
-    if (error instanceof UserAlreadyExistsError) {
-      return new UserAlreadyExistsApiError(error);
-    }
-    if (error instanceof UserNotFoundError) {
-      return new UserNotFoundApiError(error);
-    }
-
-    const exhaustiveCheck: never = error;
-    void exhaustiveCheck;
-
-    return undefined;
-  }
-}
-```
-
-Every `UserError` member must be mapped: once all are handled, `error` narrows to `never` and the assignment compiles. Miss one and it fails to compile.
-
-Compose the domain mappers into a single `ApiMapper`, then register the `ApiExceptionFilter` (errors) and the `ApiInterceptor` (successful responses):
-
-```ts
-import { UsersApiMapper } from '@infrastructures/users';
+import { USER_API_ERROR_MAPPINGS } from '@infrastructures/users';
 import { ApiExceptionFilter, ApiInterceptor, ApiMapper } from '@libs/api';
 
-const usersApiMapper = new UsersApiMapper();
-
-const apiMapper = new ApiMapper({ mappers: [usersApiMapper] });
+const apiMapper = new ApiMapper({ errorMappings: { ...USER_API_ERROR_MAPPINGS } });
 
 const apiExceptionFilter = new ApiExceptionFilter({ apiMapper, loggerService });
 const apiInterceptor = new ApiInterceptor();
@@ -81,7 +42,7 @@ app.useGlobalFilters(apiExceptionFilter);
 app.useGlobalInterceptors(apiInterceptor);
 ```
 
-The filter catches both domain errors (`KernelError`, mapped via the `ApiMapper`) and API errors (`ApiError`, used as-is); unmapped errors fall back to a generic `InternalServerError`, serialized as `{ errors: [...] }`. Successful responses are wrapped by the `ApiInterceptor` as `{ data: ... }`.
+The filter catches both domain errors (`KernelError`, mapped via the `ApiMapper`) and API errors (`ApiError`, used as-is); unmapped and `null` mapped errors fall back to a generic `InternalServerError`, serialized as `{ errors: [...] }`. Successful responses are wrapped by the `ApiInterceptor` as `{ data: ... }`.
 
 Route Nest's own logs through your application logger (and silence its bootstrap noise) with the `LoggerAdapter` when creating the app:
 

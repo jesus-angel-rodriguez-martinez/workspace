@@ -1,6 +1,11 @@
-import { type InvalidRefreshTokenError, type WrongCredentialsError } from '@domains/authentication';
 import { type IUser } from '@domains/user';
+import { type InferKernelError } from '@libs/kernel';
 import { type EncodedToken } from '@libs/security';
+
+/**
+ * Represents the complete list of authentication domain errors.
+ */
+export type AuthenticationError = InferKernelError<typeof import('@domains/authentication/core/errors')>;
 
 /**
  * Represents the pair of tokens issued to an authenticated user.
@@ -25,8 +30,3 @@ export interface IRefreshCredentials extends Pick<IAuthenticationTokens, 'refres
  * Represents the data required to authenticate a user.
  */
 export interface IUserCredentials extends Pick<IUser, 'password' | 'username'> {}
-
-/**
- * Represents the complete list of authentication domain errors.
- */
-export type AuthenticationError = InvalidRefreshTokenError | WrongCredentialsError;
