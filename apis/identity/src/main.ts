@@ -141,8 +141,11 @@ const init = async () => {
     });
     loggerService.debug('🔧 Client service ready');
 
-    database = clientService.createClient();
+    database = clientService.getClient();
     loggerService.debug('🔧 Database client ready');
+
+    await clientService.verifyConnection();
+    loggerService.debug('🔧 Database connection verified');
 
     const createUserValidator = new CreateUserValidator();
 

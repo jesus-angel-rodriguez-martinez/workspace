@@ -24,11 +24,23 @@ export abstract class AbstractClientService<Client> {
   }
 
   /**
+   * Gets the client used to query the database.
+   *
+   * @returns The database client.
+   */
+  public abstract getClient(): Client;
+  /**
+   * Verifies that the client can reach the database.
+   *
+   * @returns A promise that resolves once the database answers.
+   */
+  public abstract verifyConnection(): Promise<void>;
+  /**
    * Creates the client used to query the database.
    *
    * @returns The database client.
    */
-  public abstract createClient(): Client;
+  protected abstract createClient(): Client;
   /**
    * Creates the connection string used to reach the database.
    *

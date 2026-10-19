@@ -17,6 +17,23 @@ export class AggregateClientConfigurationError extends AggregateKernelError {
 }
 
 /**
+ * Error thrown when the database cannot be reached.
+ */
+export class ClientConnectionError extends KernelError {
+  public readonly code = 'CLIENT.CONNECTION';
+  public readonly title = 'Database connection failed';
+
+  /**
+   * @param host - The host the database server runs on.
+   * @param port - The port the database server listens on.
+   * @param options - Optional error configuration options.
+   */
+  constructor(host: string, port: number, options: IKernelErrorOptions = {}) {
+    super(`The database at '${host}:${port}' could not be reached.`, options);
+  }
+}
+
+/**
  * Error thrown when the database name is missing.
  */
 export class MissingClientDatabaseError extends KernelError {

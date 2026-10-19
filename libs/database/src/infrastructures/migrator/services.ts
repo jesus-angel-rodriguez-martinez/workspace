@@ -28,7 +28,7 @@ export class MigratorService<Schema> extends AbstractMigratorService<Kysely<Sche
 
   protected async migrate(command: MigrationCommand): Promise<void> {
     const migrationFolder = this.pathService.resolveMigrationFolder();
-    const db = this.clientService.createClient();
+    const db = this.clientService.getClient();
 
     const provider = new FileMigrationProvider({ fs: promises, migrationFolder, path: { join } });
 

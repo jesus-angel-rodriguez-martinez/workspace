@@ -33,8 +33,12 @@ const clientService = new ClientService<IDatabaseSchema>({
   }
 });
 
-const database = clientService.createClient();
+const database = clientService.getClient();
+
+await clientService.verifyConnection();
 ```
+
+The service creates a single client on construction and the client connects lazily on its first query. Call `verifyConnection` during bootstrap to fail fast when the database cannot be reached.
 
 ### Certificate
 
@@ -119,6 +123,7 @@ This writes a timestamped `<YYYYMMDDHHMMSS>_<name>.ts` file (with empty `up` and
 
 - `AggregateCertificateConfigurationError`: Thrown by `CertificateValidator` when constructing a `CertificateService` with an invalid file name or a missing file. Its message lists each underlying error (`code` and `detail`).
 - `AggregateClientConfigurationError`: Thrown by `ClientValidator` when constructing a `ClientService` with one or more missing connection values. Its message lists each underlying error (`code` and `detail`).
+- `ClientConnectionError`: Thrown by `verifyConnection` when the database cannot be reached.
 - `InvalidCertificateFileNameError`: Thrown when the certificate file name is not a plain file name (e.g. it contains path separators).
 - `InvalidMigrationNameError`: Thrown when scaffolding a migration whose name is not lowercase letters and digits separated by single hyphens (no leading, trailing, or consecutive hyphens).
 - `MigrationFailedError`: Thrown when a migration fails to run.
