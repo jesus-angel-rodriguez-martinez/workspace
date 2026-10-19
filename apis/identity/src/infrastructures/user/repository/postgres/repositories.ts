@@ -35,7 +35,6 @@ export class PostgresUserRepository implements IUserRepository {
     const userModel = await this.db
       .insertInto('users')
       .values({
-        about: payload.about,
         name: payload.name,
         password: payload.password,
         salt: payload.salt,

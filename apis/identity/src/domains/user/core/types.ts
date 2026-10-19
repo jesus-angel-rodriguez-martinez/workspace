@@ -20,10 +20,6 @@ export interface ISecureUser extends Omit<IUser, keyof Pick<IUser, 'password'>> 
  */
 export interface IUser {
   /**
-   * A brief description of the user.
-   */
-  about: string;
-  /**
    * The unique identifier of the user.
    */
   id: string;

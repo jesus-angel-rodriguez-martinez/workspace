@@ -5,10 +5,6 @@ export interface ICreateUserModel extends Omit<IUserModel, 'id'> {}
 
 export interface IUserModel {
   /**
-   * A brief description of the user.
-   */
-  about: string;
-  /**
    * The unique identifier of the user.
    */
   id: string;
