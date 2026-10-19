@@ -40,15 +40,15 @@ export class TokenService extends AbstractTokenService {
   }
 
   public verifyToken(token: EncodedToken): DecodedToken {
-    try {
-      const { algorithm, secret, type } = this.configuration;
+    const { algorithm, secret, type } = this.configuration;
 
+    try {
       const decodedToken = verify(token, secret, {
         algorithms: [algorithm]
       }) as DecodedToken;
 
       if (decodedToken.type !== type) {
-        throw new TokenValidationError();
+        throw new TokenValidationError(type);
       }
       return decodedToken;
     } catch (error) {
@@ -56,9 +56,9 @@ export class TokenService extends AbstractTokenService {
         throw error;
       }
       if (error instanceof TokenExpiredError) {
-        throw new TokenExpiryError({ cause: error });
+        throw new TokenExpiryError(type, { cause: error });
       }
-      throw new TokenValidationError({ cause: error });
+      throw new TokenValidationError(type, { cause: error });
     }
   }
 }

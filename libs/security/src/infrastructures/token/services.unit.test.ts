@@ -119,12 +119,28 @@ describe('TokenService', () => {
       expect(() => tokenService.verifyToken(token)).toThrow(TokenExpiryError);
     });
 
+    it('names the configured token type in the TokenExpiryError detail', () => {
+      verifyMock.mockImplementationOnce(() => {
+        throw new MockTokenExpiredError();
+      });
+
+      expect(() => tokenService.verifyToken(token)).toThrow(`The '${configuration.type}' token has expired.`);
+    });
+
     it('throws a TokenValidationError when the token is invalid', () => {
       verifyMock.mockImplementationOnce(() => {
         throw new Error();
       });
 
       expect(() => tokenService.verifyToken(token)).toThrow(TokenValidationError);
+    });
+
+    it('names the configured token type in the TokenValidationError detail', () => {
+      verifyMock.mockImplementationOnce(() => {
+        throw new Error();
+      });
+
+      expect(() => tokenService.verifyToken(token)).toThrow(`The '${configuration.type}' token is invalid.`);
     });
 
     it('throws a TokenValidationError when the token type differs from the configured type', () => {

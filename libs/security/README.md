@@ -102,9 +102,9 @@ const { exp, iat, sub, type } = refreshTokenService.verifyToken(refreshToken);
 - `AggregateTokenConfigurationError`: Thrown by `TokenValidator` when constructing a `TokenService` with one or more configuration values below their minimum security requirement. Its message lists each underlying error (`code` and `detail`).
 - `InvalidCryptographyKeyLengthError`: Thrown when the configured key length differs from the output length of the digest.
 - `InvalidTokenExpiresInError`: Thrown when the configured token `expiresIn` is below its minimum seconds.
-- `TokenExpiryError`: Thrown when verifying a token that has expired.
+- `TokenExpiryError`: Thrown when verifying a token that has expired. Its detail names the token `type`.
 - `TokenIssuanceError`: Thrown when a token cannot be issued.
-- `TokenValidationError`: Thrown when verifying a token whose signature or format is invalid, or whose `type` differs from the configured one.
+- `TokenValidationError`: Thrown when verifying a token whose signature or format is invalid, or whose `type` differs from the configured one. Its detail names the configured token `type`.
 - `WeakCryptographyIterationsError`: Thrown when the configured number of iterations is below its minimum security requirement.
 - `WeakCryptographySaltLengthError`: Thrown when the configured salt length is below its minimum security requirement.
 - `WeakTokenSecretError`: Thrown when the configured token secret is below its minimum security requirement.

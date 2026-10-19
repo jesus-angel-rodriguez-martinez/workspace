@@ -1,4 +1,4 @@
-import { TOKEN_RULES } from '@domains/token';
+import { TOKEN_RULES, type TokenType } from '@domains/token';
 import { AggregateKernelError, type IKernelError, type IKernelErrorOptions, KernelError } from '@libs/kernel';
 
 /**
@@ -40,10 +40,11 @@ export class TokenExpiryError extends KernelError {
   public readonly title = 'Token expiry';
 
   /**
+   * @param type - The purpose of the token.
    * @param options - Optional error configuration options.
    */
-  constructor(options: IKernelErrorOptions = {}) {
-    super('The authentication token has expired.', options);
+  constructor(type: TokenType, options: IKernelErrorOptions = {}) {
+    super(`The '${type}' token has expired.`, options);
   }
 }
 
@@ -70,10 +71,11 @@ export class TokenValidationError extends KernelError {
   public readonly title = 'Token validation failed';
 
   /**
+   * @param type - The purpose of the token.
    * @param options - Optional error configuration options.
    */
-  constructor(options: IKernelErrorOptions = {}) {
-    super('The authentication token is invalid.', options);
+  constructor(type: TokenType, options: IKernelErrorOptions = {}) {
+    super(`The '${type}' token is invalid.`, options);
   }
 }
 
