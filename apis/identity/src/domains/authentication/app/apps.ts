@@ -8,7 +8,6 @@ import {
   WrongCredentialsError
 } from '@domains/authentication';
 import { type ICreateUser } from '@domains/user';
-import { type DecodedToken, type EncodedToken } from '@libs/security';
 
 export class AuthenticationApp extends AbstractAuthenticationApp {
   public constructor(options: IAuthenticationAppOptions) {
@@ -43,7 +42,7 @@ export class AuthenticationApp extends AbstractAuthenticationApp {
   public async refresh(refreshCredentials: IRefreshCredentials): Promise<IAuthenticationTokens> {
     const { refreshToken } = refreshCredentials;
 
-    const { sub } = this.verifyRefreshToken(refreshToken);
+    const { sub } = this.refreshTokenService.verifyToken(refreshToken);
 
     const userModel = await this.userRepository.findOne({
       id: sub
@@ -53,7 +52,12 @@ export class AuthenticationApp extends AbstractAuthenticationApp {
     }
 
     const accessToken = this.accessTokenService.issueToken(userModel.id);
-    return { accessToken, refreshToken };
+
+    const authenticationTokens: IAuthenticationTokens = {
+      accessToken,
+      refreshToken
+    };
+    return authenticationTokens;
   }
 
   public async signUp(payload: ICreateUser): Promise<IAuthenticationTokens> {
@@ -66,15 +70,11 @@ export class AuthenticationApp extends AbstractAuthenticationApp {
   protected generateTokens(userId: string): IAuthenticationTokens {
     const accessToken = this.accessTokenService.issueToken(userId);
     const refreshToken = this.refreshTokenService.issueToken(userId);
-    return { accessToken, refreshToken };
-  }
 
-  protected verifyRefreshToken(refreshToken: EncodedToken): DecodedToken {
-    try {
-      const decodedToken = this.refreshTokenService.verifyToken(refreshToken);
-      return decodedToken;
-    } catch (error) {
-      throw new InvalidRefreshTokenError({ cause: error });
-    }
+    const authenticationTokens: IAuthenticationTokens = {
+      accessToken,
+      refreshToken
+    };
+    return authenticationTokens;
   }
 }

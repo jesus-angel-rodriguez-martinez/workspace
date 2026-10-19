@@ -29,7 +29,7 @@ export abstract class AbstractAuthenticationApp {
    */
   protected readonly userApp: AbstractUserApp;
   /**
-   * Validates the credentials provided to log in.
+   * Validates the credentials provided.
    */
   protected readonly userCredentialsValidator: AbstractUserCredentialsValidator;
   /**

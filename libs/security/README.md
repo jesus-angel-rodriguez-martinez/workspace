@@ -109,6 +109,8 @@ const { exp, iat, sub, type } = refreshTokenService.verifyToken(refreshToken);
 - `WeakCryptographySaltLengthError`: Thrown when the configured salt length is below its minimum security requirement.
 - `WeakTokenSecretError`: Thrown when the configured token secret is below its minimum security requirement.
 
+Use the `TokenError` union to type an `ApiErrorMappings` table for the token errors.
+
 ## 🧪 Testing
 
 Uses Jest with ESM support.

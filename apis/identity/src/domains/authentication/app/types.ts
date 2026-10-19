@@ -20,7 +20,7 @@ export interface IAuthenticationAppOptions {
    */
   readonly userApp: AbstractUserApp;
   /**
-   * Validates the credentials provided to log in.
+   * Validates the credentials provided.
    */
   readonly userCredentialsValidator: AbstractUserCredentialsValidator;
   /**

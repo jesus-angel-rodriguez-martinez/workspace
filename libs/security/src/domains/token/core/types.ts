@@ -1,4 +1,5 @@
 import { type AbstractTokenValidator } from '@domains/token';
+import { type InferKernelError } from '@libs/kernel';
 
 /**
  * The decoded representation of an issued token.
@@ -9,6 +10,11 @@ export type DecodedToken = IAccessToken | IRefreshToken;
  * The encoded string representation of an issued token.
  */
 export type EncodedToken = string;
+
+/**
+ * Represents the complete list of token domain errors.
+ */
+export type TokenError = InferKernelError<typeof import('@domains/token/core/errors')>;
 
 /**
  * The purpose of the token.

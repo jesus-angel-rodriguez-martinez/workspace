@@ -4,6 +4,7 @@ import { ApiModule } from '@infrastructures/api';
 import {
   AUTHENTICATION_API_ERROR_MAPPINGS,
   AuthenticationResponseMapper,
+  TOKEN_API_ERROR_MAPPINGS,
   UserCredentialsValidator
 } from '@infrastructures/authentication';
 import { type IDatabase, type IDatabaseSchema } from '@infrastructures/database';
@@ -177,6 +178,7 @@ const init = async () => {
     const apiMapper = new ApiMapper({
       errorMappings: {
         ...AUTHENTICATION_API_ERROR_MAPPINGS,
+        ...TOKEN_API_ERROR_MAPPINGS,
         ...USER_API_ERROR_MAPPINGS
       }
     });
