@@ -27,10 +27,6 @@ export class CryptographyService extends AbstractCryptographyService {
   public async verifyPassword(password: string, salt: Buffer, hashedPassword: Buffer): Promise<boolean> {
     const derivedPassword = await this.hashPassword(password, salt);
 
-    if (derivedPassword.length !== hashedPassword.length) {
-      return false;
-    }
-
     const areCredentialsValid = timingSafeEqual(derivedPassword, hashedPassword);
     return areCredentialsValid;
   }

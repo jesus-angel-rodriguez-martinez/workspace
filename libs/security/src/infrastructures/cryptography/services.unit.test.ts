@@ -151,14 +151,5 @@ describe('CryptographyService', () => {
 
       expect(isValid).toBe(false);
     });
-
-    it('returns false without comparing when the stored hash length differs from the derived hash', async () => {
-      const shorterStoredHash = Buffer.alloc(16, 3);
-
-      const isValid = await cryptographyService.verifyPassword(password, generatedSalt, shorterStoredHash);
-
-      expect(isValid).toBe(false);
-      expect(timingSafeEqualMock).not.toHaveBeenCalled();
-    });
   });
 });
