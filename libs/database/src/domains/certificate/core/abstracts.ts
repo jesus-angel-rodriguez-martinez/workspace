@@ -54,6 +54,8 @@ export abstract class AbstractCertificateValidator {
    * Validates that the certificate file name is valid and that the file exists.
    *
    * @param configuration - Certificate configuration options to validate.
+   *
+   * @throws {AggregateCertificateConfigurationError} When the file name is invalid or the file does not exist.
    */
   public abstract validate(configuration: ICertificateServiceConfiguration): void;
 }

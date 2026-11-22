@@ -73,6 +73,8 @@ export abstract class AbstractLoggerService {
    * @param level - The log level at which the message should be logged.
    * @param message - The message to log.
    * @param context - The context to log.
+   *
+   * @throws {LoggerNotInitializedError} When the logger has not been initialized.
    */
   protected abstract log(level: LoggerLevel, message: string, context: LoggerContext): void;
 }

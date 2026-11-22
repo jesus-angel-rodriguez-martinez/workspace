@@ -60,6 +60,8 @@ export abstract class AbstractUserApp {
    * @param payload - The data required to create the user.
    *
    * @returns A promise that resolves with the created user, without sensitive fields.
+   *
+   * @throws {UserAlreadyExistsError} When the username is already taken.
    */
   public abstract create(payload: ICreateUser): Promise<ISecureUser>;
 }

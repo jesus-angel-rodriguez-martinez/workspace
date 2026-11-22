@@ -11,6 +11,9 @@ import {
 export class LoggerService extends AbstractLoggerService {
   protected static rootLogger: Logger | undefined;
 
+  /**
+   * @throws {LoggerNotInitializedError} When the logger has not been initialized.
+   */
   public constructor() {
     if (!LoggerService.rootLogger) {
       throw new LoggerNotInitializedError();
@@ -22,6 +25,13 @@ export class LoggerService extends AbstractLoggerService {
     LoggerService.rootLogger = undefined;
   }
 
+  /**
+   * Initializes the root logger shared by every logger service.
+   *
+   * @param configuration - The logger configuration.
+   *
+   * @throws {LoggerAlreadyInitializedError} When the logger is already initialized.
+   */
   public static init(configuration: ILoggerServiceInitConfiguration): void {
     if (LoggerService.rootLogger) {
       throw new LoggerAlreadyInitializedError();

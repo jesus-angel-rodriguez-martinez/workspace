@@ -64,6 +64,8 @@ export abstract class AbstractAuthenticationApp {
    * @param userCredentials - The credentials provided by the user.
    *
    * @returns A promise that resolves with the access and refresh tokens.
+   *
+   * @throws {WrongCredentialsError} When the username does not exist or the password does not match.
    */
   public abstract logIn(userCredentials: IUserCredentials): Promise<IAuthenticationTokens>;
   /**
@@ -73,6 +75,8 @@ export abstract class AbstractAuthenticationApp {
    * @param refreshCredentials - The refresh token provided by the user.
    *
    * @returns A promise that resolves with the new access token and the same refresh token.
+   *
+   * @throws {InvalidRefreshTokenError} When the user identified by the refresh token no longer exists.
    */
   public abstract refresh(refreshCredentials: IRefreshCredentials): Promise<IAuthenticationTokens>;
   /**

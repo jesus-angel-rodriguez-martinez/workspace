@@ -27,6 +27,9 @@ export abstract class AbstractScaffolderService {
    * @param name - The human-readable migration name.
    *
    * @returns A promise that resolves to the path of the created migration file.
+   *
+   * @throws {InvalidMigrationNameError} When the name contains characters that are not allowed.
+   * @throws {MissingMigrationNameError} When the name is not provided.
    */
   public abstract create(name: string | undefined): Promise<string>;
   /**

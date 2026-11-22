@@ -28,6 +28,8 @@ export abstract class AbstractTokenService {
    * @param userId - The unique identifier of the authenticated user for whom the token will be issued.
    *
    * @returns The signed encoded token.
+   *
+   * @throws {TokenIssuanceError} When the token cannot be signed.
    */
   public abstract issueToken(userId: string): EncodedToken;
   /**
@@ -36,6 +38,9 @@ export abstract class AbstractTokenService {
    * @param token - The encoded token to verify.
    *
    * @returns The decoded token when the encoded token is valid.
+   *
+   * @throws {TokenExpiryError} When the token has expired.
+   * @throws {TokenValidationError} When the token is invalid or its type does not match the configured type.
    */
   public abstract verifyToken(token: EncodedToken): DecodedToken;
 }
@@ -50,6 +55,8 @@ export abstract class AbstractTokenValidator {
    * Validates that the configuration meets the minimum security requirements.
    *
    * @param configuration - Token configuration options to validate.
+   *
+   * @throws {AggregateTokenConfigurationError} When the configuration does not meet the minimum security requirements.
    */
   public abstract validate(configuration: ITokenServiceConfiguration): void;
 }

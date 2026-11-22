@@ -33,6 +33,8 @@ export abstract class AbstractClientService<Client> {
    * Verifies that the client can reach the database.
    *
    * @returns A promise that resolves once the database answers.
+   *
+   * @throws {ClientConnectionError} When the database cannot be reached.
    */
   public abstract verifyConnection(): Promise<void>;
   /**
@@ -61,6 +63,8 @@ export abstract class AbstractClientValidator {
    * Validates that the configuration provides every required connection value.
    *
    * @param configuration - Client configuration options to validate.
+   *
+   * @throws {AggregateClientConfigurationError} When one or more required connection values are missing.
    */
   public abstract validate(configuration: IClientServiceConfiguration): void;
 }

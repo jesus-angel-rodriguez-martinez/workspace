@@ -57,6 +57,8 @@ export abstract class AbstractMigratorService<Client> {
    * @param command - The migration direction to run.
    *
    * @returns A promise that resolves once the run completes.
+   *
+   * @throws {MigrationFailedError} When a migration fails.
    */
   protected abstract migrate(command: MigrationCommand): Promise<void>;
 }

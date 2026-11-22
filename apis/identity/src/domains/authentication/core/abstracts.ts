@@ -19,12 +19,16 @@ export abstract class AbstractUserCredentialsValidator {
    * Validates that the provided password is well formed.
    *
    * @param password - The password of the user used for authentication.
+   *
+   * @throws {UserPasswordInvalidTypeError} When the password is not a string.
    */
   protected abstract validatePassword(password: string | undefined): void;
   /**
    * Validates that the provided username is well formed.
    *
    * @param username - The username of the user.
+   *
+   * @throws {UserUsernameInvalidTypeError} When the username is not a string.
    */
   protected abstract validateUsername(username: string | undefined): void;
 }

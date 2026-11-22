@@ -58,6 +58,8 @@ export abstract class AbstractCryptographyValidator {
    * Validates that the configuration meets the minimum security requirements.
    *
    * @param configuration - Cryptography configuration options to validate.
+   *
+   * @throws {AggregateCryptographyConfigurationError} When the configuration does not meet the minimum security requirements.
    */
   public abstract validate(configuration: ICryptographyServiceConfiguration): void;
 }
