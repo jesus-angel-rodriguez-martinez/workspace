@@ -61,6 +61,16 @@ describe('ConfigurationService', () => {
         ).toThrow('CONFIGURATION.INVALID_BOOLEAN');
       });
 
+      it('throws an InvalidBooleanConfigurationError when a boolean is a case variant or an alias', () => {
+        ['1', 'TRUE', 'True', 'yes'].forEach((value) => {
+          process.env['INVALID_BOOLEAN'] = value;
+
+          expect(
+            () => new ConfigurationService({ INVALID_BOOLEAN: { required: true, type: 'boolean' } })
+          ).toThrow('CONFIGURATION.INVALID_BOOLEAN');
+        });
+      });
+
       it('throws an InvalidNumberConfigurationError when a number is not finite', () => {
         process.env['NON_FINITE_NUMBER'] = 'Infinity';
 

@@ -48,54 +48,14 @@ export abstract class AbstractConfigurationService<C extends Configuration> {
    * Reads and parses every value defined in the configuration.
    *
    * Each value is parsed according to its declared type in the configuration
-   * and returned as a fully typed object.
+   * and returned as a fully typed object. Every invalid or missing value is collected
+   * and reported together.
    *
    * @param configuration - The configuration defining the type of each key and whether it is required.
    *
    * @returns An object containing all configuration entries with correctly parsed types.
+   *
+   * @throws {AggregateConfigurationError} When one or more values fail validation.
    */
   protected abstract parseAll(configuration: C): ResolvedConfiguration<C>;
-  /**
-   * Parses a boolean configuration value.
-   *
-   * @param key - The configuration key being parsed.
-   * @param rawValue - The raw string value retrieved from the environment.
-   *
-   * @returns The parsed boolean value (`true` or `false`).
-   */
-  protected abstract parseBoolean(key: string, rawValue: string): boolean;
-  /**
-   * Parses a numeric configuration value.
-   *
-   * @param key - The configuration key being parsed.
-   * @param rawValue - The raw string value retrieved from the environment.
-   *
-   * @returns The parsed finite number.
-   */
-  protected abstract parseNumber(key: string, rawValue: string): number;
-  /**
-   * Reads and parses a single configuration value based on its expected type.
-   *
-   * The value is returned as the native JavaScript type (`string`, `number`, or `boolean`)
-   * corresponding to the provided primitive type in the configuration, or as `undefined`
-   * when `required` is `false`.
-   *
-   * @param key - The configuration key to read.
-   * @param value - The definition of the configuration key (its type and whether it is required).
-   *
-   * @returns The parsed configuration value with the appropriate native type.
-   */
-  protected abstract parseOne<T extends Configuration, K extends ConfigurationKey<T>>(
-    key: K,
-    value: T[K]
-  ): ResolvedConfiguration<T>[K];
-  /**
-   * Parses a string configuration value.
-   *
-   * @param key - The configuration key being parsed.
-   * @param rawValue - The raw string value retrieved from the environment.
-   *
-   * @returns The parsed string value.
-   */
-  protected abstract parseString(key: string, rawValue: string): string;
 }

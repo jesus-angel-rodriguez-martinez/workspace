@@ -2,15 +2,16 @@ import {
   AbstractConfigurationService,
   AggregateConfigurationError,
   type Configuration,
-  type ConfigurationKey,
   EmptyConfigurationError,
+  type IConfigurationValue,
   InvalidBooleanConfigurationError,
   InvalidNumberConfigurationError,
   MissingConfigurationError,
   type ResolvedConfiguration,
   UnsupportedPrimitiveError
 } from '@domains/configuration';
-import { type IKernelError, KernelError } from '@libs/kernel';
+import { type IKernelError } from '@libs/kernel';
+import * as z from 'zod';
 
 export class ConfigurationService<C extends Configuration> extends AbstractConfigurationService<C> {
   public constructor(configuration: C) {
@@ -18,72 +19,68 @@ export class ConfigurationService<C extends Configuration> extends AbstractConfi
   }
 
   protected parseAll(configuration: C): ResolvedConfiguration<C> {
-    const entries = Object.entries(configuration);
     const errors: IKernelError[] = [];
+    const shape: Record<string, z.ZodType> = {};
 
-    const result = entries.reduce((previous, [key, value]) => {
+    Object.entries(configuration).forEach(([key, value]) => {
       try {
-        return {
-          ...previous,
-          [key]: this.parseOne(key, value)
-        };
+        shape[key] = this.createSchema(key, value);
       } catch (error) {
-        if (error instanceof KernelError) {
+        if (error instanceof UnsupportedPrimitiveError) {
           errors.push(error);
-          return previous;
+          return;
         }
         throw error;
       }
-    }, {} as ResolvedConfiguration<C>);
+    });
 
-    if (errors.length) {
+    const environment = Object.fromEntries(Object.keys(shape).map((key) => [key, process.env[key]]));
+    const result = z.object(shape).safeParse(environment);
+    if (!result.success) {
+      errors.push(...result.error.issues.map((issue) => this.toError(issue)));
+    }
+
+    if (!result.success || errors.length) {
       throw new AggregateConfigurationError(errors);
     }
 
-    return result;
+    return result.data as ResolvedConfiguration<C>;
   }
 
-  protected parseBoolean(key: string, rawValue: string): boolean {
-    const value = this.parseString(key, rawValue);
-    if (value !== 'false' && value !== 'true') {
-      throw new InvalidBooleanConfigurationError(key);
-    }
-    return value === 'true';
+  /**
+   * Creates the schema that parses a raw value to a boolean, accepting only `"true"` and `"false"`.
+   */
+  private createBooleanSchema(): z.ZodType<boolean, string> {
+    return this.createStringSchema().pipe(
+      z.stringbool({ case: 'sensitive', falsy: ['false'], truthy: ['true'] })
+    );
   }
 
-  protected parseNumber(key: string, rawValue: string): number {
-    const value = this.parseString(key, rawValue);
-    const parsedValue = Number(value);
-    if (!Number.isFinite(parsedValue)) {
-      throw new InvalidNumberConfigurationError(key);
-    }
-    return parsedValue;
+  /**
+   * Creates the schema that parses a raw value to a finite number.
+   */
+  private createNumberSchema(): z.ZodType<number, string> {
+    return this.createStringSchema().pipe(z.coerce.number());
   }
 
-  protected parseOne<T extends Configuration, K extends ConfigurationKey<T>>(
-    key: K,
-    value: T[K]
-  ): ResolvedConfiguration<T>[K] {
+  /**
+   * Creates the schema for a single configuration value, based on its declared type and whether it is required.
+   *
+   * @throws {UnsupportedPrimitiveError} When the declared type is not supported.
+   */
+  private createSchema(key: string, value: IConfigurationValue): z.ZodType {
     const { required, type } = value;
 
-    const rawValue = process.env[key];
-    if (rawValue === undefined) {
-      if (required) {
-        throw new MissingConfigurationError(key);
-      }
-      return undefined as ResolvedConfiguration<T>[K];
-    }
-
-    let parsedValue: boolean | number | string;
+    let schema: z.ZodType;
     switch (type) {
       case 'boolean':
-        parsedValue = this.parseBoolean(key, rawValue);
+        schema = this.createBooleanSchema();
         break;
       case 'number':
-        parsedValue = this.parseNumber(key, rawValue);
+        schema = this.createNumberSchema();
         break;
       case 'string':
-        parsedValue = this.parseString(key, rawValue);
+        schema = this.createStringSchema();
         break;
       default: {
         const exhaustiveCheck: never = type;
@@ -91,14 +88,40 @@ export class ConfigurationService<C extends Configuration> extends AbstractConfi
       }
     }
 
-    return parsedValue as ResolvedConfiguration<T>[K];
+    return required ? schema : schema.optional();
   }
 
-  protected parseString(key: string, rawValue: string): string {
-    const value = rawValue.trim();
-    if (!value) {
-      throw new EmptyConfigurationError(key);
+  /**
+   * Creates the schema that trims a raw value and rejects it when empty.
+   */
+  private createStringSchema(): z.ZodType<string, string> {
+    return z.string().trim().min(1);
+  }
+
+  /**
+   * Maps a Zod issue to its configuration error.
+   *
+   * Every schema starts with the string schema, and each stage aborts the pipe on failure,
+   * so each issue code identifies a single failure:
+   * - `invalid_type` expecting a string: the value is not defined in the environment.
+   * - `too_small`: the value is empty or contains only whitespace.
+   * - `invalid_value`: the value is neither `"true"` nor `"false"`.
+   * - `invalid_type` expecting a number: the value is not a finite number.
+   */
+  private toError(issue: z.core.$ZodIssue): IKernelError {
+    const key = String(issue.path[0]);
+
+    switch (issue.code) {
+      case 'invalid_type':
+        return issue.expected === 'number'
+          ? new InvalidNumberConfigurationError(key)
+          : new MissingConfigurationError(key);
+      case 'invalid_value':
+        return new InvalidBooleanConfigurationError(key);
+      case 'too_small':
+        return new EmptyConfigurationError(key);
+      default:
+        throw new z.ZodError([issue]);
     }
-    return value;
   }
 }

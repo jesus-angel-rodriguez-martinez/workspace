@@ -2,6 +2,8 @@
 
 `@libs/configuration` is a type-safe runtime validator for environment variables.
 
+Validation is powered by [Zod](https://zod.dev), which stays an implementation detail: the public API is the declarative configuration described below.
+
 It does not load `.env` files. It reads from `process.env` and validates that required variables are present and correctly typed. Load environment variables before running your application:
 
 ```bash
