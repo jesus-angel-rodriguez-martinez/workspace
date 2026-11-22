@@ -3,3 +3,4 @@ export * from './client';
 export * from './migrator';
 export * from './path';
 export * from './scaffolder';
+export * from './unit-of-work';

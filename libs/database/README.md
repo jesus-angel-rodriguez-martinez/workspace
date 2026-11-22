@@ -119,6 +119,27 @@ rushx database:migration:create create-users
 
 This writes a timestamped `<YYYYMMDDHHMMSS>_<name>.ts` file (with empty `up` and `down` exports) to `<cwd>/database/migrations` and logs its path.
 
+### Unit of work
+
+`UnitOfWork` implements the `IUnitOfWork` contract from `@libs/kernel` on top of a Kysely transaction. Pass the client and a factory that binds the repositories to the transaction, so the domain declares only the repositories it needs:
+
+```ts
+import { UnitOfWork } from '@libs/database';
+
+const userUnitOfWork = new UnitOfWork<IDatabaseSchema, IUserUnitOfWorkRepositories>({
+  client: database,
+  createRepositories: (transaction) => ({
+    userRepository: new PostgresUserRepository(transaction)
+  })
+});
+
+await userUnitOfWork.execute(async ({ userRepository }) => {
+  await userRepository.insertOne(payload);
+});
+```
+
+The transaction commits when the callback resolves and rolls back when it rejects.
+
 ### Errors
 
 - `AggregateCertificateConfigurationError`: Thrown by `CertificateValidator` when constructing a `CertificateService` with an invalid file name or a missing file. Its message lists each underlying error (`code` and `detail`).

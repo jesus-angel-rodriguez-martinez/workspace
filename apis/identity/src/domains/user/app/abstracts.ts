@@ -4,8 +4,10 @@ import {
   type ICreateUser,
   type ISecureUser,
   type IUserAppOptions,
-  type IUserRepository
+  type IUserRepository,
+  type IUserUnitOfWorkRepositories
 } from '@domains/user';
+import { type IUnitOfWork } from '@libs/kernel';
 import { type AbstractCryptographyService } from '@libs/security';
 
 /**
@@ -20,6 +22,10 @@ export abstract class AbstractUserApp {
    * Provides cryptographic utilities for securely hashing.
    */
   protected readonly cryptographyService: AbstractCryptographyService;
+  /**
+   * Runs repository operations inside a single transaction.
+   */
+  protected readonly unitOfWork: IUnitOfWork<IUserUnitOfWorkRepositories>;
   /**
    * Maps user persistence models to domain entities.
    */
@@ -37,11 +43,13 @@ export abstract class AbstractUserApp {
   protected constructor({
     createUserValidator,
     cryptographyService,
+    unitOfWork,
     userModelMapper,
     userRepository
   }: IUserAppOptions) {
     this.createUserValidator = createUserValidator;
     this.cryptographyService = cryptographyService;
+    this.unitOfWork = unitOfWork;
     this.userModelMapper = userModelMapper;
     this.userRepository = userRepository;
   }

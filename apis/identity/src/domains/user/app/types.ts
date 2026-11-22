@@ -3,6 +3,7 @@ import {
   type AbstractUserModelMapper,
   type IUserRepository
 } from '@domains/user';
+import { type IUnitOfWork } from '@libs/kernel';
 import { type AbstractCryptographyService } from '@libs/security';
 
 export interface IUserAppOptions {
@@ -15,9 +16,23 @@ export interface IUserAppOptions {
    */
   readonly cryptographyService: AbstractCryptographyService;
   /**
+   * Runs repository operations inside a single transaction.
+   */
+  readonly unitOfWork: IUnitOfWork<IUserUnitOfWorkRepositories>;
+  /**
    * Maps user persistence models to domain entities.
    */
   readonly userModelMapper: AbstractUserModelMapper;
+  /**
+   * Provides access to user data.
+   */
+  readonly userRepository: IUserRepository;
+}
+
+/**
+ * The repositories bound to the transaction of a user unit of work.
+ */
+export interface IUserUnitOfWorkRepositories {
   /**
    * Provides access to user data.
    */

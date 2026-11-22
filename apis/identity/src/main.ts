@@ -1,5 +1,5 @@
 import { AuthenticationApp } from '@domains/authentication';
-import { UserApp } from '@domains/user';
+import { type IUserUnitOfWorkRepositories, UserApp } from '@domains/user';
 import { ApiModule } from '@infrastructures/api';
 import {
   AUTHENTICATION_API_ERROR_MAPPINGS,
@@ -22,7 +22,8 @@ import {
   CertificateValidator,
   ClientService,
   ClientValidator,
-  PathService
+  PathService,
+  UnitOfWork
 } from '@libs/database';
 import { type AbstractLoggerService, LoggerService } from '@libs/logger';
 import { CryptographyService, CryptographyValidator, TokenService, TokenValidator } from '@libs/security';
@@ -154,9 +155,18 @@ const init = async () => {
     const userRepository = new PostgresUserRepository(database);
     loggerService.debug('📦 User repository ready');
 
+    const userUnitOfWork = new UnitOfWork<IDatabaseSchema, IUserUnitOfWorkRepositories>({
+      client: database,
+      createRepositories: (transaction) => ({
+        userRepository: new PostgresUserRepository(transaction)
+      })
+    });
+    loggerService.debug('📦 User unit of work ready');
+
     const userApp = new UserApp({
       createUserValidator,
       cryptographyService,
+      unitOfWork: userUnitOfWork,
       userModelMapper,
       userRepository
     });

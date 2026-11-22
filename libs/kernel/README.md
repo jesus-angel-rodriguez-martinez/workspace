@@ -1,6 +1,6 @@
 # Kernel
 
-`@libs/kernel` is a foundational library that provides shared contracts for error handling.
+`@libs/kernel` is a foundational library that provides shared contracts for error handling and transactions.
 
 ## 📦 Installation
 
@@ -51,6 +51,24 @@ import { type InferKernelError } from '@libs/kernel';
 
 export type UserError = InferKernelError<typeof import('@domains/user/core/errors')>;
 ```
+
+### Unit of work
+
+`IUnitOfWork` lets a domain run several repository operations inside a single transaction without depending on a database library. Each domain declares the repositories its transaction needs:
+
+```ts
+import { type IUnitOfWork } from '@libs/kernel';
+
+export interface IUserUnitOfWorkRepositories {
+  readonly userRepository: IUserRepository;
+}
+
+export interface IUserAppOptions {
+  readonly unitOfWork: IUnitOfWork<IUserUnitOfWorkRepositories>;
+}
+```
+
+The transaction commits when the callback resolves and rolls back when it rejects. `@libs/database` provides the Kysely implementation.
 
 ## 🧪 Testing
 

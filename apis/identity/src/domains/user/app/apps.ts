@@ -27,11 +27,14 @@ export class UserApp extends AbstractUserApp {
 
     const hashedPassword = await this.cryptographyService.hashPassword(password, salt);
 
-    const createdUserModel = await this.userRepository.insertOne({
-      name,
-      password: hashedPassword,
-      salt,
-      username
+    const createdUserModel = await this.unitOfWork.execute(async ({ userRepository }) => {
+      const insertedUserModel = await userRepository.insertOne({
+        name,
+        password: hashedPassword,
+        salt,
+        username
+      });
+      return insertedUserModel;
     });
 
     const secureUser = this.userModelMapper.toSecureUser(createdUserModel);
