@@ -11,7 +11,7 @@ export class AggregateCertificateConfigurationError extends AggregateKernelError
    * @param errors - The collection of configuration errors.
    * @param options - Optional error configuration options.
    */
-  constructor(errors: IKernelError[], options: IKernelErrorOptions = {}) {
+  public constructor(errors: IKernelError[], options: IKernelErrorOptions = {}) {
     super(errors, options);
   }
 }
@@ -27,7 +27,7 @@ export class InvalidCertificateFileNameError extends KernelError {
    * @param fileName - The invalid certificate file name.
    * @param options - Optional error configuration options.
    */
-  constructor(fileName: string, options: IKernelErrorOptions = {}) {
+  public constructor(fileName: string, options: IKernelErrorOptions = {}) {
     super(`Certificate file name '${fileName}' must not contain path separators.`, options);
   }
 }
@@ -43,7 +43,7 @@ export class MissingCertificateFileError extends KernelError {
    * @param filePath - The absolute path where the certificate file was expected.
    * @param options - Optional error configuration options.
    */
-  constructor(filePath: string, options: IKernelErrorOptions = {}) {
+  public constructor(filePath: string, options: IKernelErrorOptions = {}) {
     super(`Certificate file '${filePath}' does not exist.`, options);
   }
 }

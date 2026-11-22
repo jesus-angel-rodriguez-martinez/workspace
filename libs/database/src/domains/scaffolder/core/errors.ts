@@ -11,7 +11,7 @@ export class InvalidMigrationNameError extends KernelError {
    * @param name - The invalid migration name.
    * @param options - Optional error configuration options.
    */
-  constructor(name: string, options: IKernelErrorOptions = {}) {
+  public constructor(name: string, options: IKernelErrorOptions = {}) {
     super(
       `Migration name '${name}' may only contain lowercase letters, digits, and single hyphens between them.`,
       options
@@ -29,7 +29,7 @@ export class MissingMigrationNameError extends KernelError {
   /**
    * @param options - Optional error configuration options.
    */
-  constructor(options: IKernelErrorOptions = {}) {
+  public constructor(options: IKernelErrorOptions = {}) {
     super('A migration name is required to scaffold a new migration.', options);
   }
 }

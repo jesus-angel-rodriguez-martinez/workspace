@@ -11,7 +11,7 @@ export class AggregateClientConfigurationError extends AggregateKernelError {
    * @param errors - The collection of configuration errors.
    * @param options - Optional error configuration options.
    */
-  constructor(errors: IKernelError[], options: IKernelErrorOptions = {}) {
+  public constructor(errors: IKernelError[], options: IKernelErrorOptions = {}) {
     super(errors, options);
   }
 }
@@ -28,7 +28,7 @@ export class ClientConnectionError extends KernelError {
    * @param port - The port the database server listens on.
    * @param options - Optional error configuration options.
    */
-  constructor(host: string, port: number, options: IKernelErrorOptions = {}) {
+  public constructor(host: string, port: number, options: IKernelErrorOptions = {}) {
     super(`The database at '${host}:${port}' could not be reached.`, options);
   }
 }
@@ -43,7 +43,7 @@ export class MissingClientDatabaseError extends KernelError {
   /**
    * @param options - Optional error configuration options.
    */
-  constructor(options: IKernelErrorOptions = {}) {
+  public constructor(options: IKernelErrorOptions = {}) {
     super('The database name is required.', options);
   }
 }
@@ -58,7 +58,7 @@ export class MissingClientHostError extends KernelError {
   /**
    * @param options - Optional error configuration options.
    */
-  constructor(options: IKernelErrorOptions = {}) {
+  public constructor(options: IKernelErrorOptions = {}) {
     super('The database host is required.', options);
   }
 }
@@ -73,7 +73,7 @@ export class MissingClientPasswordError extends KernelError {
   /**
    * @param options - Optional error configuration options.
    */
-  constructor(options: IKernelErrorOptions = {}) {
+  public constructor(options: IKernelErrorOptions = {}) {
     super('The database password is required.', options);
   }
 }
@@ -88,7 +88,7 @@ export class MissingClientPortError extends KernelError {
   /**
    * @param options - Optional error configuration options.
    */
-  constructor(options: IKernelErrorOptions = {}) {
+  public constructor(options: IKernelErrorOptions = {}) {
     super('The database port is required.', options);
   }
 }
@@ -103,7 +103,7 @@ export class MissingClientUserError extends KernelError {
   /**
    * @param options - Optional error configuration options.
    */
-  constructor(options: IKernelErrorOptions = {}) {
+  public constructor(options: IKernelErrorOptions = {}) {
     super('The database user is required.', options);
   }
 }

@@ -11,7 +11,7 @@ export class MigrationFailedError extends KernelError {
    * @param name - The name of the migration that failed.
    * @param options - Optional error configuration options.
    */
-  constructor(name: string, options: IKernelErrorOptions = {}) {
+  public constructor(name: string, options: IKernelErrorOptions = {}) {
     super(`Migration '${name}' failed to run.`, options);
   }
 }

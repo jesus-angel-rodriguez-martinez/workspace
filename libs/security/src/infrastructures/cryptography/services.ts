@@ -6,7 +6,7 @@ const pbkdf2Async = promisify(pbkdf2);
 const randomBytesAsync = promisify(randomBytes);
 
 export class CryptographyService extends AbstractCryptographyService {
-  constructor(options: ICryptographyServiceOptions) {
+  public constructor(options: ICryptographyServiceOptions) {
     super(options);
   }
 

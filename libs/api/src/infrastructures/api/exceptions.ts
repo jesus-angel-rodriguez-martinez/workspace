@@ -13,12 +13,12 @@ export class ApiExceptionFilter implements ExceptionFilter {
   private readonly apiMapper: AbstractApiMapper;
   private readonly loggerService: AbstractLoggerService;
 
-  constructor({ apiMapper, loggerService }: IApiExceptionFilterOptions) {
+  public constructor({ apiMapper, loggerService }: IApiExceptionFilterOptions) {
     this.apiMapper = apiMapper;
     this.loggerService = loggerService;
   }
 
-  catch(unknownError: UnknownError, host: ArgumentsHost): void {
+  public catch(unknownError: UnknownError, host: ArgumentsHost): void {
     const error =
       unknownError instanceof ApiError
         ? unknownError

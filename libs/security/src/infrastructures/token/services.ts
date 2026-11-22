@@ -12,7 +12,7 @@ import {
 const { TokenExpiredError, sign, verify } = jsonwebtoken;
 
 export class TokenService extends AbstractTokenService {
-  constructor(options: ITokenServiceOptions) {
+  public constructor(options: ITokenServiceOptions) {
     super(options);
   }
 

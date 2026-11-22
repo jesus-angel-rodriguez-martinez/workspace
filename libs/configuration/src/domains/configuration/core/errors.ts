@@ -11,7 +11,7 @@ export class AggregateConfigurationError extends AggregateKernelError {
    * @param errors - The collection of configuration errors.
    * @param options - Optional error configuration options.
    */
-  constructor(errors: IKernelError[], options: IKernelErrorOptions = {}) {
+  public constructor(errors: IKernelError[], options: IKernelErrorOptions = {}) {
     super(errors, options);
   }
 }
@@ -27,7 +27,7 @@ export class EmptyConfigurationError extends KernelError {
    * @param key - The configuration key with empty value.
    * @param options - Optional error configuration options.
    */
-  constructor(key: string, options: IKernelErrorOptions = {}) {
+  public constructor(key: string, options: IKernelErrorOptions = {}) {
     super(`Configuration key '${key}' cannot be empty.`, options);
   }
 }
@@ -43,7 +43,7 @@ export class InvalidBooleanConfigurationError extends KernelError {
    * @param key - The configuration key with invalid boolean value.
    * @param options - Optional error configuration options.
    */
-  constructor(key: string, options: IKernelErrorOptions = {}) {
+  public constructor(key: string, options: IKernelErrorOptions = {}) {
     super(`Invalid boolean value for configuration key '${key}'.`, options);
   }
 }
@@ -59,7 +59,7 @@ export class InvalidNumberConfigurationError extends KernelError {
    * @param key - The configuration key with invalid number value.
    * @param options - Optional error configuration options.
    */
-  constructor(key: string, options: IKernelErrorOptions = {}) {
+  public constructor(key: string, options: IKernelErrorOptions = {}) {
     super(`Invalid number value for configuration key '${key}'.`, options);
   }
 }
@@ -75,7 +75,7 @@ export class MissingConfigurationError extends KernelError {
    * @param configuration - The name of the missing configuration variable.
    * @param options - Optional error configuration options.
    */
-  constructor(configuration: string, options: IKernelErrorOptions = {}) {
+  public constructor(configuration: string, options: IKernelErrorOptions = {}) {
     super(`Missing required configuration: '${configuration}'.`, options);
   }
 }
@@ -92,7 +92,7 @@ export class UnsupportedPrimitiveError extends KernelError {
    * @param primitive - The unsupported primitive type.
    * @param options - Optional error configuration options.
    */
-  constructor(key: string, primitive: string, options: IKernelErrorOptions = {}) {
+  public constructor(key: string, primitive: string, options: IKernelErrorOptions = {}) {
     super(`Unsupported primitive type '${primitive}' for configuration key '${key}'.`, options);
   }
 }

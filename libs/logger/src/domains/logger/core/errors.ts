@@ -10,7 +10,7 @@ export class LoggerAlreadyInitializedError extends KernelError {
   /**
    * @param options - Optional error configuration options.
    */
-  constructor(options: IKernelErrorOptions = {}) {
+  public constructor(options: IKernelErrorOptions = {}) {
     super('The logger has already been initialized.', options);
   }
 }
@@ -25,7 +25,7 @@ export class LoggerNotInitializedError extends KernelError {
   /**
    * @param options - Optional error configuration options.
    */
-  constructor(options: IKernelErrorOptions = {}) {
+  public constructor(options: IKernelErrorOptions = {}) {
     super('Cannot access the logger before it has been initialized.', options);
   }
 }

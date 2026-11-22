@@ -7,7 +7,7 @@ export class InvalidRefreshTokenError extends KernelError {
   public readonly code = 'AUTHENTICATION.INVALID_REFRESH_TOKEN';
   public readonly title = 'Invalid refresh token';
 
-  constructor(options: IKernelErrorOptions = {}) {
+  public constructor(options: IKernelErrorOptions = {}) {
     super('The provided refresh token is invalid or has expired.', options);
   }
 }
@@ -19,7 +19,7 @@ export class WrongCredentialsError extends KernelError {
   public readonly code = 'AUTHENTICATION.WRONG_CREDENTIALS';
   public readonly title = 'Wrong credentials';
 
-  constructor(options: IKernelErrorOptions = {}) {
+  public constructor(options: IKernelErrorOptions = {}) {
     super('The provided username or password is incorrect.', options);
   }
 }

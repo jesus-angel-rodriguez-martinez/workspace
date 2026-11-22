@@ -12,7 +12,7 @@ export class AggregateCryptographyConfigurationError extends AggregateKernelErro
    * @param errors - The collection of configuration errors.
    * @param options - Optional error configuration options.
    */
-  constructor(errors: IKernelError[], options: IKernelErrorOptions = {}) {
+  public constructor(errors: IKernelError[], options: IKernelErrorOptions = {}) {
     super(errors, options);
   }
 }
@@ -27,7 +27,7 @@ export class InvalidCryptographyKeyLengthError extends KernelError {
   /**
    * @param options - Optional error configuration options.
    */
-  constructor(options: IKernelErrorOptions = {}) {
+  public constructor(options: IKernelErrorOptions = {}) {
     super(`The cryptography key length must be '${CRYPTOGRAPHY_RULES.key.LENGTH}' bytes.`, options);
   }
 }
@@ -42,7 +42,7 @@ export class WeakCryptographyIterationsError extends KernelError {
   /**
    * @param options - Optional error configuration options.
    */
-  constructor(options: IKernelErrorOptions = {}) {
+  public constructor(options: IKernelErrorOptions = {}) {
     super(
       `The cryptography iterations must be at least '${CRYPTOGRAPHY_RULES.iterations.MIN_COUNT}'.`,
       options
@@ -60,7 +60,7 @@ export class WeakCryptographySaltLengthError extends KernelError {
   /**
    * @param options - Optional error configuration options.
    */
-  constructor(options: IKernelErrorOptions = {}) {
+  public constructor(options: IKernelErrorOptions = {}) {
     super(
       `The cryptography salt length must be at least '${CRYPTOGRAPHY_RULES.salt.MIN_LENGTH}' bytes.`,
       options

@@ -13,7 +13,7 @@ export class PostgresUserRepository implements IUserRepository {
     this.db = db;
   }
 
-  async findOne(filters: IUserModelFilters): Promise<IUserModel | null> {
+  public async findOne(filters: IUserModelFilters): Promise<IUserModel | null> {
     const { id, isActive = true, username } = filters;
 
     let query = this.db.selectFrom('users').selectAll();
@@ -31,7 +31,7 @@ export class PostgresUserRepository implements IUserRepository {
     return userModel ?? null;
   }
 
-  async insertOne(payload: ICreateUserModel): Promise<IUserModel> {
+  public async insertOne(payload: ICreateUserModel): Promise<IUserModel> {
     const userModel = await this.db
       .insertInto('users')
       .values({

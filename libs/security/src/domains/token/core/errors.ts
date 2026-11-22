@@ -12,7 +12,7 @@ export class AggregateTokenConfigurationError extends AggregateKernelError {
    * @param errors - The collection of configuration errors.
    * @param options - Optional error configuration options.
    */
-  constructor(errors: IKernelError[], options: IKernelErrorOptions = {}) {
+  public constructor(errors: IKernelError[], options: IKernelErrorOptions = {}) {
     super(errors, options);
   }
 }
@@ -27,7 +27,7 @@ export class InvalidTokenExpiresInError extends KernelError {
   /**
    * @param options - Optional error configuration options.
    */
-  constructor(options: IKernelErrorOptions = {}) {
+  public constructor(options: IKernelErrorOptions = {}) {
     super(`The token expiration must be at least '${TOKEN_RULES.expiresIn.MIN_SECONDS}' seconds.`, options);
   }
 }
@@ -43,7 +43,7 @@ export class TokenExpiryError extends KernelError {
    * @param type - The purpose of the token.
    * @param options - Optional error configuration options.
    */
-  constructor(type: TokenType, options: IKernelErrorOptions = {}) {
+  public constructor(type: TokenType, options: IKernelErrorOptions = {}) {
     super(`The '${type}' token has expired.`, options);
   }
 }
@@ -58,7 +58,7 @@ export class TokenIssuanceError extends KernelError {
   /**
    * @param options - Optional error configuration options.
    */
-  constructor(options: IKernelErrorOptions = {}) {
+  public constructor(options: IKernelErrorOptions = {}) {
     super('The authentication token could not be issued.', options);
   }
 }
@@ -74,7 +74,7 @@ export class TokenValidationError extends KernelError {
    * @param type - The purpose of the token.
    * @param options - Optional error configuration options.
    */
-  constructor(type: TokenType, options: IKernelErrorOptions = {}) {
+  public constructor(type: TokenType, options: IKernelErrorOptions = {}) {
     super(`The '${type}' token is invalid.`, options);
   }
 }
@@ -89,7 +89,7 @@ export class WeakTokenSecretError extends KernelError {
   /**
    * @param options - Optional error configuration options.
    */
-  constructor(options: IKernelErrorOptions = {}) {
+  public constructor(options: IKernelErrorOptions = {}) {
     super(`The token secret must be at least '${TOKEN_RULES.secret.MIN_LENGTH}' characters.`, options);
   }
 }

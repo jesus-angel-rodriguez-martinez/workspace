@@ -9,7 +9,7 @@ import { type DynamicModule, Module } from '@nestjs/common';
 export class ApiModule {
   public constructor() {}
 
-  static forRoot(
+  public static forRoot(
     authenticationApp: AbstractAuthenticationApp,
     authenticationResponseMapper: AbstractAuthenticationResponseMapper
   ): DynamicModule {

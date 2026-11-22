@@ -12,7 +12,7 @@ export class ApiError extends Error implements IApiError {
   public readonly status: StatusCode<string>;
   public readonly title: string;
 
-  constructor(error: IApiError) {
+  public constructor(error: IApiError) {
     super(error.detail, { cause: error.cause });
 
     this.code = error.code;
@@ -33,7 +33,7 @@ export class ApiError extends Error implements IApiError {
  * client-side issues such as validation errors or malformed input.
  */
 export class BadRequestError extends ApiError {
-  constructor(options: IApiErrorOptions = {}) {
+  public constructor(options: IApiErrorOptions = {}) {
     super({
       cause: options.cause,
       code: options.code || 'BAD_REQUEST_ERROR',
@@ -52,7 +52,7 @@ export class BadRequestError extends ApiError {
  * This error should be thrown when authentication is required and has failed or has not yet been provided.
  */
 export class UnauthorizedError extends ApiError {
-  constructor(options: IApiErrorOptions = {}) {
+  public constructor(options: IApiErrorOptions = {}) {
     super({
       cause: options.cause,
       code: options.code || 'UNAUTHORIZED_ERROR',
@@ -69,7 +69,7 @@ export class UnauthorizedError extends ApiError {
  * This error should be thrown when the server understands the request but refuses to authorize it.
  */
 export class ForbiddenError extends ApiError {
-  constructor(options: IApiErrorOptions = {}) {
+  public constructor(options: IApiErrorOptions = {}) {
     super({
       cause: options.cause,
       code: options.code || 'FORBIDDEN_ERROR',
@@ -86,7 +86,7 @@ export class ForbiddenError extends ApiError {
  * This error should be thrown when the requested resource could not be found.
  */
 export class NotFoundError extends ApiError {
-  constructor(options: IApiErrorOptions = {}) {
+  public constructor(options: IApiErrorOptions = {}) {
     super({
       cause: options.cause,
       code: options.code || 'NOT_FOUND_ERROR',
@@ -103,7 +103,7 @@ export class NotFoundError extends ApiError {
  * This error should be thrown when the request method is not supported for the requested resource.
  */
 export class MethodNotAllowedError extends ApiError {
-  constructor(options: IApiErrorOptions = {}) {
+  public constructor(options: IApiErrorOptions = {}) {
     super({
       cause: options.cause,
       code: options.code || 'METHOD_NOT_ALLOWED_ERROR',
@@ -120,7 +120,7 @@ export class MethodNotAllowedError extends ApiError {
  * This error should be thrown when the resource cannot produce a response matching the accepted content types.
  */
 export class NotAcceptableError extends ApiError {
-  constructor(options: IApiErrorOptions = {}) {
+  public constructor(options: IApiErrorOptions = {}) {
     super({
       cause: options.cause,
       code: options.code || 'NOT_ACCEPTABLE_ERROR',
@@ -139,7 +139,7 @@ export class NotAcceptableError extends ApiError {
  * This error should be thrown when the server times out waiting for the request.
  */
 export class RequestTimeoutError extends ApiError {
-  constructor(options: IApiErrorOptions = {}) {
+  public constructor(options: IApiErrorOptions = {}) {
     super({
       cause: options.cause,
       code: options.code || 'REQUEST_TIMEOUT_ERROR',
@@ -157,7 +157,7 @@ export class RequestTimeoutError extends ApiError {
  * Common use cases include duplicate entries, version conflicts, or violations of business rules.
  */
 export class ConflictError extends ApiError {
-  constructor(options: IApiErrorOptions = {}) {
+  public constructor(options: IApiErrorOptions = {}) {
     super({
       cause: options.cause,
       code: options.code || 'CONFLICT_ERROR',
@@ -176,7 +176,7 @@ export class ConflictError extends ApiError {
  * This error should be thrown when the requested resource is no longer available and will not return.
  */
 export class GoneError extends ApiError {
-  constructor(options: IApiErrorOptions = {}) {
+  public constructor(options: IApiErrorOptions = {}) {
     super({
       cause: options.cause,
       code: options.code || 'GONE_ERROR',
@@ -193,7 +193,7 @@ export class GoneError extends ApiError {
  * This error should be thrown when a request contains a media type that the server does not support.
  */
 export class UnsupportedMediaTypeError extends ApiError {
-  constructor(options: IApiErrorOptions = {}) {
+  public constructor(options: IApiErrorOptions = {}) {
     super({
       cause: options.cause,
       code: options.code || 'UNSUPPORTED_MEDIA_TYPE_ERROR',
@@ -211,7 +211,7 @@ export class UnsupportedMediaTypeError extends ApiError {
  * of the request entity, but the contained instructions are semantically invalid.
  */
 export class UnprocessableEntityError extends ApiError {
-  constructor(options: IApiErrorOptions = {}) {
+  public constructor(options: IApiErrorOptions = {}) {
     super({
       cause: options.cause,
       code: options.code || 'UNPROCESSABLE_ENTITY_ERROR',
@@ -229,7 +229,7 @@ export class UnprocessableEntityError extends ApiError {
  * This error should be thrown when the client has sent too many requests in a given amount of time.
  */
 export class TooManyRequestsError extends ApiError {
-  constructor(options: IApiErrorOptions = {}) {
+  public constructor(options: IApiErrorOptions = {}) {
     super({
       cause: options.cause,
       code: options.code || 'TOO_MANY_REQUESTS_ERROR',
@@ -249,7 +249,7 @@ export class TooManyRequestsError extends ApiError {
  * that is not directly caused by the client's request.
  */
 export class InternalServerError extends ApiError {
-  constructor(options: IApiErrorOptions = {}) {
+  public constructor(options: IApiErrorOptions = {}) {
     super({
       cause: options.cause,
       code: options.code || 'INTERNAL_SERVER_ERROR',
@@ -266,7 +266,7 @@ export class InternalServerError extends ApiError {
  * This error should be thrown when the server does not support the functionality required to fulfill the request.
  */
 export class NotImplementedError extends ApiError {
-  constructor(options: IApiErrorOptions = {}) {
+  public constructor(options: IApiErrorOptions = {}) {
     super({
       cause: options.cause,
       code: options.code || 'NOT_IMPLEMENTED_ERROR',
@@ -284,7 +284,7 @@ export class NotImplementedError extends ApiError {
  * This error should be thrown when the server receives an invalid response from an upstream server.
  */
 export class BadGatewayError extends ApiError {
-  constructor(options: IApiErrorOptions = {}) {
+  public constructor(options: IApiErrorOptions = {}) {
     super({
       cause: options.cause,
       code: options.code || 'BAD_GATEWAY_ERROR',
@@ -301,7 +301,7 @@ export class BadGatewayError extends ApiError {
  * This error should be thrown when the server is currently unable to handle the request.
  */
 export class ServiceUnavailableError extends ApiError {
-  constructor(options: IApiErrorOptions = {}) {
+  public constructor(options: IApiErrorOptions = {}) {
     super({
       cause: options.cause,
       code: options.code || 'SERVICE_UNAVAILABLE_ERROR',
@@ -319,7 +319,7 @@ export class ServiceUnavailableError extends ApiError {
  * This error should be thrown when the server does not receive a timely response from an upstream server.
  */
 export class GatewayTimeoutError extends ApiError {
-  constructor(options: IApiErrorOptions = {}) {
+  public constructor(options: IApiErrorOptions = {}) {
     super({
       cause: options.cause,
       code: options.code || 'GATEWAY_TIMEOUT_ERROR',
