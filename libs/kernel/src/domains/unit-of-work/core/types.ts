@@ -3,6 +3,9 @@
  */
 export type UnitOfWorkCallback<Repositories, Result> = (repositories: Repositories) => Promise<Result>;
 
+/**
+ * Runs work against repositories that share a single transaction.
+ */
 export interface IUnitOfWork<Repositories> {
   /**
    * Runs the given work inside a single transaction.

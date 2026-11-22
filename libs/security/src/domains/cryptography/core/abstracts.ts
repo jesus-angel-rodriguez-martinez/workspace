@@ -3,6 +3,9 @@ import {
   type ICryptographyServiceOptions
 } from '@domains/cryptography';
 
+/**
+ * Abstract base class for hashing and verifying passwords.
+ */
 export abstract class AbstractCryptographyService {
   /**
    * Cryptography configuration options.
@@ -48,6 +51,9 @@ export abstract class AbstractCryptographyService {
   public abstract verifyPassword(password: string, salt: Buffer, hashedPassword: Buffer): Promise<boolean>;
 }
 
+/**
+ * Abstract base class for validating the cryptography configuration.
+ */
 export abstract class AbstractCryptographyValidator {
   /**
    * Restricts instantiation to subclasses.

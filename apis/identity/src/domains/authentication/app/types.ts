@@ -2,6 +2,9 @@ import { type AbstractUserCredentialsValidator } from '@domains/authentication';
 import { type AbstractUserApp, type IUserRepository } from '@domains/user';
 import { type AbstractCryptographyService, type AbstractTokenService } from '@libs/security';
 
+/**
+ * Defines the dependencies required to create the authentication application.
+ */
 export interface IAuthenticationAppOptions {
   /**
    * Issues and verifies access tokens.

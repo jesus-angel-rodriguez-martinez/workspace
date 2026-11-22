@@ -14,8 +14,8 @@ const verifyMock = jest.fn();
 
 jest.unstable_mockModule('jsonwebtoken', () => ({
   default: {
-    TokenExpiredError: MockTokenExpiredError,
     sign: signMock,
+    TokenExpiredError: MockTokenExpiredError,
     verify: verifyMock
   }
 }));

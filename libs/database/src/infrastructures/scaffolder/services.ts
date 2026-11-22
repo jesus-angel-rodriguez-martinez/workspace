@@ -1,7 +1,7 @@
 import {
   AbstractScaffolderService,
-  type IScaffolderServiceOptions,
   InvalidMigrationNameError,
+  type IScaffolderServiceOptions,
   MissingMigrationNameError,
   SCAFFOLDER_RULES
 } from '@domains/scaffolder';

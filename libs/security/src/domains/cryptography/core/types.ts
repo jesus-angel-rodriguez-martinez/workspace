@@ -1,5 +1,8 @@
 import { type AbstractCryptographyValidator } from '@domains/cryptography';
 
+/**
+ * Defines the key derivation settings of the cryptography service.
+ */
 export interface ICryptographyServiceConfiguration {
   /**
    * The digest algorithm.
@@ -19,6 +22,9 @@ export interface ICryptographyServiceConfiguration {
   readonly saltLength: number;
 }
 
+/**
+ * Defines the configuration and dependencies required to create the cryptography service.
+ */
 export interface ICryptographyServiceOptions {
   /**
    * Cryptography configuration options.

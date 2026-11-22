@@ -7,6 +7,9 @@ import { type KernelError } from '@libs/kernel';
  */
 export type UnknownError = ApiError | KernelError;
 
+/**
+ * Represents an error exposed by the API, with its HTTP status and client-facing details.
+ */
 export interface IApiError {
   /**
    * The underlying error or value that caused this error, if any.

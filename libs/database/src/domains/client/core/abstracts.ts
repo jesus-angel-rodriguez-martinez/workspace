@@ -1,6 +1,9 @@
 import { type AbstractCertificateService } from '@domains/certificate';
 import { type IClientServiceConfiguration, type IClientServiceOptions } from '@domains/client';
 
+/**
+ * Abstract base class for creating and verifying the database client.
+ */
 export abstract class AbstractClientService<Client> {
   /**
    * Provides the certificate for TLS connections.
@@ -53,6 +56,9 @@ export abstract class AbstractClientService<Client> {
   protected abstract createConnectionString(): string;
 }
 
+/**
+ * Abstract base class for validating the database client configuration.
+ */
 export abstract class AbstractClientValidator {
   /**
    * Restricts instantiation to subclasses.

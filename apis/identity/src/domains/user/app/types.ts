@@ -6,6 +6,9 @@ import {
 import { type IUnitOfWork } from '@libs/kernel';
 import { type AbstractCryptographyService } from '@libs/security';
 
+/**
+ * Defines the dependencies required to create the user application.
+ */
 export interface IUserAppOptions {
   /**
    * Validates user creation business rules.

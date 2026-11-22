@@ -1,5 +1,5 @@
-import { type IApiErrorOptions, type IApiError } from '@domains/api';
-import { type StatusCode, STATUS_CODE } from '@domains/status-code';
+import { type IApiError, type IApiErrorOptions } from '@domains/api';
+import { STATUS_CODE, type StatusCode } from '@domains/status-code';
 
 /**
  * Base class for standardized application errors.

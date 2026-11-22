@@ -5,6 +5,9 @@ import {
 } from '@domains/certificate';
 import { type AbstractPathService } from '@domains/path';
 
+/**
+ * Abstract base class for reading the certificate used to verify the database server.
+ */
 export abstract class AbstractCertificateService {
   /**
    * Certificate configuration options.
@@ -35,6 +38,9 @@ export abstract class AbstractCertificateService {
   public abstract read(): string;
 }
 
+/**
+ * Abstract base class for validating the certificate configuration.
+ */
 export abstract class AbstractCertificateValidator {
   /**
    * Resolves the filesystem paths.

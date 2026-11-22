@@ -7,6 +7,9 @@ import { type AbstractLoggerService } from '@libs/logger';
  */
 export type MigrationCommand = 'down' | 'reset' | 'up';
 
+/**
+ * Defines the dependencies required to create the migrator service.
+ */
 export interface IMigratorServiceOptions<Client> {
   /**
    * Provides the database client migrations run against.

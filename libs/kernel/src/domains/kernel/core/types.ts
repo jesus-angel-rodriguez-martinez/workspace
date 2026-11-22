@@ -30,6 +30,9 @@ export interface IKernelError extends IKernelErrorOptions {
   readonly title: string;
 }
 
+/**
+ * Defines the optional settings shared by every kernel error.
+ */
 export interface IKernelErrorOptions {
   /**
    * The underlying error or value that caused this error, if any.

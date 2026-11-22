@@ -5,6 +5,9 @@ import {
   type ITokenServiceOptions
 } from '@domains/token';
 
+/**
+ * Abstract base class for issuing and verifying authentication tokens.
+ */
 export abstract class AbstractTokenService {
   /**
    * Token configuration options.
@@ -45,6 +48,9 @@ export abstract class AbstractTokenService {
   public abstract verifyToken(token: EncodedToken): DecodedToken;
 }
 
+/**
+ * Abstract base class for validating the token configuration.
+ */
 export abstract class AbstractTokenValidator {
   /**
    * Restricts instantiation to subclasses.

@@ -17,26 +17,26 @@ const errorMock = jest.fn();
 const fatalMock = jest.fn();
 
 const defaultMock = jest.fn<(options: LoggerOptions) => unknown>(() => ({
-  trace: traceMock,
   debug: debugMock,
-  info: infoMock,
-  warn: warnMock,
   error: errorMock,
-  fatal: fatalMock
+  fatal: fatalMock,
+  info: infoMock,
+  trace: traceMock,
+  warn: warnMock
 }));
 
 const diagnosticLoggerLevels = ['trace', 'debug', 'info'] satisfies DiagnosticLoggerLevel[];
 const diagnosticLevelMocks = {
-  trace: traceMock,
   debug: debugMock,
-  info: infoMock
+  info: infoMock,
+  trace: traceMock
 } satisfies Record<DiagnosticLoggerLevel, jest.Mock>;
 
 const criticalLoggerLevels = ['warn', 'error', 'fatal'] satisfies CriticalLoggerLevel[];
 const criticalLevelMocks = {
-  warn: warnMock,
   error: errorMock,
-  fatal: fatalMock
+  fatal: fatalMock,
+  warn: warnMock
 } satisfies Record<CriticalLoggerLevel, jest.Mock>;
 
 const stdTimeFunctionsMock = jest.fn();

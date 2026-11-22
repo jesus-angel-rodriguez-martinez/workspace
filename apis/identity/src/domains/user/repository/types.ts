@@ -1,8 +1,11 @@
 /**
  * Represents the data required to create a new user.
  */
-export interface ICreateUserModel extends Omit<IUserModel, 'id'> {}
+export interface ICreateUserModel extends Omit<IUserModel, keyof Pick<IUserModel, 'id'>> {}
 
+/**
+ * Represents a user as stored by the repository.
+ */
 export interface IUserModel {
   /**
    * The unique identifier of the user.
@@ -36,6 +39,9 @@ export interface IUserModelFilters extends Partial<Pick<IUserModel, 'id' | 'user
   readonly isActive?: boolean;
 }
 
+/**
+ * Provides access to persisted users.
+ */
 export interface IUserRepository {
   /**
    * Finds a user by the given filter criteria.

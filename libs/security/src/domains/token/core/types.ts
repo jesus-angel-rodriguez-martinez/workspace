@@ -59,6 +59,9 @@ export interface IRefreshToken extends IBaseToken {
   type: 'refresh';
 }
 
+/**
+ * Defines the signing settings of the token service.
+ */
 export interface ITokenServiceConfiguration {
   /**
    * The signing algorithm to use.
@@ -78,6 +81,9 @@ export interface ITokenServiceConfiguration {
   readonly type: TokenType;
 }
 
+/**
+ * Defines the configuration and dependencies required to create the token service.
+ */
 export interface ITokenServiceOptions {
   /**
    * Token configuration options.

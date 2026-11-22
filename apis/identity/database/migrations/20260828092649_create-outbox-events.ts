@@ -5,11 +5,11 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .createTable('outbox_events')
     .addColumn('aggregate_id', 'text', (column) => column.notNull())
     .addColumn('aggregate_type', 'text', (column) => column.notNull())
-    .addColumn('id', 'uuid', (column) => column.primaryKey().defaultTo(sql`gen_random_uuid()`))
-    .addColumn('type', 'text', (column) => column.notNull())
-    .addColumn('payload', 'jsonb', (column) => column.notNull())
     .addColumn('created_at', 'timestamptz', (column) => column.notNull().defaultTo(sql`now()`))
+    .addColumn('id', 'uuid', (column) => column.primaryKey().defaultTo(sql`gen_random_uuid()`))
+    .addColumn('payload', 'jsonb', (column) => column.notNull())
     .addColumn('processed_at', 'timestamptz')
+    .addColumn('type', 'text', (column) => column.notNull())
     .execute();
 
   await sql`

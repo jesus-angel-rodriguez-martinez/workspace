@@ -1,6 +1,9 @@
 import { type AbstractCertificateService } from '@domains/certificate';
 import { type AbstractClientValidator } from '@domains/client';
 
+/**
+ * Defines the connection settings of the database client.
+ */
 export interface IClientServiceConfiguration {
   /**
    * The name of the database to connect to.
@@ -24,6 +27,9 @@ export interface IClientServiceConfiguration {
   readonly user: string;
 }
 
+/**
+ * Defines the configuration and dependencies required to create the client service.
+ */
 export interface IClientServiceOptions {
   /**
    * Provides the certificate for TLS connections.
