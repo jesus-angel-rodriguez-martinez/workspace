@@ -66,8 +66,9 @@ APIs and libraries follow distinct structural conventions documented in `libs/RE
 
 ### Ordering
 
-- Alphabetize keys, properties, and named imports with no exceptions for importance, and re-check siblings when adding one; a single rule avoids debates and keeps diffs predictable.
+- Alphabetize keys, properties, and named imports with no exceptions for importance beyond the one below, and re-check siblings when adding one; a single rule avoids debates and keeps diffs predictable.
 - List type aliases before interfaces in type files, each group alphabetized; readers meet the simple types before the shapes built on them.
+- Order HTTP status code constants by their number, the only exception to alphabetizing; readers scan them by code, not by name.
 
 ### Packages
 

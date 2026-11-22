@@ -98,8 +98,8 @@ const { exp, iat, sub, type } = refreshTokenService.verifyToken(refreshToken);
 
 ### Errors
 
-- `AggregateCryptographyConfigurationError`: Thrown by `CryptographyValidator` when constructing a `CryptographyService` with one or more configuration values that do not meet their security requirement. Its message lists each underlying error (`code` and `detail`).
-- `AggregateTokenConfigurationError`: Thrown by `TokenValidator` when constructing a `TokenService` with one or more configuration values below their minimum security requirement. Its message lists each underlying error (`code` and `detail`).
+- `AggregateCryptographyConfigurationError`: Thrown when constructing a `CryptographyService` with one or more configuration values that do not meet their security requirement. Its message lists each underlying error (`code` and `detail`).
+- `AggregateTokenConfigurationError`: Thrown when constructing a `TokenService` with one or more configuration values below their minimum security requirement. Its message lists each underlying error (`code` and `detail`).
 - `InvalidCryptographyKeyLengthError`: Thrown when the configured key length differs from the output length of the digest.
 - `InvalidTokenExpiresInError`: Thrown when the configured token `expiresIn` is below its minimum seconds.
 - `TokenExpiryError`: Thrown when verifying a token that has expired. Its detail names the token `type`.

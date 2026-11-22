@@ -142,9 +142,9 @@ The transaction commits when the callback resolves and rolls back when it reject
 
 ### Errors
 
-- `AggregateCertificateConfigurationError`: Thrown by `CertificateValidator` when constructing a `CertificateService` with an invalid file name or a missing file. Its message lists each underlying error (`code` and `detail`).
-- `AggregateClientConfigurationError`: Thrown by `ClientValidator` when constructing a `ClientService` with one or more missing connection values. Its message lists each underlying error (`code` and `detail`).
-- `ClientConnectionError`: Thrown by `verifyConnection` when the database cannot be reached.
+- `AggregateCertificateConfigurationError`: Thrown when constructing a `CertificateService` with an invalid file name or a missing file. Its message lists each underlying error (`code` and `detail`).
+- `AggregateClientConfigurationError`: Thrown when constructing a `ClientService` with one or more missing connection values. Its message lists each underlying error (`code` and `detail`).
+- `ClientConnectionError`: Thrown when `verifyConnection` cannot reach the database.
 - `InvalidCertificateFileNameError`: Thrown when the certificate file name is not a plain file name (e.g. it contains path separators).
 - `InvalidMigrationNameError`: Thrown when scaffolding a migration whose name is not lowercase letters and digits separated by single hyphens (no leading, trailing, or consecutive hyphens).
 - `MigrationFailedError`: Thrown when a migration fails to run.

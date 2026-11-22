@@ -21,11 +21,11 @@ Every package splits its code into **domains** — business rules and the contra
 
 ## 📦 Packages
 
-Each package ships its own `README.md` with full usage and examples; each API documents its setup in its own folder.
+Each package ships its own `README.md` with full usage and examples.
 
 | Package                                               | Description                                                                            |
 | ----------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| [`@apis/identity`](apis/identity)                     | Identity service for account registration, sign in, and session tokens.                |
+| [`@apis/identity`](apis/identity/README.md)           | Identity service for account registration, sign in, and session tokens.                |
 | [`@libs/api`](libs/api/README.md)                     | API services for standard errors, error mapping, and consistent responses.             |
 | [`@libs/configuration`](libs/configuration/README.md) | Configuration service for type-safe loading and validation of environment variables.   |
 | [`@libs/database`](libs/database/README.md)           | Database services for client creation, transactions, and schema migrations.            |
